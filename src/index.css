@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-dark-950 text-slate-100 font-sans antialiased;
+  }
+
+  * {
+    @apply border-dark-700;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl
+           bg-brand-600 hover:bg-brand-500 text-white font-semibold
+           transition-all duration-200 shadow-lg hover:shadow-brand-600/30
+           active:scale-95 cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl
+           border border-dark-600 bg-dark-800/60 hover:bg-dark-700 text-slate-200
+           font-semibold transition-all duration-200 active:scale-95 cursor-pointer;
+  }
+
+  .card {
+    @apply bg-dark-800/60 backdrop-blur-sm border border-dark-700 rounded-2xl;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl bg-dark-800 border border-dark-600
+           text-slate-100 placeholder-slate-500
+           focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/50
+           transition-colors duration-200;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-400 via-purple-400 to-pink-400 bg-clip-text text-transparent;
+  }
+
+  .glow {
+    box-shadow: 0 0 60px rgba(124, 58, 237, 0.15);
+  }
+}
+
+/* Blur overlay for locked trajectories */
+.blur-locked {
+  filter: blur(8px);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #060610;
+}
+::-webkit-scrollbar-thumb {
+  background: #303060;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #484880;
+}
