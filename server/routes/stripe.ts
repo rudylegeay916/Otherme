@@ -1,15 +1,15 @@
 import { Router } from 'express'
 import Stripe from 'stripe'
-import { getReport, getReportBySessionId, markReportPaid, markReportComplete } from '../lib/supabase'
+import { env } from '../config/env'
+import { getReport, markReportPaid, markReportComplete } from '../lib/supabase'
 import { generatePDF } from '../lib/pdf'
 import { sendReportEmail } from '../lib/resend'
 import type { Trajectory } from '../../src/types'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripe = new Stripe(env.stripeSecretKey, {
   apiVersion: '2023-10-16',
 })
 
-const APP_URL = process.env.VITE_APP_URL || 'http://localhost:5173'
 const PRICE_CENTS = 499 // 4,99 €
 
 const router = Router()
@@ -51,8 +51,8 @@ router.post('/create-checkout', async (req, res) => {
         },
       ],
       metadata: { reportId },
-      success_url: `${APP_URL}/success?report_id=${reportId}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url:  `${APP_URL}/cancel?report_id=${reportId}`,
+      success_url: `${env.appUrl}/success?report_id=${reportId}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url:  `${env.appUrl}/cancel?report_id=${reportId}`,
     })
 
     return res.json({ url: session.url })
@@ -67,11 +67,10 @@ router.post('/create-checkout', async (req, res) => {
 // ── Stripe webhook ─────────────────────────────────────────
 router.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'] as string
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
 
   let event: Stripe.Event
   try {
-    event = stripe.webhooks.constructEvent(req.body as Buffer, sig, webhookSecret)
+    event = stripe.webhooks.constructEvent(req.body as Buffer, sig, env.stripeWebhookSecret)
   } catch (err) {
     console.error('[stripe] Webhook signature verification failed:', err)
     return res.status(400).send('Webhook Error')
@@ -87,10 +86,8 @@ router.post('/webhook', async (req, res) => {
     }
 
     try {
-      // Mark as paid
       await markReportPaid(reportId, session.id)
 
-      // Fetch report from DB
       const report = await getReport(reportId)
       if (!report || !report.report_full) {
         console.error('[stripe] Report not found or no content:', reportId)
@@ -98,20 +95,14 @@ router.post('/webhook', async (req, res) => {
       }
 
       const trajectories = JSON.parse(report.report_full) as Trajectory[]
-
-      // Generate PDF
       const pdfBuffer = await generatePDF(report.first_name, report.email, trajectories)
-
-      // Send email
       await sendReportEmail(report.email, report.first_name, pdfBuffer)
-
-      // Mark as complete
       await markReportComplete(reportId)
 
       console.log(`[stripe] Report ${reportId} completed for ${report.email}`)
     } catch (err) {
       console.error('[stripe] Post-payment processing error:', err)
-      // Don't return 500 — Stripe would retry. The report is marked as paid.
+      // Ne pas retourner 500 — Stripe réessaierait. Le rapport est déjà marqué payé.
     }
   }
 

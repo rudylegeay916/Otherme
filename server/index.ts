@@ -1,4 +1,8 @@
 import 'dotenv/config'
+// La validation doit être la première opération après le chargement de dotenv.
+import { validateEnv, env } from './config/env'
+validateEnv()
+
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
@@ -8,24 +12,23 @@ import reportRouter from './routes/report'
 import stripeRouter from './routes/stripe'
 
 const app = express()
-const PORT = parseInt(process.env.PORT || '3001', 10)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// ── Raw body for Stripe webhooks (must be before json middleware) ──
+// ── Raw body pour les webhooks Stripe (avant le middleware JSON) ──
 app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }))
 
-// ── Standard middleware ────────────────────────────────────
-app.use(cors({ origin: process.env.VITE_APP_URL || 'http://localhost:5173' }))
+// ── Middleware standard ────────────────────────────────────
+app.use(cors({ origin: env.appUrl }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// ── API routes ─────────────────────────────────────────────
+// ── Routes API ─────────────────────────────────────────────
 app.use('/api/onboarding', onboardingRouter)
 app.use('/api/report', reportRouter)
 app.use('/api/stripe', stripeRouter)
 
-// ── Serve frontend in production ──────────────────────────
-if (process.env.NODE_ENV === 'production') {
+// ── Serve le frontend en production ──────────────────────
+if (env.isProd) {
   const distPath = path.join(__dirname, '../dist')
   app.use(express.static(distPath))
   app.get('*', (_req, res) => {
@@ -33,7 +36,8 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ OtherMe server running on port ${PORT}`)
-  console.log(`   Mode: ${process.env.NODE_ENV || 'development'}`)
+app.listen(env.port, '0.0.0.0', () => {
+  console.log(`✅ OtherMe server running on port ${env.port}`)
+  console.log(`   Mode    : ${env.isProd ? 'production' : 'development'}`)
+  console.log(`   App URL : ${env.appUrl}`)
 })

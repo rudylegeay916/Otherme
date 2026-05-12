@@ -1,7 +1,8 @@
 import { Resend } from 'resend'
+import { env } from '../config/env'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM = process.env.RESEND_FROM_EMAIL || 'OtherMe <noreply@otherme.app>'
+const resend = new Resend(env.resendApiKey)
+const FROM = env.fromEmail || 'OtherMe <noreply@otherme.app>'
 
 export async function sendReportEmail(
   to: string,

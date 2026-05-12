@@ -1,7 +1,8 @@
 import OpenAI from 'openai'
+import { env } from '../config/env'
 import type { OnboardingData, Trajectory } from '../../src/types'
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const client = new OpenAI({ apiKey: env.openaiApiKey })
 
 const SYSTEM_PROMPT = `Tu es un expert en développement de carrière, psychologie des trajectoires de vie et coaching professionnel.
 Tu analyses le profil d'une personne et génères 3 trajectoires de vie alternatives réalistes et inspirantes.
