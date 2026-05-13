@@ -3,26 +3,32 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { translateAuthError } from '../lib/authErrors'
 import Logo from '../components/Logo'
+import LanguageToggle from '../components/LanguageToggle'
+import { useLanguage } from '../contexts/LanguageContext'
+import { useTr } from '../lib/i18n/translations'
 
 export default function Signup() {
   const { signUp } = useAuth()
   const navigate = useNavigate()
+  const { lang } = useLanguage()
+  const tr = useTr(lang)
+  const t = tr.auth
 
-  const [fullName, setFullName]               = useState('')
-  const [email, setEmail]                     = useState('')
-  const [password, setPassword]               = useState('')
-  const [confirm, setConfirm]                 = useState('')
-  const [error, setError]                     = useState('')
-  const [loading, setLoading]                 = useState(false)
-  const [emailSent, setEmailSent]             = useState(false)
+  const [fullName, setFullName]   = useState('')
+  const [email, setEmail]         = useState('')
+  const [password, setPassword]   = useState('')
+  const [confirm, setConfirm]     = useState('')
+  const [error, setError]         = useState('')
+  const [loading, setLoading]     = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
 
   const validate = (): string | null => {
-    if (!fullName.trim()) return 'Merci d\'entrer ton prénom.'
-    if (!email.trim())    return 'L\'email est requis.'
+    if (!fullName.trim()) return lang === 'fr' ? "Merci d'entrer ton prénom." : 'Please enter your first name.'
+    if (!email.trim())    return lang === 'fr' ? "L'email est requis." : 'Email is required.'
     if (password.length < 8)
-      return 'Le mot de passe doit contenir au moins 8 caractères.'
+      return lang === 'fr' ? 'Le mot de passe doit contenir au moins 8 caractères.' : 'Password must be at least 8 characters.'
     if (password !== confirm)
-      return 'Les mots de passe ne correspondent pas.'
+      return lang === 'fr' ? 'Les mots de passe ne correspondent pas.' : 'Passwords do not match.'
     return null
   }
 
@@ -31,10 +37,7 @@ export default function Signup() {
     setError('')
 
     const validationError = validate()
-    if (validationError) {
-      setError(validationError)
-      return
-    }
+    if (validationError) { setError(validationError); return }
 
     setLoading(true)
     const { error, requiresConfirmation } = await signUp(email.trim(), password, fullName.trim())
@@ -46,35 +49,26 @@ export default function Signup() {
     }
 
     if (requiresConfirmation) {
-      // Supabase a envoyé un email de confirmation
       setEmailSent(true)
       setLoading(false)
       return
     }
 
-    // Auto-login : rediriger directement
     navigate('/dashboard', { replace: true })
   }
 
-  // ── Écran "vérifie ton email" ─────────────────────────────────
   if (emailSent) {
     return (
       <div className="min-h-screen bg-dark-950 flex items-center justify-center px-4">
+        <div className="absolute top-4 right-4"><LanguageToggle /></div>
         <div className="card p-10 max-w-sm w-full text-center animate-fade-in">
           <div className="text-5xl mb-4">📬</div>
-          <h2 className="text-xl font-bold text-slate-100 mb-3">Vérifie ton email</h2>
-          <p className="text-slate-400 text-sm leading-relaxed mb-6">
-            Un lien de confirmation a été envoyé à{' '}
-            <strong className="text-slate-200">{email}</strong>.
-            <br />
-            Clique sur le lien pour activer ton compte.
-          </p>
-          <p className="text-xs text-slate-600">
-            Pense à vérifier tes spams.
-          </p>
+          <h2 className="text-xl font-bold text-slate-100 mb-3">{t.emailSentTitle}</h2>
+          <p className="text-slate-400 text-sm leading-relaxed mb-6">{t.emailSentSub(email)}</p>
+          <p className="text-xs text-slate-600">{t.emailSentNote}</p>
           <div className="mt-6 pt-5 border-t border-dark-700">
             <Link to="/login" className="text-brand-400 hover:text-brand-300 text-sm font-medium transition-colors">
-              Retour à la connexion
+              {t.backToLogin}
             </Link>
           </div>
         </div>
@@ -82,155 +76,101 @@ export default function Signup() {
     )
   }
 
-  // ── Formulaire d'inscription ──────────────────────────────────
   return (
     <div className="min-h-screen bg-dark-950 flex flex-col items-center justify-center px-4">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-800/15 rounded-full blur-[120px]" />
       </div>
 
+      <div className="absolute top-4 right-4"><LanguageToggle /></div>
+
       <div className="relative z-10 w-full max-w-sm animate-fade-in">
-        {/* Logo */}
         <div className="text-center mb-8">
           <Logo size={40} className="justify-center" />
-          <p className="text-slate-500 text-sm mt-1">Crée ton compte pour sauvegarder tes rapports</p>
+          <p className="text-slate-500 text-sm mt-1">{t.signupSub}</p>
         </div>
 
         <div className="card p-8">
-          <h1 className="text-xl font-bold text-slate-100 mb-6">Créer mon compte</h1>
+          <h1 className="text-xl font-bold text-slate-100 mb-6">{t.signupTitle}</h1>
 
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            {/* Prénom */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Prénom</label>
-              <input
-                type="text"
-                autoComplete="given-name"
-                className="input-field"
-                placeholder="Marie"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-              />
+              <label className="block text-sm font-medium text-slate-300 mb-1.5">{t.firstNameLabel}</label>
+              <input type="text" autoComplete="given-name" className="input-field" placeholder="Marie"
+                value={fullName} onChange={(e) => setFullName(e.target.value)} required />
             </div>
 
-            {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
-              <input
-                type="email"
-                autoComplete="email"
-                className="input-field"
-                placeholder="marie@exemple.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <label className="block text-sm font-medium text-slate-300 mb-1.5">{t.emailLabel}</label>
+              <input type="email" autoComplete="email" className="input-field" placeholder="marie@exemple.com"
+                value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
 
-            {/* Mot de passe */}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1.5">
-                Mot de passe
-                <span className="text-slate-600 font-normal ml-1">(min. 8 caractères)</span>
+                {t.passwordLabel}
+                <span className="text-slate-600 font-normal ml-1">{t.passwordMin}</span>
               </label>
-              <input
-                type="password"
-                autoComplete="new-password"
-                className="input-field"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <input type="password" autoComplete="new-password" className="input-field" placeholder="••••••••"
+                value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
 
-            {/* Confirmation */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">
-                Confirmer le mot de passe
-              </label>
-              <input
-                type="password"
-                autoComplete="new-password"
-                className="input-field"
-                placeholder="••••••••"
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
-                required
-              />
+              <label className="block text-sm font-medium text-slate-300 mb-1.5">{t.confirmPwdLabel}</label>
+              <input type="password" autoComplete="new-password" className="input-field" placeholder="••••••••"
+                value={confirm} onChange={(e) => setConfirm(e.target.value)} required />
             </div>
 
-            {/* Indicateur de force */}
-            {password.length > 0 && (
-              <PasswordStrength password={password} />
-            )}
+            {password.length > 0 && <PasswordStrength password={password} t={t} />}
 
-            {/* Erreur */}
             {error && (
               <div className="flex items-start gap-2.5 p-3 rounded-xl bg-red-900/20 border border-red-800/50 text-red-300 text-sm">
-                <span className="flex-shrink-0 mt-0.5">⚠</span>
-                <span>{error}</span>
+                <span className="flex-shrink-0 mt-0.5">⚠</span><span>{error}</span>
               </div>
             )}
 
-            {/* Bouton */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full justify-center py-3 mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+            <button type="submit" disabled={loading}
+              className="btn-primary w-full justify-center py-3 mt-2 disabled:opacity-50 disabled:cursor-not-allowed">
               {loading ? (
                 <span className="flex items-center gap-2">
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Création…
+                  {t.signingUp}
                 </span>
-              ) : (
-                'Créer mon compte'
-              )}
+              ) : t.signupBtn}
             </button>
 
             <p className="text-xs text-slate-600 text-center">
-              En créant un compte, tu acceptes nos{' '}
-              <a href="#" className="text-slate-500 hover:text-slate-400">CGU</a>.
+              {t.termsNote}{' '}
+              <a href="#" className="text-slate-500 hover:text-slate-400">{t.termsLink}</a>.
             </p>
           </form>
         </div>
 
-        {/* Lien connexion */}
         <p className="text-center text-sm text-slate-500 mt-6">
-          Déjà un compte ?{' '}
-          <Link to="/login" className="text-brand-400 hover:text-brand-300 font-medium transition-colors">
-            Se connecter
-          </Link>
+          {t.hasAccount}{' '}
+          <Link to="/login" className="text-brand-400 hover:text-brand-300 font-medium transition-colors">{t.loginLink}</Link>
         </p>
       </div>
     </div>
   )
 }
 
-// ── Indicateur de force du mot de passe ──────────────────────────
-function PasswordStrength({ password }: { password: string }) {
+function PasswordStrength({ password, t }: { password: string; t: ReturnType<typeof useTr>['auth'] }) {
   const checks = [
-    { label: '8+ caractères',     ok: password.length >= 8 },
-    { label: 'Majuscule',         ok: /[A-Z]/.test(password) },
-    { label: 'Chiffre',           ok: /[0-9]/.test(password) },
+    { label: t.pwdCheck8,     ok: password.length >= 8 },
+    { label: t.pwdCheckUpper, ok: /[A-Z]/.test(password) },
+    { label: t.pwdCheckDigit, ok: /[0-9]/.test(password) },
   ]
 
   const score = checks.filter((c) => c.ok).length
   const colors = ['bg-red-500', 'bg-amber-500', 'bg-green-500']
-  const labels = ['Faible', 'Moyen', 'Fort']
+  const labels = [t.pwdStrengthWeak, t.pwdStrengthMedium, t.pwdStrengthStrong]
 
   return (
     <div>
       <div className="flex gap-1 mb-1.5">
         {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
-              i < score ? colors[score - 1] : 'bg-dark-700'
-            }`}
-          />
+          <div key={i} className={`h-1 flex-1 rounded-full transition-colors duration-300 ${i < score ? colors[score - 1] : 'bg-dark-700'}`} />
         ))}
       </div>
       <div className="flex items-center justify-between">

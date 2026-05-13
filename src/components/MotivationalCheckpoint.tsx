@@ -5,11 +5,12 @@ interface Props {
   statValue:  string
   icon:       string
   ctaLabel?:  string
+  footer?:    string
   onContinue: () => void
 }
 
 export default function MotivationalCheckpoint({
-  title, message, statLabel, statValue, icon, ctaLabel = 'Continuer', onContinue,
+  title, message, statLabel, statValue, icon, ctaLabel = 'Continuer', footer = 'OtherMe · Analyse en cours', onContinue,
 }: Props) {
   return (
     <div className="min-h-screen bg-[#000000] flex flex-col items-center justify-center px-4 animate-fade-in">
@@ -39,7 +40,7 @@ export default function MotivationalCheckpoint({
       </div>
 
       {/* Subtil indicateur de progression */}
-      <p className="text-slate-700 text-xs mt-8">OtherMe · Analyse en cours</p>
+      <p className="text-slate-700 text-xs mt-8">{footer}</p>
     </div>
   )
 }

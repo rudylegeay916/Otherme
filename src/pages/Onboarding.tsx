@@ -11,6 +11,10 @@ import {
   LOADING_MESSAGES, QUESTIONS, getAdaptiveQuestions,
 } from './onboarding-data'
 import { saveProgress, loadProgress, clearProgress } from '../lib/onboardingStorage'
+import { useLanguage } from '../contexts/LanguageContext'
+import { useTr } from '../lib/i18n/translations'
+import { getLocalizedData } from './onboarding-data'
+import LanguageToggle from '../components/LanguageToggle'
 
 // ── Questions par étape (IDs dans QUESTIONS[]) ────────────────────
 const STEP_QUESTION_IDS: string[][] = [
@@ -66,85 +70,20 @@ function detectSignals(answers: Record<string, QuestionAnswer>) {
 function getCheckpointContent(
   index:   number,
   answers: Record<string, QuestionAnswer>,
+  tr:      import('../lib/i18n/translations').Tr,
 ): CheckpointContent {
   const s = detectSignals(answers)
+  const c = tr.cp
 
-  const generic: CheckpointContent[] = [
-    // 0 — après Compétences
-    {
-      title:     'Ton profil commence à se dessiner.',
-      message:   "Tes premières réponses permettent déjà à OtherMe de mieux comprendre ce qui te motive, ce qui t'attire et ce que tu veux éviter.",
-      statLabel: 'Analyse',
-      statValue: 'En cours',
-      icon:      '🧩',
-    },
-    // 1 — après Passions (on injecte un message adaptatif ici)
-    {
-      title:     'Tu avances mieux que tu ne le penses.',
-      message:   'Chaque réponse affine tes trajectoires. OtherMe commence à distinguer les environnements, les secteurs et les rôles qui pourraient vraiment te correspondre.',
-      statLabel: 'Personnalisation',
-      statValue: '+ précise',
-      icon:      '📡',
-    },
-    // 2 — après Style de vie
-    {
-      title:     'Tes trajectoires deviennent plus précises.',
-      message:   'Tes réponses ne servent pas à te mettre dans une case. Elles permettent de construire plusieurs chemins possibles à partir de ton parcours, tes envies et ta réalité.',
-      statLabel: 'Trajectoires',
-      statValue: '3 scénarios',
-      icon:      '🗺️',
-    },
-    // 3 — avant les questions adaptatives
-    {
-      title:     'OtherMe va maintenant affiner ton profil.',
-      message:   'Les prochaines questions sont adaptées à tes réponses. Elles servent à mieux distinguer les pistes réalistes, inspirantes et actionnables pour toi.',
-      statLabel: 'Questions',
-      statValue: 'Personnalisées',
-      icon:      '✨',
-      ctaLabel:  'Répondre aux questions personnalisées',
-    },
-  ]
+  const generic: CheckpointContent[] = c.generic.map(g => ({ ...g }))
 
-  // Checkpoint 1 : message adaptatif selon profil détecté
   if (index === 1) {
-    if (s.liberty) return {
-      title:     'Ton envie de liberté ressort clairement.',
-      message:   "OtherMe va privilégier des trajectoires qui peuvent t'offrir plus d'autonomie, sans ignorer ton besoin de sécurité.",
-      statLabel: 'Signal détecté',
-      statValue: 'Autonomie',
-      icon:      '🦅',
-    }
-    if (s.creativity) return {
-      title:     'Ton profil créatif commence à apparaître.',
-      message:   "OtherMe va chercher des trajectoires où tu peux créer, imaginer, produire ou transformer des idées en projets concrets.",
-      statLabel: 'Signal détecté',
-      statValue: 'Créativité',
-      icon:      '🎨',
-    }
-    if (s.meaning) return {
-      title:     'Ton besoin de sens ressort dans tes réponses.',
-      message:   "OtherMe va explorer des pistes où ton travail peut avoir plus d'impact, d'utilité ou d'alignement personnel.",
-      statLabel: 'Signal détecté',
-      statValue: 'Sens & impact',
-      icon:      '💡',
-    }
-    if (s.money) return {
-      title:     'Ton ambition est prise en compte.',
-      message:   "OtherMe va chercher des trajectoires qui valorisent mieux tes compétences, tout en restant réalistes selon ton parcours.",
-      statLabel: 'Signal détecté',
-      statValue: 'Ambition',
-      icon:      '🎯',
-    }
+    if (s.liberty)    return c.liberty
+    if (s.creativity) return c.creativity
+    if (s.meaning)    return c.meaning
+    if (s.money)      return c.money
   }
-
-  // Checkpoint 2 : progressive transition
-  if (index === 2 && s.progressive) return {
-    title:     'Ta transition peut se construire étape par étape.',
-    message:   "OtherMe ne va pas seulement proposer un métier final, mais aussi un chemin réaliste pour y arriver progressivement.",
-    statLabel: 'Approche',
-    statValue: 'Transition douce',
-    icon:      '🪜',
-  }
+  if (index === 2 && s.progressive) return c.progressive
 
   return generic[index] ?? generic[0]
 }
@@ -158,7 +97,7 @@ const DEFAULT_DATA: OnboardingData = {
 
 // ── Écran de chargement ───────────────────────────────────────────
 
-function LoadingScreen({ msgIdx }: { msgIdx: number }) {
+function LoadingScreen({ msgIdx, messages }: { msgIdx: number; messages: string[] }) {
   return (
     <div className="min-h-screen bg-dark-950 flex flex-col items-center justify-center px-4">
       <div className="text-center max-w-sm">
@@ -167,8 +106,8 @@ function LoadingScreen({ msgIdx }: { msgIdx: number }) {
           <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-brand-500 animate-spin" />
           <div className="absolute inset-3 rounded-full bg-brand-600/20 flex items-center justify-center text-2xl">✨</div>
         </div>
-        <h2 className="text-2xl font-bold mb-3 text-slate-100">{LOADING_MESSAGES[msgIdx]}</h2>
-        <p className="text-slate-500 text-sm">Cela peut prendre 15 à 30 secondes</p>
+        <h2 className="text-2xl font-bold mb-3 text-slate-100">{messages[msgIdx]}</h2>
+        <p className="text-slate-500 text-sm">{messages.length > 0 ? '15 – 30 sec' : ''}</p>
         <div className="mt-8 h-1.5 bg-dark-700 rounded-full overflow-hidden max-w-xs mx-auto">
           <div className="h-full bg-gradient-to-r from-brand-600 to-purple-500 rounded-full animate-pulse-slow w-3/4" />
         </div>
@@ -226,6 +165,9 @@ export default function Onboarding() {
   const navigate    = useNavigate()
   const { session } = useAuth()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { lang }    = useLanguage()
+  const tr          = useTr(lang)
+  const ld          = getLocalizedData(lang)
 
   const [step,              setStep]              = useState(0)
   const [data,              setData]              = useState<OnboardingData>(DEFAULT_DATA)
@@ -265,9 +207,9 @@ export default function Onboarding() {
     answers[id] ?? { ...EMPTY_ANSWER }
 
   const adaptiveQuestions = useMemo(
-    () => getAdaptiveQuestions(answers, data.currentSituation),
+    () => ld.getAdaptiveQuestions(answers, data.currentSituation),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [step]
+    [step, lang]
   )
 
   const TOTAL_STEPS = adaptiveQuestions.length > 0 ? 8 : 7
@@ -316,14 +258,15 @@ export default function Onboarding() {
   const isLastStep  = step === TOTAL_STEPS - 1
   const progressPct = ((step + 1) / TOTAL_STEPS) * 100
 
-  if (loading) return <LoadingScreen msgIdx={loadingMsg} />
+  if (loading) return <LoadingScreen msgIdx={loadingMsg} messages={tr.onb.loadingMessages} />
 
   // ── Checkpoint motivationnel ──────────────────────────────────────
   if (showingCheckpoint !== null) {
-    const content = getCheckpointContent(showingCheckpoint, answers)
+    const content = getCheckpointContent(showingCheckpoint, answers, tr)
     return (
       <MotivationalCheckpoint
         {...content}
+        footer={tr.cp.footer}
         onContinue={() => {
           setShowingCheckpoint(null)
           setStep((s) => s + 1)
@@ -336,25 +279,20 @@ export default function Onboarding() {
     step === 7 ? adaptiveQuestions.map((q) => q.id) : (STEP_QUESTION_IDS[step] ?? [])
 
   const currentQuestions = currentQuestionIds
-    .map((id) => QUESTIONS.find((q) => q.id === id) ?? adaptiveQuestions.find((q) => q.id === id) ?? null)
+    .map((id) => ld.QUESTIONS.find((q) => q.id === id) ?? adaptiveQuestions.find((q) => q.id === id) ?? null)
     .filter(Boolean)
 
-  const stepTitles: Record<number, { title: string; sub: string }> = {
-    0: { title: 'Parle-nous de toi',               sub: 'Quelques infos pour personnaliser ton analyse' },
-    2: { title: 'Tes compétences & ton profil',    sub: 'Ce que tu sais faire et comment tu fonctionnes' },
-    3: { title: 'Tes passions & ton énergie',      sub: "Ce qui t'anime naturellement" },
-    4: { title: 'Ton style de vie idéal',          sub: 'Le cadre professionnel qui te correspond' },
-    5: { title: 'Ta projection de vie',            sub: 'Ce que tu veux construire et éviter' },
-    6: { title: 'Ton profil & tes blocages',       sub: 'Les derniers éléments pour affiner tes trajectoires' },
-    7: { title: 'Questions adaptées à ton profil', sub: 'Quelques questions personnalisées selon tes réponses' },
-  }
+  const stepTitles = tr.onb.stepTitles
 
   return (
     <div className="min-h-screen bg-dark-950 flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-dark-800">
         <Logo size={36} />
-        <span className="text-sm text-slate-500">Étape {step + 1} / {TOTAL_STEPS}</span>
+        <div className="flex items-center gap-3">
+          <LanguageToggle />
+          <span className="text-sm text-slate-500">{tr.c.stepLabel(step + 1, TOTAL_STEPS)}</span>
+        </div>
       </div>
 
       {/* Barre de progression */}
@@ -398,7 +336,7 @@ export default function Onboarding() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-1.5">Prénom *</label>
+                    <label className="block text-sm font-medium text-slate-300 mb-1.5">{tr.onb.fieldFirstName}</label>
                     <input
                       className="input-field"
                       placeholder="Marie"
@@ -407,7 +345,7 @@ export default function Onboarding() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-1.5">Âge *</label>
+                    <label className="block text-sm font-medium text-slate-300 mb-1.5">{tr.onb.fieldAge}</label>
                     <input
                       className="input-field"
                       type="number"
@@ -421,7 +359,7 @@ export default function Onboarding() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Email *</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">{tr.onb.fieldEmail}</label>
                   <input
                     className="input-field"
                     type="email"
@@ -429,13 +367,13 @@ export default function Onboarding() {
                     value={data.email}
                     onChange={(e) => setField('email', e.target.value)}
                   />
-                  <p className="text-xs text-slate-600 mt-1">Pour recevoir ton rapport PDF</p>
+                  <p className="text-xs text-slate-600 mt-1">{tr.onb.fieldEmailNote}</p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Situation actuelle *</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">{tr.onb.fieldSituation}</label>
                   <ChipSelect
-                    options={SITUATIONS}
+                    options={ld.SITUATIONS}
                     selected={data.currentSituation ? [data.currentSituation] : []}
                     onChange={(v) => setField('currentSituation', v[0] ?? '')}
                     multi={false}
@@ -444,7 +382,7 @@ export default function Onboarding() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-1.5">
-                    Ville <span className="text-slate-600 font-normal">(optionnel)</span>
+                    {tr.onb.fieldCity} <span className="text-slate-600 font-normal">({tr.c.optional})</span>
                   </label>
                   <input
                     className="input-field"
@@ -456,10 +394,10 @@ export default function Onboarding() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-2">
-                    Genre <span className="text-slate-600 font-normal">(optionnel)</span>
+                    {tr.onb.fieldGender} <span className="text-slate-600 font-normal">({tr.c.optional})</span>
                   </label>
                   <ChipSelect
-                    options={GENDERS}
+                    options={ld.GENDERS}
                     selected={data.gender ? [data.gender] : []}
                     onChange={(v) => setField('gender', v[0] ?? '')}
                     multi={false}
@@ -473,11 +411,9 @@ export default function Onboarding() {
               <div className="space-y-5">
                 <div>
                   <h2 className="text-2xl font-bold text-slate-100 mb-1">
-                    Ton CV <span className="text-slate-500 font-normal text-base">(optionnel)</span>
+                    {tr.onb.cvTitle} <span className="text-slate-500 font-normal text-base">({tr.c.optional})</span>
                   </h2>
-                  <p className="text-slate-400 text-sm leading-relaxed">
-                    Ajoute ton CV pour permettre à OtherMe de personnaliser l'analyse. C'est optionnel, mais cela la rend beaucoup plus précise.
-                  </p>
+                  <p className="text-slate-400 text-sm leading-relaxed">{tr.onb.cvSub}</p>
                 </div>
 
                 {/* Fichier CV sauvegardé mais non rechargeable */}
@@ -486,7 +422,7 @@ export default function Onboarding() {
                     <span className="text-xl">📄</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-brand-300 text-sm font-medium truncate">{cvMeta.name}</p>
-                      <p className="text-slate-500 text-xs">CV de la session précédente · Re-charge le fichier si tu veux l'inclure</p>
+                      <p className="text-slate-500 text-xs">{tr.onb.cvSavedNote}</p>
                     </div>
                   </div>
                 )}
@@ -514,21 +450,21 @@ export default function Onboarding() {
                     <>
                       <div className="text-3xl mb-2">📄</div>
                       <p className="text-brand-300 font-medium">{cvFile.name}</p>
-                      <p className="text-slate-500 text-xs mt-1">{(cvFile.size / 1024).toFixed(0)} Ko · Cliquer pour changer</p>
+                      <p className="text-slate-500 text-xs mt-1">{(cvFile.size / 1024).toFixed(0)} Ko · {tr.onb.cvClickChange}</p>
                     </>
                   ) : (
                     <>
                       <div className="text-3xl mb-2">📎</div>
-                      <p className="text-slate-300 font-medium">Glisser ou cliquer pour ajouter ton CV</p>
-                      <p className="text-slate-500 text-xs mt-1">PDF, DOCX ou TXT · Max 10 Mo</p>
+                      <p className="text-slate-300 font-medium">{tr.onb.cvDropTitle}</p>
+                      <p className="text-slate-500 text-xs mt-1">{tr.onb.cvDropSub}</p>
                     </>
                   )}
                 </div>
 
                 <div className="space-y-4 pt-2 border-t border-dark-700">
-                  <p className="text-sm text-slate-500">Ou renseigne ton parcours rapidement :</p>
+                  <p className="text-sm text-slate-500">{tr.onb.cvQuickTitle}</p>
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-1.5">Métier actuel</label>
+                    <label className="block text-sm font-medium text-slate-300 mb-1.5">{tr.onb.fieldJob}</label>
                     <input
                       className="input-field"
                       placeholder="Chef de projet, Développeur, Infirmière…"
@@ -538,18 +474,18 @@ export default function Onboarding() {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-1.5">Secteur</label>
+                      <label className="block text-sm font-medium text-slate-300 mb-1.5">{tr.onb.fieldSector}</label>
                       <select
                         className="input-field"
                         value={data.sector ?? ''}
                         onChange={(e) => setField('sector', e.target.value)}
                       >
-                        <option value="">Choisir…</option>
-                        {SECTORS.map((s) => <option key={s} value={s}>{s}</option>)}
+                        <option value="">{tr.onb.chooseLabel}</option>
+                        {ld.SECTORS.map((s) => <option key={s} value={s}>{s}</option>)}
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-1.5">Années d'expérience</label>
+                      <label className="block text-sm font-medium text-slate-300 mb-1.5">{tr.onb.fieldExp}</label>
                       <input
                         className="input-field"
                         type="number"
@@ -563,18 +499,18 @@ export default function Onboarding() {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-1.5">Niveau d'études</label>
+                      <label className="block text-sm font-medium text-slate-300 mb-1.5">{tr.onb.fieldEducLevel}</label>
                       <select
                         className="input-field"
                         value={data.educationLevel ?? ''}
                         onChange={(e) => setField('educationLevel', e.target.value)}
                       >
-                        <option value="">Choisir…</option>
-                        {EDUCATION_LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
+                        <option value="">{tr.onb.chooseLabel}</option>
+                        {ld.EDUCATION_LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-1.5">Domaine</label>
+                      <label className="block text-sm font-medium text-slate-300 mb-1.5">{tr.onb.fieldEducField}</label>
                       <input
                         className="input-field"
                         placeholder="Informatique, Droit…"
@@ -584,9 +520,9 @@ export default function Onboarding() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Langues parlées</label>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">{tr.onb.fieldLanguages}</label>
                     <ChipSelect
-                      options={LANGUAGES}
+                      options={ld.LANGUAGES}
                       selected={data.languages ?? []}
                       onChange={(v) => setField('languages', v)}
                       multi={true}
@@ -643,8 +579,8 @@ export default function Onboarding() {
             {isLastStep && (
               <div className="mt-6 card p-4 bg-brand-600/5 border-brand-800">
                 <p className="text-sm text-slate-400">
-                  <span className="text-brand-400 font-medium">Prêt à découvrir tes autres vies.</span>{' '}
-                  L'IA va analyser ton profil complet et générer 3 trajectoires alternatives personnalisées. Résultat en ~30 secondes.
+                  <span className="text-brand-400 font-medium">{tr.onb.readyAccent}</span>{' '}
+                  {tr.onb.readyText}
                 </p>
               </div>
             )}
@@ -656,7 +592,7 @@ export default function Onboarding() {
                 onClick={handleBack}
                 className={`btn-secondary ${step === 0 ? 'invisible' : ''}`}
               >
-                ← Retour
+                {tr.c.back}
               </button>
 
               {!isLastStep ? (
@@ -666,7 +602,7 @@ export default function Onboarding() {
                   disabled={!canProceed()}
                   className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  Continuer →
+                  {tr.c.continue}
                 </button>
               ) : (
                 <button
@@ -674,7 +610,7 @@ export default function Onboarding() {
                   onClick={handleSubmit}
                   className="btn-primary"
                 >
-                  Générer mon rapport ✨
+                  {tr.onb.generateBtn}
                 </button>
               )}
             </div>

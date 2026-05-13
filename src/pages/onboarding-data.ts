@@ -448,3 +448,34 @@ export function getAdaptiveQuestions(
 ): AdaptiveQuestionDef[] {
   return ADAPTIVE_QUESTIONS.filter((q) => q.condition(answers, situation)).slice(0, 4)
 }
+
+// ── Données localisées ────────────────────────────────────────────
+
+import type { Lang } from '../lib/i18n/translations'
+import {
+  SITUATIONS_EN, GENDERS_EN, SECTORS_EN, EDUCATION_LEVELS_EN,
+  LOADING_MESSAGES_EN, QUESTIONS_EN, ADAPTIVE_QUESTIONS_EN,
+} from '../lib/i18n/onboarding-en'
+
+export function getLocalizedData(lang: Lang) {
+  if (lang === 'en') {
+    return {
+      SITUATIONS:      SITUATIONS_EN,
+      GENDERS:         GENDERS_EN,
+      SECTORS:         SECTORS_EN,
+      EDUCATION_LEVELS: EDUCATION_LEVELS_EN,
+      LANGUAGES,
+      LOADING_MESSAGES: LOADING_MESSAGES_EN,
+      QUESTIONS:       QUESTIONS_EN,
+      getAdaptiveQuestions: (
+        answers: Record<string, { selectedOptions: string[]; freeText: string }>,
+        situation: string
+      ) => ADAPTIVE_QUESTIONS_EN.filter((q) => q.condition(answers, situation)).slice(0, 4),
+    }
+  }
+  return {
+    SITUATIONS, GENDERS, SECTORS, EDUCATION_LEVELS, LANGUAGES,
+    LOADING_MESSAGES, QUESTIONS,
+    getAdaptiveQuestions,
+  }
+}
