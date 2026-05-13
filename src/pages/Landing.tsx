@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
+import { hasStartedTest, clearProgress } from '../lib/onboardingStorage'
 
 const TESTIMONIALS = [
   {
@@ -36,7 +38,7 @@ const STEPS = [
   {
     icon: '✨',
     title: 'Tu découvres tes autres vies',
-    desc: '3 trajectoires de vie alternatives personnalisées, avec plan d\'action, compétences à développer et score de faisabilité.',
+    desc: "3 trajectoires de vie alternatives personnalisées, avec plan d'action, compétences à développer et score de faisabilité.",
   },
 ]
 
@@ -61,26 +63,74 @@ const FAQS = [
 
 export default function Landing() {
   const navigate = useNavigate()
+  const [started, setStarted]         = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+
+  useEffect(() => {
+    setStarted(hasStartedTest())
+  }, [])
+
+  const handleStart  = () => navigate('/onboarding')
+  const handleResume = () => navigate('/onboarding')
+
+  const handleConfirmRestart = () => {
+    clearProgress()
+    setStarted(false)
+    setShowConfirm(false)
+    navigate('/onboarding')
+  }
 
   return (
     <div className="min-h-screen bg-dark-950">
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-dark-950/80 backdrop-blur-md border-b border-dark-800">
-        <Logo size={32} />
-        <button
-          onClick={() => navigate('/onboarding')}
-          className="btn-primary text-sm py-2 px-5"
-        >
-          Commencer
-        </button>
+        <Logo size={40} />
+        {started ? (
+          <div className="flex items-center gap-3">
+            <button onClick={() => setShowConfirm(true)} className="btn-secondary text-sm py-2 px-4">
+              Recommencer
+            </button>
+            <button onClick={handleResume} className="btn-primary text-sm py-2 px-5">
+              Reprendre le test
+            </button>
+          </div>
+        ) : (
+          <button onClick={handleStart} className="btn-primary text-sm py-2 px-5">
+            Commencer
+          </button>
+        )}
       </nav>
+
+      {/* Modal de confirmation restart */}
+      {showConfirm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-[#111111] border border-dark-600 rounded-2xl p-8 max-w-sm w-full text-center animate-fade-in shadow-2xl">
+            <div className="text-4xl mb-4">⚠️</div>
+            <h3 className="text-lg font-bold text-slate-100 mb-3">Recommencer depuis le début ?</h3>
+            <p className="text-slate-400 text-sm mb-6 leading-relaxed">
+              Tes réponses actuelles seront supprimées. Cette action est irréversible.
+            </p>
+            <div className="flex gap-3">
+              <button onClick={() => setShowConfirm(false)} className="btn-secondary flex-1 py-3">
+                Annuler
+              </button>
+              <button
+                onClick={handleConfirmRestart}
+                className="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold transition-all duration-200 active:scale-95"
+              >
+                Recommencer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-16 overflow-hidden">
         {/* Glow bg */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-700/20 rounded-full blur-[120px]" />
-          <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] bg-purple-900/20 rounded-full blur-[80px]" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-700/15 rounded-full blur-[140px]" />
+          <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] bg-purple-900/15 rounded-full blur-[80px]" />
         </div>
 
         <div className="relative z-10 text-center max-w-3xl mx-auto animate-fade-in">
@@ -89,24 +139,34 @@ export default function Landing() {
             Propulsé par GPT-4o
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
-            Et si tu avais{' '}
-            <span className="gradient-text">choisi une autre vie&nbsp;?</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6 text-slate-100">
+            Et si une autre version{' '}
+            <span className="text-brand-400">de toi</span>{' '}
+            t'attendait encore&nbsp;?
           </h1>
 
           <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            OtherMe analyse ton parcours et génère <strong className="text-slate-200">3 trajectoires de vie alternatives</strong>{' '}
-            que tu aurais pu vivre — ou que tu peux encore emprunter.
+            OtherMe analyse ton parcours, tes envies et tes choix pour révéler{' '}
+            <strong className="text-slate-200">3 trajectoires de vie alternatives</strong>{' '}
+            que tu peux encore construire.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-            <button
-              onClick={() => navigate('/onboarding')}
-              className="btn-primary text-base py-4 px-8 text-lg w-full sm:w-auto"
-            >
-              Découvrir mes autres vies →
-            </button>
-          </div>
+          {started ? (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
+              <button onClick={handleResume} className="btn-primary text-base py-4 px-8 text-lg w-full sm:w-auto">
+                Reprendre le test →
+              </button>
+              <button onClick={() => setShowConfirm(true)} className="btn-secondary text-base py-4 px-8 w-full sm:w-auto">
+                Recommencer
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+              <button onClick={handleStart} className="btn-primary text-base py-4 px-8 text-lg w-full sm:w-auto">
+                Découvrir mes autres vies →
+              </button>
+            </div>
+          )}
 
           <div className="flex items-center justify-center gap-6 text-sm text-slate-500">
             <span className="flex items-center gap-1.5">
@@ -127,6 +187,32 @@ export default function Landing() {
           </svg>
         </div>
       </section>
+
+      {/* Bannière de reprise — visible uniquement si test en cours */}
+      {started && (
+        <section className="px-4 -mt-8 pb-8 relative z-10">
+          <div className="max-w-2xl mx-auto bg-[#111111] border border-dark-700 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="text-2xl flex-shrink-0">🔄</div>
+            <div className="flex-1 min-w-0">
+              <p className="text-slate-200 font-semibold text-sm">Ton exploration OtherMe est en cours.</p>
+              <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">
+                Tu peux reprendre là où tu t'es arrêté, ou tout recommencer depuis le début.
+              </p>
+            </div>
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <button
+                onClick={() => setShowConfirm(true)}
+                className="text-slate-500 hover:text-slate-300 text-xs underline underline-offset-2 transition-colors"
+              >
+                Recommencer
+              </button>
+              <button onClick={handleResume} className="btn-primary text-xs py-2 px-4">
+                Reprendre →
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* How it works */}
       <section className="py-24 px-4">
@@ -230,18 +316,26 @@ export default function Landing() {
       {/* Final CTA */}
       <section className="py-24 px-4 bg-dark-900/50">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Prêt à <span className="gradient-text">te découvrir</span> ?
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
+            Prêt à <span className="text-brand-400">te découvrir</span> ?
           </h2>
           <p className="text-slate-400 mb-10 text-lg">
             Réponds à quelques questions et laisse l'IA révéler tes autres vies possibles.
           </p>
-          <button
-            onClick={() => navigate('/onboarding')}
-            className="btn-primary text-base py-4 px-10 text-lg"
-          >
-            Commencer maintenant →
-          </button>
+          {started ? (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <button onClick={handleResume} className="btn-primary text-base py-4 px-10 text-lg">
+                Reprendre mon test →
+              </button>
+              <button onClick={() => setShowConfirm(true)} className="btn-secondary text-base py-4 px-8">
+                Recommencer
+              </button>
+            </div>
+          ) : (
+            <button onClick={handleStart} className="btn-primary text-base py-4 px-10 text-lg">
+              Commencer maintenant →
+            </button>
+          )}
           <p className="text-sm text-slate-600 mt-4">⚡ Résultat personnalisé en moins de 30 secondes</p>
         </div>
       </section>
@@ -266,7 +360,7 @@ export default function Landing() {
       {/* Footer */}
       <footer className="py-12 px-4 border-t border-dark-800">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <Logo size={30} />
+          <Logo size={36} />
           <p className="text-slate-600 text-sm text-center">
             © {new Date().getFullYear()} OtherMe · Tous droits réservés
           </p>

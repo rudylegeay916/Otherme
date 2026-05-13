@@ -1,49 +1,159 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { submitOnboarding } from '../lib/api'
 import { useAuth } from '../contexts/AuthContext'
 import QuestionWithBubblesAndTextInput from '../components/QuestionWithBubblesAndTextInput'
+import MotivationalCheckpoint from '../components/MotivationalCheckpoint'
 import Logo from '../components/Logo'
 import type { OnboardingData, QuestionAnswer } from '../types'
 import {
   EMPTY_ANSWER, SITUATIONS, GENDERS, SECTORS, EDUCATION_LEVELS, LANGUAGES,
   LOADING_MESSAGES, QUESTIONS, getAdaptiveQuestions,
 } from './onboarding-data'
+import { saveProgress, loadProgress, clearProgress } from '../lib/onboardingStorage'
 
-// ── Questions par étape (indices dans QUESTIONS[]) ────────────────
-
+// ── Questions par étape (IDs dans QUESTIONS[]) ────────────────────
 const STEP_QUESTION_IDS: string[][] = [
-  [],                                                          // Step 0 — Identité (formulaire custom)
-  [],                                                          // Step 1 — CV (formulaire custom)
-  ['skills', 'askedFor', 'profile'],                          // Step 2 — Parcours & compétences
-  ['motivation', 'energy', 'interests', 'timeActivity'],      // Step 3 — Passions & énergie
-  ['lifestyle', 'workEnv', 'money', 'risk'],                  // Step 4 — Motivations & style de vie
-  ['drains', 'vision5y', 'successCriteria', 'avoidNext', 'transitionTest'], // Step 5 — Projection
-  ['relation', 'role', 'blocks', 'realisticPath'],            // Step 6 — Questions finales
-  [],                                                          // Step 7 — Adaptatives (dynamique)
+  [],                                                                      // Step 0 — Identité
+  [],                                                                      // Step 1 — CV
+  ['skills', 'askedFor', 'profile'],                                       // Step 2 — Compétences
+  ['motivation', 'energy', 'interests', 'timeActivity'],                   // Step 3 — Passions
+  ['lifestyle', 'workEnv', 'money', 'risk'],                               // Step 4 — Style de vie
+  ['drains', 'vision5y', 'successCriteria', 'avoidNext', 'transitionTest'],// Step 5 — Projection
+  ['relation', 'role', 'blocks', 'realisticPath'],                         // Step 6 — Profil
+  [],                                                                      // Step 7 — Adaptatives
 ]
 
-const STEP_LABELS = [
-  'Identité', 'Ton CV', 'Compétences', 'Passions',
-  'Style de vie', 'Projection', 'Profil', 'Pour toi',
-]
+// Étapes après lesquelles on affiche un checkpoint (index 0..3)
+const CHECKPOINT_AFTER: number[] = [3, 4, 5, 6]
 
-// ── Helpers ───────────────────────────────────────────────────────
+// ── Contenu des checkpoints ───────────────────────────────────────
 
-const emptyAnswers = (): Record<string, QuestionAnswer> => ({})
-
-const DEFAULT_DATA: OnboardingData = {
-  firstName: '',
-  email: '',
-  age: 0,
-  currentSituation: '',
-  gender: '',
-  city: '',
-  answers: emptyAnswers(),
+interface CheckpointContent {
+  title:     string
+  message:   string
+  statLabel: string
+  statValue: string
+  icon:      string
+  ctaLabel?: string
 }
 
-function getQ(id: string) {
-  return QUESTIONS.find((q) => q.id === id)!
+function detectSignals(answers: Record<string, QuestionAnswer>) {
+  const motiv     = answers.motivation?.selectedOptions ?? []
+  const lifestyle = answers.lifestyle?.selectedOptions  ?? []
+  const energy    = answers.energy?.selectedOptions     ?? []
+  const interests = answers.interests?.selectedOptions  ?? []
+  const risk      = answers.risk?.selectedOptions       ?? []
+  const money     = answers.money?.selectedOptions      ?? []
+
+  return {
+    liberty:     motiv.includes('Avoir plus de liberté') ||
+                 lifestyle.some(o => ['Libre et flexible', 'Indépendante', 'Nomade / à distance'].includes(o)),
+    creativity:  motiv.includes('Créer mon activité') ||
+                 lifestyle.includes('Créative') ||
+                 energy.some(o => ['Créer', 'Imaginer'].includes(o)) ||
+                 interests.some(o => ['Art', 'Musique'].includes(o)),
+    meaning:     motiv.some(o => ['Trouver plus de sens', 'Me sentir plus aligné'].includes(o)) ||
+                 lifestyle.includes('Utile aux autres'),
+    money:       motiv.includes('Gagner plus') ||
+                 money.some(o => ['Hauts revenus', 'Indépendance financière'].includes(o)),
+    progressive: motiv.includes('Me reconvertir progressivement') ||
+                 risk.some(o => ['Je veux avancer progressivement', 'Je veux une transition douce',
+                                 'Je veux sécuriser avant de changer'].includes(o)),
+  }
+}
+
+function getCheckpointContent(
+  index:   number,
+  answers: Record<string, QuestionAnswer>,
+): CheckpointContent {
+  const s = detectSignals(answers)
+
+  const generic: CheckpointContent[] = [
+    // 0 — après Compétences
+    {
+      title:     'Ton profil commence à se dessiner.',
+      message:   "Tes premières réponses permettent déjà à OtherMe de mieux comprendre ce qui te motive, ce qui t'attire et ce que tu veux éviter.",
+      statLabel: 'Analyse',
+      statValue: 'En cours',
+      icon:      '🧩',
+    },
+    // 1 — après Passions (on injecte un message adaptatif ici)
+    {
+      title:     'Tu avances mieux que tu ne le penses.',
+      message:   'Chaque réponse affine tes trajectoires. OtherMe commence à distinguer les environnements, les secteurs et les rôles qui pourraient vraiment te correspondre.',
+      statLabel: 'Personnalisation',
+      statValue: '+ précise',
+      icon:      '📡',
+    },
+    // 2 — après Style de vie
+    {
+      title:     'Tes trajectoires deviennent plus précises.',
+      message:   'Tes réponses ne servent pas à te mettre dans une case. Elles permettent de construire plusieurs chemins possibles à partir de ton parcours, tes envies et ta réalité.',
+      statLabel: 'Trajectoires',
+      statValue: '3 scénarios',
+      icon:      '🗺️',
+    },
+    // 3 — avant les questions adaptatives
+    {
+      title:     'OtherMe va maintenant affiner ton profil.',
+      message:   'Les prochaines questions sont adaptées à tes réponses. Elles servent à mieux distinguer les pistes réalistes, inspirantes et actionnables pour toi.',
+      statLabel: 'Questions',
+      statValue: 'Personnalisées',
+      icon:      '✨',
+      ctaLabel:  'Répondre aux questions personnalisées',
+    },
+  ]
+
+  // Checkpoint 1 : message adaptatif selon profil détecté
+  if (index === 1) {
+    if (s.liberty) return {
+      title:     'Ton envie de liberté ressort clairement.',
+      message:   "OtherMe va privilégier des trajectoires qui peuvent t'offrir plus d'autonomie, sans ignorer ton besoin de sécurité.",
+      statLabel: 'Signal détecté',
+      statValue: 'Autonomie',
+      icon:      '🦅',
+    }
+    if (s.creativity) return {
+      title:     'Ton profil créatif commence à apparaître.',
+      message:   "OtherMe va chercher des trajectoires où tu peux créer, imaginer, produire ou transformer des idées en projets concrets.",
+      statLabel: 'Signal détecté',
+      statValue: 'Créativité',
+      icon:      '🎨',
+    }
+    if (s.meaning) return {
+      title:     'Ton besoin de sens ressort dans tes réponses.',
+      message:   "OtherMe va explorer des pistes où ton travail peut avoir plus d'impact, d'utilité ou d'alignement personnel.",
+      statLabel: 'Signal détecté',
+      statValue: 'Sens & impact',
+      icon:      '💡',
+    }
+    if (s.money) return {
+      title:     'Ton ambition est prise en compte.',
+      message:   "OtherMe va chercher des trajectoires qui valorisent mieux tes compétences, tout en restant réalistes selon ton parcours.",
+      statLabel: 'Signal détecté',
+      statValue: 'Ambition',
+      icon:      '🎯',
+    }
+  }
+
+  // Checkpoint 2 : progressive transition
+  if (index === 2 && s.progressive) return {
+    title:     'Ta transition peut se construire étape par étape.',
+    message:   "OtherMe ne va pas seulement proposer un métier final, mais aussi un chemin réaliste pour y arriver progressivement.",
+    statLabel: 'Approche',
+    statValue: 'Transition douce',
+    icon:      '🪜',
+  }
+
+  return generic[index] ?? generic[0]
+}
+
+// ── Valeurs par défaut ────────────────────────────────────────────
+
+const DEFAULT_DATA: OnboardingData = {
+  firstName: '', email: '', age: 0, currentSituation: '',
+  gender: '', city: '', answers: {},
 }
 
 // ── Écran de chargement ───────────────────────────────────────────
@@ -67,16 +177,13 @@ function LoadingScreen({ msgIdx }: { msgIdx: number }) {
   )
 }
 
-// ── Composant MultiSelect simple ──────────────────────────────────
+// ── ChipSelect ────────────────────────────────────────────────────
 
 function ChipSelect({
   options, selected, onChange, multi = true, label,
 }: {
-  options: string[]
-  selected: string[]
-  onChange: (v: string[]) => void
-  multi?: boolean
-  label?: string
+  options: string[]; selected: string[]; onChange: (v: string[]) => void
+  multi?: boolean; label?: string
 }) {
   const toggle = (opt: string) => {
     if (selected.includes(opt)) {
@@ -116,16 +223,35 @@ function ChipSelect({
 // ── Composant principal ───────────────────────────────────────────
 
 export default function Onboarding() {
-  const navigate = useNavigate()
+  const navigate    = useNavigate()
   const { session } = useAuth()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const [step, setStep] = useState(0)
-  const [data, setData] = useState<OnboardingData>(DEFAULT_DATA)
-  const [cvFile, setCvFile] = useState<File | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [loadingMsg, setLoadingMsg] = useState(0)
-  const [error, setError] = useState('')
+  const [step,              setStep]              = useState(0)
+  const [data,              setData]              = useState<OnboardingData>(DEFAULT_DATA)
+  const [cvFile,            setCvFile]            = useState<File | null>(null)
+  const [cvMeta,            setCvMeta]            = useState<{ name: string; size: number } | null>(null)
+  const [loading,           setLoading]           = useState(false)
+  const [loadingMsg,        setLoadingMsg]        = useState(0)
+  const [error,             setError]             = useState('')
+  const [showingCheckpoint, setShowingCheckpoint] = useState<number | null>(null)
+
+  // ── Restauration depuis localStorage ─────────────────────────────
+  useEffect(() => {
+    const saved = loadProgress()
+    if (!saved) return
+    setStep(saved.currentStep)
+    setData(saved.data)
+    if (saved.showingCheckpoint !== null) setShowingCheckpoint(saved.showingCheckpoint)
+    if (saved.cvMeta) setCvMeta(saved.cvMeta)
+  }, [])
+
+  // ── Sauvegarde automatique ────────────────────────────────────────
+  useEffect(() => {
+    // Ne pas sauvegarder sur l'état par défaut vide
+    if (!data.firstName && !data.email && step === 0) return
+    saveProgress(step, data, cvFile, showingCheckpoint)
+  }, [step, data, cvFile, showingCheckpoint])
 
   const answers = data.answers ?? {}
 
@@ -138,25 +264,39 @@ export default function Onboarding() {
   const getAnswer = (id: string): QuestionAnswer =>
     answers[id] ?? { ...EMPTY_ANSWER }
 
-  // Questions adaptatives calculées à partir des réponses de l'étape 6
   const adaptiveQuestions = useMemo(
     () => getAdaptiveQuestions(answers, data.currentSituation),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [step] // recalculate only when advancing to step 7
+    [step]
   )
 
   const TOTAL_STEPS = adaptiveQuestions.length > 0 ? 8 : 7
 
-  // ── Validation step 0 ───────────────────────────────────────────
+  // ── Validation ────────────────────────────────────────────────────
   const step0Valid = !!data.firstName.trim() && !!data.email.trim() &&
     data.age > 0 && !!data.currentSituation
 
-  const canProceed = (): boolean => {
-    if (step === 0) return step0Valid
-    return true // toutes les autres étapes sont optionnelles
+  const canProceed = () => step === 0 ? step0Valid : true
+
+  // ── Navigation ────────────────────────────────────────────────────
+  const handleNext = () => {
+    const checkpointIdx = CHECKPOINT_AFTER.indexOf(step)
+    if (checkpointIdx !== -1) {
+      setShowingCheckpoint(checkpointIdx)
+    } else {
+      setStep((s) => s + 1)
+    }
   }
 
-  // ── Soumission ──────────────────────────────────────────────────
+  const handleBack = () => {
+    if (showingCheckpoint !== null) {
+      setShowingCheckpoint(null)
+      return
+    }
+    setStep((s) => Math.max(0, s - 1))
+  }
+
+  // ── Soumission ───────────────────────────────────────────────────
   const handleSubmit = async () => {
     setLoading(true)
     setError('')
@@ -164,6 +304,7 @@ export default function Onboarding() {
     try {
       const { reportId } = await submitOnboarding(data, cvFile, session?.access_token)
       clearInterval(interval)
+      clearProgress()
       navigate(`/paywall/${reportId}`)
     } catch (e) {
       clearInterval(interval)
@@ -172,27 +313,47 @@ export default function Onboarding() {
     }
   }
 
-  const isLastStep = step === TOTAL_STEPS - 1
+  const isLastStep  = step === TOTAL_STEPS - 1
   const progressPct = ((step + 1) / TOTAL_STEPS) * 100
 
   if (loading) return <LoadingScreen msgIdx={loadingMsg} />
 
-  // ── IDs de questions pour l'étape courante ──────────────────────
+  // ── Checkpoint motivationnel ──────────────────────────────────────
+  if (showingCheckpoint !== null) {
+    const content = getCheckpointContent(showingCheckpoint, answers)
+    return (
+      <MotivationalCheckpoint
+        {...content}
+        onContinue={() => {
+          setShowingCheckpoint(null)
+          setStep((s) => s + 1)
+        }}
+      />
+    )
+  }
+
   const currentQuestionIds: string[] =
     step === 7 ? adaptiveQuestions.map((q) => q.id) : (STEP_QUESTION_IDS[step] ?? [])
 
-  // Questions à afficher dans cette étape
-  const currentQuestions = currentQuestionIds.map((id) => {
-    const base = QUESTIONS.find((q) => q.id === id)
-    if (base) return base
-    return adaptiveQuestions.find((q) => q.id === id) ?? null
-  }).filter(Boolean)
+  const currentQuestions = currentQuestionIds
+    .map((id) => QUESTIONS.find((q) => q.id === id) ?? adaptiveQuestions.find((q) => q.id === id) ?? null)
+    .filter(Boolean)
+
+  const stepTitles: Record<number, { title: string; sub: string }> = {
+    0: { title: 'Parle-nous de toi',               sub: 'Quelques infos pour personnaliser ton analyse' },
+    2: { title: 'Tes compétences & ton profil',    sub: 'Ce que tu sais faire et comment tu fonctionnes' },
+    3: { title: 'Tes passions & ton énergie',      sub: "Ce qui t'anime naturellement" },
+    4: { title: 'Ton style de vie idéal',          sub: 'Le cadre professionnel qui te correspond' },
+    5: { title: 'Ta projection de vie',            sub: 'Ce que tu veux construire et éviter' },
+    6: { title: 'Ton profil & tes blocages',       sub: 'Les derniers éléments pour affiner tes trajectoires' },
+    7: { title: 'Questions adaptées à ton profil', sub: 'Quelques questions personnalisées selon tes réponses' },
+  }
 
   return (
     <div className="min-h-screen bg-dark-950 flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-dark-800">
-        <Logo size={30} />
+        <Logo size={36} />
         <span className="text-sm text-slate-500">Étape {step + 1} / {TOTAL_STEPS}</span>
       </div>
 
@@ -204,7 +365,7 @@ export default function Onboarding() {
         />
       </div>
 
-      {/* Indicateur d'étapes (compact) */}
+      {/* Indicateur d'étapes */}
       <div className="flex items-center justify-center gap-1.5 py-4 px-4 overflow-x-auto">
         {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
           <div
@@ -217,9 +378,7 @@ export default function Onboarding() {
                 : 'w-2 h-2 rounded-full bg-dark-700'
             }`}
           >
-            {i < step && (
-              <span className="text-white text-[10px] font-bold">✓</span>
-            )}
+            {i < step && <span className="text-white text-[10px] font-bold">✓</span>}
           </div>
         ))}
       </div>
@@ -229,12 +388,12 @@ export default function Onboarding() {
         <div className="w-full max-w-lg">
           <div className="card p-6 md:p-8 animate-slide-up">
 
-            {/* ── Étape 0 : Identité ─────────────────────────────── */}
+            {/* ── Étape 0 : Identité ──────────────────────────────── */}
             {step === 0 && (
               <div className="space-y-5">
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-100 mb-1">Parle-nous de toi</h2>
-                  <p className="text-slate-500 text-sm">Quelques infos pour personnaliser ton analyse</p>
+                  <h2 className="text-2xl font-bold text-slate-100 mb-1">{stepTitles[0].title}</h2>
+                  <p className="text-slate-500 text-sm">{stepTitles[0].sub}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -284,7 +443,9 @@ export default function Onboarding() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Ville <span className="text-slate-600 font-normal">(optionnel)</span></label>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                    Ville <span className="text-slate-600 font-normal">(optionnel)</span>
+                  </label>
                   <input
                     className="input-field"
                     placeholder="Paris"
@@ -294,7 +455,9 @@ export default function Onboarding() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Genre <span className="text-slate-600 font-normal">(optionnel)</span></label>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                    Genre <span className="text-slate-600 font-normal">(optionnel)</span>
+                  </label>
                   <ChipSelect
                     options={GENDERS}
                     selected={data.gender ? [data.gender] : []}
@@ -305,7 +468,7 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* ── Étape 1 : CV ───────────────────────────────────── */}
+            {/* ── Étape 1 : CV ────────────────────────────────────── */}
             {step === 1 && (
               <div className="space-y-5">
                 <div>
@@ -313,10 +476,20 @@ export default function Onboarding() {
                     Ton CV <span className="text-slate-500 font-normal text-base">(optionnel)</span>
                   </h2>
                   <p className="text-slate-400 text-sm leading-relaxed">
-                    Ajoutez votre CV pour permettre à OtherMe de personnaliser les prochaines questions.
-                    C'est optionnel, mais cela rendra l'analyse beaucoup plus précise.
+                    Ajoute ton CV pour permettre à OtherMe de personnaliser l'analyse. C'est optionnel, mais cela la rend beaucoup plus précise.
                   </p>
                 </div>
+
+                {/* Fichier CV sauvegardé mais non rechargeable */}
+                {!cvFile && cvMeta && (
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-brand-600/10 border border-brand-700/40">
+                    <span className="text-xl">📄</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-brand-300 text-sm font-medium truncate">{cvMeta.name}</p>
+                      <p className="text-slate-500 text-xs">CV de la session précédente · Re-charge le fichier si tu veux l'inclure</p>
+                    </div>
+                  </div>
+                )}
 
                 <div
                   onClick={() => fileInputRef.current?.click()}
@@ -331,7 +504,11 @@ export default function Onboarding() {
                     type="file"
                     accept=".pdf,.txt,.doc,.docx"
                     className="hidden"
-                    onChange={(e) => setCvFile(e.target.files?.[0] || null)}
+                    onChange={(e) => {
+                      const f = e.target.files?.[0] || null
+                      setCvFile(f)
+                      if (f) setCvMeta({ name: f.name, size: f.size })
+                    }}
                   />
                   {cvFile ? (
                     <>
@@ -342,15 +519,14 @@ export default function Onboarding() {
                   ) : (
                     <>
                       <div className="text-3xl mb-2">📎</div>
-                      <p className="text-slate-300 font-medium">Glisser ou cliquer pour ajouter votre CV</p>
+                      <p className="text-slate-300 font-medium">Glisser ou cliquer pour ajouter ton CV</p>
                       <p className="text-slate-500 text-xs mt-1">PDF, DOCX ou TXT · Max 10 Mo</p>
                     </>
                   )}
                 </div>
 
-                {/* Parcours rapide (optionnel) */}
                 <div className="space-y-4 pt-2 border-t border-dark-700">
-                  <p className="text-sm text-slate-500">Ou renseignez votre parcours rapidement :</p>
+                  <p className="text-sm text-slate-500">Ou renseigne ton parcours rapidement :</p>
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-1.5">Métier actuel</label>
                     <input
@@ -420,43 +596,13 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* ── Étapes 2–7 : questions ─────────────────────────── */}
+            {/* ── Étapes 2–7 : questions ────────────────────────────── */}
             {step >= 2 && currentQuestions.length > 0 && (
               <div className="space-y-10">
-                {step === 2 && (
+                {stepTitles[step] && (
                   <div className="mb-2">
-                    <h2 className="text-2xl font-bold text-slate-100 mb-1">Tes compétences & ton profil</h2>
-                    <p className="text-slate-500 text-sm">Ce que vous savez faire et comment vous fonctionnez</p>
-                  </div>
-                )}
-                {step === 3 && (
-                  <div className="mb-2">
-                    <h2 className="text-2xl font-bold text-slate-100 mb-1">Tes passions & ton énergie</h2>
-                    <p className="text-slate-500 text-sm">Ce qui vous anime naturellement</p>
-                  </div>
-                )}
-                {step === 4 && (
-                  <div className="mb-2">
-                    <h2 className="text-2xl font-bold text-slate-100 mb-1">Ton style de vie idéal</h2>
-                    <p className="text-slate-500 text-sm">Le cadre de vie professionnel qui vous correspond</p>
-                  </div>
-                )}
-                {step === 5 && (
-                  <div className="mb-2">
-                    <h2 className="text-2xl font-bold text-slate-100 mb-1">Ta projection de vie</h2>
-                    <p className="text-slate-500 text-sm">Ce que vous voulez construire et éviter</p>
-                  </div>
-                )}
-                {step === 6 && (
-                  <div className="mb-2">
-                    <h2 className="text-2xl font-bold text-slate-100 mb-1">Ton profil & tes blocages</h2>
-                    <p className="text-slate-500 text-sm">Les derniers éléments pour affiner vos trajectoires</p>
-                  </div>
-                )}
-                {step === 7 && (
-                  <div className="mb-2">
-                    <h2 className="text-2xl font-bold text-slate-100 mb-1">Questions adaptées à ton profil</h2>
-                    <p className="text-slate-500 text-sm">Quelques questions personnalisées selon vos réponses</p>
+                    <h2 className="text-2xl font-bold text-slate-100 mb-1">{stepTitles[step].title}</h2>
+                    <p className="text-slate-500 text-sm">{stepTitles[step].sub}</p>
                   </div>
                 )}
 
@@ -477,12 +623,12 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Étape 7 vide = pas de questions adaptatives */}
+            {/* Étape 7 sans questions adaptatives */}
             {step === 7 && currentQuestions.length === 0 && (
               <div className="text-center py-8">
                 <div className="text-4xl mb-4">✅</div>
                 <h2 className="text-xl font-bold text-slate-100 mb-2">Profil complété !</h2>
-                <p className="text-slate-400 text-sm">Vous pouvez générer votre rapport maintenant.</p>
+                <p className="text-slate-400 text-sm">Tu peux générer ton rapport maintenant.</p>
               </div>
             )}
 
@@ -493,7 +639,7 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Note finale avant soumission */}
+            {/* Note finale */}
             {isLastStep && (
               <div className="mt-6 card p-4 bg-brand-600/5 border-brand-800">
                 <p className="text-sm text-slate-400">
@@ -507,7 +653,7 @@ export default function Onboarding() {
             <div className="flex items-center justify-between mt-8 pt-6 border-t border-dark-700">
               <button
                 type="button"
-                onClick={() => setStep((s) => Math.max(0, s - 1))}
+                onClick={handleBack}
                 className={`btn-secondary ${step === 0 ? 'invisible' : ''}`}
               >
                 ← Retour
@@ -516,7 +662,7 @@ export default function Onboarding() {
               {!isLastStep ? (
                 <button
                   type="button"
-                  onClick={() => setStep((s) => s + 1)}
+                  onClick={handleNext}
                   disabled={!canProceed()}
                   className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
                 >
