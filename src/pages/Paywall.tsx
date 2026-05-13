@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { fetchReport, createCheckoutSession } from '../lib/api'
 import type { Report, Trajectory } from '../types'
+import Logo from '../components/Logo'
 
 function FeasibilityBar({ score }: { score: number }) {
   const color = score >= 70 ? 'bg-green-500' : score >= 50 ? 'bg-amber-500' : 'bg-red-500'
@@ -168,7 +169,7 @@ export default function Paywall() {
     <div className="min-h-screen bg-dark-950">
       {/* Navbar */}
       <nav className="sticky top-0 z-40 flex items-center justify-between px-6 py-4 bg-dark-950/90 backdrop-blur-md border-b border-dark-800">
-        <span className="text-xl font-bold gradient-text">OtherMe</span>
+        <Logo size={30} />
         {!isPaid && (
           <button onClick={handlePay} disabled={paying} className="btn-primary text-sm py-2 px-5">
             {paying ? 'Redirection...' : 'Débloquer — 4,99 €'}

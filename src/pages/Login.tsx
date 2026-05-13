@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { translateAuthError } from '../lib/authErrors'
+import Logo from '../components/Logo'
 
 export default function Login() {
   const { signIn } = useAuth()
@@ -42,8 +43,8 @@ export default function Login() {
       <div className="relative z-10 w-full max-w-sm animate-fade-in">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link to="/" className="text-2xl font-bold gradient-text">OtherMe</Link>
-          <p className="text-slate-500 text-sm mt-1">Connecte-toi pour accéder à tes rapports</p>
+          <Logo size={40} className="justify-center" />
+          <p className="text-slate-500 text-sm mt-2">Connecte-toi pour accéder à tes rapports</p>
         </div>
 
         <div className="card p-8">

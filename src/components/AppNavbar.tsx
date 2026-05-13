@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import Logo from './Logo'
 
 const NAV_LINKS = [
   { href: '/dashboard', label: 'Mes rapports' },
@@ -30,9 +31,7 @@ export default function AppNavbar() {
     <nav className="sticky top-0 z-40 border-b border-dark-800 bg-dark-950/90 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
         {/* Logo */}
-        <Link to="/" className="text-xl font-bold gradient-text flex-shrink-0">
-          OtherMe
-        </Link>
+        <Logo size={34} />
 
         {/* Navigation centrale */}
         <div className="hidden md:flex items-center gap-1">

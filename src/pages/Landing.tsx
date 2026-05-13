@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import Logo from '../components/Logo'
 
 const TESTIMONIALS = [
   {
@@ -65,7 +66,7 @@ export default function Landing() {
     <div className="min-h-screen bg-dark-950">
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-dark-950/80 backdrop-blur-md border-b border-dark-800">
-        <span className="text-xl font-bold gradient-text">OtherMe</span>
+        <Logo size={32} />
         <button
           onClick={() => navigate('/onboarding')}
           className="btn-primary text-sm py-2 px-5"
@@ -265,7 +266,7 @@ export default function Landing() {
       {/* Footer */}
       <footer className="py-12 px-4 border-t border-dark-800">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <span className="text-xl font-bold gradient-text">OtherMe</span>
+          <Logo size={30} />
           <p className="text-slate-600 text-sm text-center">
             © {new Date().getFullYear()} OtherMe · Tous droits réservés
           </p>

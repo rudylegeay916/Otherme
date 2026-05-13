@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { submitOnboarding } from '../lib/api'
 import { useAuth } from '../contexts/AuthContext'
 import QuestionWithBubblesAndTextInput from '../components/QuestionWithBubblesAndTextInput'
+import Logo from '../components/Logo'
 import type { OnboardingData, QuestionAnswer } from '../types'
 import {
   EMPTY_ANSWER, SITUATIONS, GENDERS, SECTORS, EDUCATION_LEVELS, LANGUAGES,
@@ -191,7 +192,7 @@ export default function Onboarding() {
     <div className="min-h-screen bg-dark-950 flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-dark-800">
-        <span className="text-xl font-bold gradient-text">OtherMe</span>
+        <Logo size={30} />
         <span className="text-sm text-slate-500">Étape {step + 1} / {TOTAL_STEPS}</span>
       </div>
 
