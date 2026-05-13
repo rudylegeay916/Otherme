@@ -57,4 +57,8 @@ export interface Report {
 export interface OnboardingResponse {
   reportId: string
   status: string
+  isMock?: boolean
+  mockTrajectories?: Trajectory[]
+  firstName?: string
+  email?: string
 }

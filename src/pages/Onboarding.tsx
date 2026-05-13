@@ -250,7 +250,9 @@ export default function Onboarding() {
       navigate(`/paywall/${reportId}`)
     } catch (e) {
       clearInterval(interval)
-      setError(e instanceof Error ? e.message : 'Une erreur est survenue')
+      console.error('[Onboarding] Erreur génération rapport:', e)
+      const msg = e instanceof Error ? e.message : 'Une erreur est survenue'
+      setError(`${msg} — Vérifie ta connexion et réessaie.`)
       setLoading(false)
     }
   }
