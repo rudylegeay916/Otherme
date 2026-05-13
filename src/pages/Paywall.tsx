@@ -24,10 +24,8 @@ function TrajectoryCard({ trajectory, index, locked }: { trajectory: Trajectory;
 
   return (
     <div className={`card relative overflow-hidden ${locked ? 'select-none' : ''}`}>
-      {/* Top accent bar */}
       <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradients[index]} rounded-t-2xl`} />
 
-      {/* Locked overlay */}
       {locked && (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-dark-900/80 backdrop-blur-sm rounded-2xl">
           <div className="text-4xl mb-3">🔒</div>
@@ -69,7 +67,6 @@ function TrajectoryCard({ trajectory, index, locked }: { trajectory: Trajectory;
           ))}
         </div>
 
-        {/* Timeline */}
         {trajectory.timeline.length > 0 && (
           <div className="mt-6">
             <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Plan d'action</h4>
@@ -91,7 +88,6 @@ function TrajectoryCard({ trajectory, index, locked }: { trajectory: Trajectory;
           </div>
         )}
 
-        {/* Skills */}
         {trajectory.skillsToDevlop.length > 0 && (
           <div className="mt-6">
             <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Compétences à développer</h4>
@@ -156,7 +152,7 @@ export default function Paywall() {
         <div className="text-center max-w-sm">
           <div className="text-5xl mb-4">⚠️</div>
           <h2 className="text-xl font-bold mb-2">Rapport introuvable</h2>
-          <p className="text-slate-500 mb-6">{error || 'Ce rapport n\'existe pas ou a expiré.'}</p>
+          <p className="text-slate-500 mb-6">{error || "Ce rapport n'existe pas ou a expiré."}</p>
           <button onClick={() => navigate('/onboarding')} className="btn-primary">
             Recommencer
           </button>
@@ -165,7 +161,7 @@ export default function Paywall() {
     )
   }
 
-  const isPaid = report.status === 'paid' || report.status === 'complete'
+  const isPaid = report.status === 'paid' || report.status === 'emailed' || report.status === 'complete'
   const trajectories = report.trajectories || []
 
   return (
@@ -193,7 +189,7 @@ export default function Paywall() {
           <p className="text-slate-400">
             {isPaid
               ? 'Ton rapport complet est débloqué. Tu recevras le PDF par email.'
-              : 'La première trajectoire est gratuite. Débloquez les 2 suivantes pour accéder au rapport complet.'}
+              : 'La première trajectoire est offerte. Débloquez les 2 suivantes pour accéder au rapport complet.'}
           </p>
         </div>
 
@@ -215,18 +211,41 @@ export default function Paywall() {
             <div className="absolute inset-0 bg-gradient-to-br from-brand-900/30 to-transparent pointer-events-none rounded-2xl" />
             <div className="relative">
               <div className="text-4xl mb-4">🔓</div>
-              <h2 className="text-2xl font-bold mb-2">Débloquez vos 2 autres trajectoires</h2>
-              <p className="text-slate-400 mb-6 max-w-md mx-auto">
-                Plus le rapport PDF complet envoyé à <strong className="text-slate-200">{report.email}</strong>
+              <h2 className="text-2xl font-bold mb-2">Débloquer le rapport complet</h2>
+              <p className="text-slate-400 mb-2 max-w-md mx-auto">
+                Accédez à vos 3 trajectoires + PDF envoyé à <strong className="text-slate-200">{report.email}</strong>
+              </p>
+              <p className="text-brand-300 text-sm font-medium mb-6">
+                ♾️ Tests illimités inclus — analysez autant de profils que vous voulez
               </p>
 
-              <div className="flex items-baseline justify-center gap-3 mb-6">
-                <span className="text-slate-500 line-through text-xl">14,99 €</span>
-                <span className="text-5xl font-black text-slate-100">4,99 €</span>
+              {/* Pricing */}
+              <div className="inline-flex flex-col items-center bg-dark-800/60 border border-dark-600 rounded-2xl px-8 py-5 mb-6">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold uppercase tracking-wider">
+                    Offre de lancement
+                  </span>
+                </div>
+                <div className="flex items-baseline justify-center gap-2 mt-2">
+                  <span className="text-5xl font-black text-slate-100">4,99 €</span>
+                  <span className="text-slate-400 text-sm">/ 1ère semaine</span>
+                </div>
+                <div className="flex items-center gap-1.5 mt-2 text-slate-500 text-sm">
+                  <span>puis</span>
+                  <span className="font-semibold text-slate-400">14,99 € / semaine</span>
+                  <span>· résiliable à tout moment</span>
+                </div>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-3 mb-8 text-sm text-slate-400">
-                {['3 trajectoires complètes', 'PDF par email', 'Paiement sécurisé', 'Remboursement 48h'].map((f) => (
+              {/* Features */}
+              <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8 text-sm text-slate-400">
+                {[
+                  '3 trajectoires complètes',
+                  'Tests illimités',
+                  'PDF par email',
+                  'Paiement sécurisé',
+                  'Sans engagement',
+                ].map((f) => (
                   <span key={f} className="flex items-center gap-1.5">
                     <span className="text-brand-400">✓</span> {f}
                   </span>
@@ -244,10 +263,10 @@ export default function Paywall() {
                     Redirection vers le paiement...
                   </span>
                 ) : (
-                  'Payer et débloquer — 4,99 €'
+                  'S\'abonner et débloquer — 4,99 €'
                 )}
               </button>
-              <p className="text-xs text-slate-600 mt-3">Paiement sécurisé par Stripe · SSL</p>
+              <p className="text-xs text-slate-600 mt-3">Paiement sécurisé par Stripe · SSL · Résiliable à tout moment</p>
             </div>
           </div>
         )}

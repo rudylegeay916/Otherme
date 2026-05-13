@@ -19,7 +19,10 @@ const stripe = new Stripe(env.stripeSecretKey, {
   apiVersion: '2023-10-16',
 })
 
-const PRICE_CENTS = 499 // 4,99 €
+// 14,99 €/semaine — prix récurrent
+const WEEKLY_PRICE_CENTS = 1499
+// 4,99 € première semaine — remise de 10 € sur la 1ère période
+const FIRST_WEEK_DISCOUNT_CENTS = 1000
 
 const router = Router()
 
@@ -41,18 +44,28 @@ router.post('/create-checkout', async (req, res) => {
       return res.status(400).json({ message: 'Ce rapport est déjà payé' })
     }
 
+    // Coupon dynamique : 10 € de remise sur la 1ère semaine → 4,99 € au lieu de 14,99 €
+    const coupon = await stripe.coupons.create({
+      amount_off: FIRST_WEEK_DISCOUNT_CENTS,
+      currency: 'eur',
+      duration: 'once',
+      name: 'Offre de lancement — 1ère semaine',
+    })
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      mode: 'payment',
+      mode: 'subscription',
       customer_email: email,
+      discounts: [{ coupon: coupon.id }],
       line_items: [
         {
           price_data: {
             currency: 'eur',
-            unit_amount: PRICE_CENTS,
+            unit_amount: WEEKLY_PRICE_CENTS,
+            recurring: { interval: 'week' },
             product_data: {
-              name: 'OtherMe — Rapport complet',
-              description: '3 trajectoires de vie alternatives + PDF personnalisé',
+              name: 'OtherMe — Accès illimité',
+              description: 'Tests illimités · 3 trajectoires par analyse · PDF personnalisé · Résiliable à tout moment',
             },
           },
           quantity: 1,
@@ -76,7 +89,6 @@ router.post('/create-checkout', async (req, res) => {
 router.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'] as string
 
-  // 1. Vérification de la signature Stripe
   let event: Stripe.Event
   try {
     event = stripe.webhooks.constructEvent(req.body as Buffer, sig, env.stripeWebhookSecret)
@@ -85,7 +97,7 @@ router.post('/webhook', async (req, res) => {
     return res.status(400).send('Webhook Error: invalid signature')
   }
 
-  // 2. Idempotence : ignorer les événements déjà traités
+  // Idempotence : ignorer les événements déjà traités
   try {
     const alreadyProcessed = await isWebhookProcessed(event.id)
     if (alreadyProcessed) {
@@ -94,10 +106,9 @@ router.post('/webhook', async (req, res) => {
     }
   } catch (err) {
     console.error('[stripe] Erreur vérification idempotence:', err)
-    // On continue quand même pour ne pas bloquer Stripe
   }
 
-  // 3. Enregistrer l'événement (idempotence)
+  // Enregistrer l'événement
   let webhookRow: Awaited<ReturnType<typeof insertWebhookEvent>> | null = null
   try {
     webhookRow = await insertWebhookEvent(
@@ -110,7 +121,7 @@ router.post('/webhook', async (req, res) => {
     console.error('[stripe] Erreur insertion webhook_events:', err)
   }
 
-  // 4. Traitement selon le type d'événement
+  // Traitement : checkout.session.completed (one-time et subscription)
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
     const reportId = session.metadata?.reportId
@@ -123,27 +134,23 @@ router.post('/webhook', async (req, res) => {
     let emailLogId: string | null = null
 
     try {
-      // 4a. Récupérer le rapport
       const report = await getReport(reportId)
       if (!report) {
         throw new Error(`Rapport introuvable : ${reportId}`)
       }
 
-      // 4b. Créer l'enregistrement de paiement
       const payment = await createPayment({
         user_id:            report.user_id,
         report_id:          reportId,
         stripe_session_id:  session.id,
         stripe_customer_id: session.customer as string | null,
-        amount_total:       session.amount_total ?? PRICE_CENTS,
+        amount_total:       session.amount_total ?? WEEKLY_PRICE_CENTS,
         currency:           session.currency ?? 'eur',
         payment_status:     session.payment_status,
       })
 
-      // 4c. Marquer le rapport comme payé
       await updateReportStatus(reportId, 'paid')
 
-      // 4d. Préparer le log email
       const emailLog = await createEmailLog({
         user_id:         report.user_id,
         report_id:       reportId,
@@ -153,22 +160,16 @@ router.post('/webhook', async (req, res) => {
       })
       emailLogId = emailLog.id
 
-      // 4e. Générer le PDF
       const trajectories = report.full_report as Trajectory[]
       const recipientEmail = session.customer_email ?? ''
-      // Extraire le prénom depuis le titre du rapport (ex: "Trajectoires alternatives pour Marie")
       const firstName = report.title?.split('pour ').pop() ?? 'toi'
 
       const pdfBuffer = await generatePDF(firstName, recipientEmail, trajectories)
-
-      // 4f. Envoyer l'email via Resend
       await sendReportEmail(recipientEmail, firstName, pdfBuffer)
 
-      // 4g. Mettre à jour le log email et le statut du rapport
       await updateEmailLog(emailLogId, 'sent')
       await updateReportStatus(reportId, 'emailed')
 
-      // 4h. Marquer l'événement comme traité
       if (webhookRow) {
         await markWebhookProcessed(webhookRow.id)
       }
@@ -178,15 +179,11 @@ router.post('/webhook', async (req, res) => {
       const msg = err instanceof Error ? err.message : String(err)
       console.error(`[stripe] ❌ Erreur post-paiement rapport ${reportId}:`, err)
 
-      // Enregistrer l'erreur dans le log email si créé
       if (emailLogId) {
         await updateEmailLog(emailLogId, 'failed', undefined, msg).catch(() => {})
       }
 
-      // Marquer le rapport en échec pour investigation
       await updateReportStatus(reportId, 'failed').catch(() => {})
-
-      // Ne pas retourner 500 — Stripe réessaierait et le paiement est déjà enregistré
     }
   }
 

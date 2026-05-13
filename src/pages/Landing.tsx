@@ -10,7 +10,7 @@ const TESTIMONIALS = [
   {
     name: 'Thomas M.',
     job: 'Développeur, 28 ans',
-    text: "Le rapport est bluffant de précision. Il a capté mes valeurs et m'a suggéré une voie entrepreneuriale que j'explore sérieusement. Vaut largement son prix.",
+    text: "Le rapport est bluffant de précision. Il a capté mes valeurs et m'a suggéré une voie entrepreneuriale que j'explore sérieusement.",
     stars: 5,
   },
   {
@@ -34,7 +34,7 @@ const STEPS = [
   },
   {
     icon: '✨',
-    title: 'Tu reçois ton rapport',
+    title: 'Tu découvres tes autres vies',
     desc: '3 trajectoires de vie alternatives personnalisées, avec plan d\'action, compétences à développer et score de faisabilité.',
   },
 ]
@@ -49,8 +49,8 @@ const FAQS = [
     a: "Oui. L'IA utilise GPT-4o et analyse chaque détail de ton profil : ton parcours, tes valeurs, tes atouts et tes rêves. Deux profils identiques n'auront jamais le même rapport.",
   },
   {
-    q: 'Et si je ne suis pas satisfait ?',
-    a: "Si ton rapport ne te convainc pas, contacte-nous dans les 48h et nous te remboursons intégralement. Sans question.",
+    q: 'Puis-je faire plusieurs analyses ?',
+    a: "Oui ! Avec ton abonnement, tu peux générer autant d'analyses que tu veux, à tout moment. Refais-en une après une formation, un changement de situation, ou simplement pour explorer de nouvelles pistes.",
   },
   {
     q: 'Mes données sont-elles sécurisées ?',
@@ -192,7 +192,7 @@ export default function Landing() {
 
             <div className="flex items-center gap-3 pt-4 border-t border-dark-700">
               <div className="w-8 h-8 rounded-full bg-brand-600/20 flex items-center justify-center text-brand-400 text-sm">→</div>
-              <span className="text-slate-500 text-sm">2 autres trajectoires personnalisées disponibles après paiement</span>
+              <span className="text-slate-500 text-sm">2 autres trajectoires personnalisées dans ton rapport complet</span>
             </div>
           </div>
         </div>
@@ -226,52 +226,22 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Pricing CTA */}
+      {/* Final CTA */}
       <section className="py-24 px-4 bg-dark-900/50">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Prêt à <span className="gradient-text">te découvrir</span> ?
           </h2>
-          <p className="text-slate-400 mb-12 text-lg">
-            Un rapport complet, personnalisé par l'IA, en moins de 30 secondes.
+          <p className="text-slate-400 mb-10 text-lg">
+            Réponds à quelques questions et laisse l'IA révéler tes autres vies possibles.
           </p>
-
-          <div className="card p-8 glow">
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-900/20 to-transparent rounded-2xl pointer-events-none" />
-            <div className="relative">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-6">
-                Offre de lancement
-              </div>
-
-              <div className="flex items-baseline justify-center gap-3 mb-8">
-                <span className="text-slate-500 line-through text-2xl">14,99 €</span>
-                <span className="text-6xl font-black text-slate-100">4,99 €</span>
-              </div>
-
-              <ul className="text-left space-y-3 mb-8 max-w-xs mx-auto">
-                {[
-                  '3 trajectoires de vie complètes',
-                  'Plan d\'action détaillé pour chaque vie',
-                  'Score de faisabilité personnalisé',
-                  'Rapport PDF envoyé par email',
-                  'Accès illimité à ton rapport',
-                ].map((feature) => (
-                  <li key={feature} className="flex items-center gap-3 text-sm text-slate-300">
-                    <span className="w-5 h-5 rounded-full bg-brand-600/20 flex items-center justify-center text-brand-400 flex-shrink-0 text-xs">✓</span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <button
-                onClick={() => navigate('/onboarding')}
-                className="btn-primary w-full text-base py-4 justify-center"
-              >
-                Générer mon rapport — 4,99 €
-              </button>
-              <p className="text-xs text-slate-600 mt-3">Satisfait ou remboursé sous 48h</p>
-            </div>
-          </div>
+          <button
+            onClick={() => navigate('/onboarding')}
+            className="btn-primary text-base py-4 px-10 text-lg"
+          >
+            Commencer maintenant →
+          </button>
+          <p className="text-sm text-slate-600 mt-4">⚡ Résultat personnalisé en moins de 30 secondes</p>
         </div>
       </section>
 
