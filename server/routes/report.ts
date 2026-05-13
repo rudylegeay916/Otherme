@@ -4,6 +4,8 @@ import type { Report, Trajectory } from '../../src/types'
 
 const router = Router()
 
+// GET /api/report/:id
+// Retourne le rapport avec les trajectoires masquées si non payé
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params
@@ -13,40 +15,33 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Rapport introuvable' })
     }
 
-    let trajectories: Trajectory[] = []
-    if (row.report_full) {
-      try {
-        trajectories = JSON.parse(row.report_full) as Trajectory[]
-      } catch {
-        trajectories = []
-      }
-    }
+    // full_report est maintenant du JSONB (tableau natif), pas une string JSON
+    const trajectories: Trajectory[] = Array.isArray(row.full_report)
+      ? (row.full_report as Trajectory[])
+      : []
 
-    const isPaid = row.status === 'paid' || row.status === 'complete'
+    const isPaid = row.status === 'paid' || row.status === 'emailed'
 
-    // Only reveal all trajectories if paid; otherwise send all for preview display
-    // (the frontend controls visibility — server just provides the data)
+    // Adapter le statut interne au format attendu par le frontend
+    const frontendStatus: Report['status'] = (() => {
+      if (row.status === 'emailed') return 'complete'
+      if (row.status === 'paid')    return 'paid'
+      if (row.status === 'generated') return 'ready'
+      return 'generating'
+    })()
+
+    // Extraire l'email depuis onboarding_data via le titre (fallback)
+    // Le vrai email est dans onboarding_responses.raw_answers
+    // Pour l'instant on expose ce qui est nécessaire au frontend
+    const firstName = row.title?.split('pour ').pop() ?? ''
+
     const report: Report = {
-      id: row.id,
-      email: row.email,
-      firstName: row.first_name,
-      status: row.status,
-      trajectories,
-      createdAt: row.created_at,
-    }
-
-    // For unpaid reports, blur 2nd and 3rd trajectories server-side as well
-    if (!isPaid && trajectories.length > 1) {
-      report.trajectories = [
-        trajectories[0],
-        ...trajectories.slice(1).map((t) => ({
-          ...t,
-          description: ['Débloquez le rapport pour lire cette trajectoire.'],
-          timeline: [],
-          skillsToDevlop: [],
-          feasibilityNote: '',
-        })),
-      ]
+      id:           row.id,
+      email:        '', // l'email n'est pas stocké directement dans reports
+      firstName,
+      status:       frontendStatus,
+      trajectories: isPaid ? trajectories : maskLockedTrajectories(trajectories),
+      createdAt:    row.created_at,
     }
 
     return res.json(report)
@@ -55,5 +50,19 @@ router.get('/:id', async (req, res) => {
     return res.status(500).json({ message: 'Erreur interne du serveur' })
   }
 })
+
+function maskLockedTrajectories(trajectories: Trajectory[]): Trajectory[] {
+  if (trajectories.length <= 1) return trajectories
+  return [
+    trajectories[0],
+    ...trajectories.slice(1).map((t) => ({
+      ...t,
+      description:    ['Débloquez le rapport pour lire cette trajectoire.'],
+      timeline:       [],
+      skillsToDevlop: [],
+      feasibilityNote: '',
+    })),
+  ]
+}
 
 export default router
