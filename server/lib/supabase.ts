@@ -1,9 +1,11 @@
 import { createClient } from '@supabase/supabase-js'
+import ws from 'ws'
 import { env } from '../config/env'
 
 // Client service_role : bypass RLS — réservé au backend uniquement
 export const supabase = createClient(env.supabaseUrl, env.supabaseServiceRoleKey, {
   auth: { persistSession: false },
+  realtime: { transport: ws },
 })
 
 // ── Types ─────────────────────────────────────────────────────────
