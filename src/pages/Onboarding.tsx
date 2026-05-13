@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { submitOnboarding } from '../lib/api'
+import { useAuth } from '../contexts/AuthContext'
 import type { OnboardingData } from '../types'
 
 const STEPS_LABELS = [
@@ -116,6 +117,7 @@ const DEFAULT_DATA: OnboardingData = {
 
 export default function Onboarding() {
   const navigate = useNavigate()
+  const { session } = useAuth()
   const [step, setStep] = useState(0)
   const [data, setData] = useState<OnboardingData>(DEFAULT_DATA)
   const [cvFile, setCvFile] = useState<File | null>(null)
@@ -148,7 +150,7 @@ export default function Onboarding() {
     }, 2500)
 
     try {
-      const { reportId } = await submitOnboarding(data, cvFile)
+      const { reportId } = await submitOnboarding(data, cvFile, session?.access_token)
       clearInterval(interval)
       navigate(`/paywall/${reportId}`)
     } catch (e) {

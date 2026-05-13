@@ -4,7 +4,8 @@ const BASE = '/api'
 
 export async function submitOnboarding(
   data: OnboardingData,
-  cvFile?: File | null
+  cvFile?: File | null,
+  authToken?: string | null
 ): Promise<OnboardingResponse> {
   const formData = new FormData()
   Object.entries(data).forEach(([key, value]) => {
@@ -18,8 +19,14 @@ export async function submitOnboarding(
     formData.append('cv', cvFile)
   }
 
+  const headers: HeadersInit = {}
+  if (authToken) {
+    headers['Authorization'] = `Bearer ${authToken}`
+  }
+
   const res = await fetch(`${BASE}/onboarding`, {
     method: 'POST',
+    headers,
     body: formData,
   })
 

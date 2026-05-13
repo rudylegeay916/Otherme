@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import multer from 'multer'
-import { createOnboardingResponse, createReport } from '../lib/supabase'
+import { supabase, createOnboardingResponse, createReport } from '../lib/supabase'
 import { generateTrajectories } from '../lib/openai'
 import type { OnboardingData, Trajectory } from '../../src/types'
 
@@ -62,6 +62,13 @@ function buildStructuredFields(data: OnboardingData): {
   }
 }
 
+async function getUserIdFromBearer(authHeader?: string): Promise<string | null> {
+  if (!authHeader?.startsWith('Bearer ')) return null
+  const token = authHeader.slice(7)
+  const { data } = await supabase.auth.getUser(token)
+  return data.user?.id ?? null
+}
+
 router.post('/', upload.single('cv'), async (req, res) => {
   try {
     const body = req.body as Record<string, string>
@@ -95,11 +102,14 @@ router.post('/', upload.single('cv'), async (req, res) => {
       data.cvText = await extractCvText(req.file)
     }
 
+    // Récupérer l'utilisateur authentifié si un token est fourni
+    const userId = await getUserIdFromBearer(req.headers.authorization)
+
     // 1. Enregistrer les réponses d'onboarding
     const { current_situation, regrets_or_desires, goals } = buildStructuredFields(data)
 
     const onboardingRow = await createOnboardingResponse({
-      user_id:            null, // flux anonyme — pas d'auth à cette étape
+      user_id:            userId,
       current_situation,
       regrets_or_desires,
       goals,
@@ -111,7 +121,7 @@ router.post('/', upload.single('cv'), async (req, res) => {
 
     // 3. Créer le rapport
     const reportRow = await createReport({
-      user_id:                null,
+      user_id:                userId,
       onboarding_response_id: onboardingRow.id,
       title:                  `Trajectoires alternatives pour ${data.firstName}`,
       summary:                trajectories[0]?.tagline ?? '',
