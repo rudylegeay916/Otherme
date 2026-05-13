@@ -27,6 +27,11 @@ app.use('/api/onboarding', onboardingRouter)
 app.use('/api/report', reportRouter)
 app.use('/api/stripe', stripeRouter)
 
+// ── 404 pour les routes /api/* inconnues ──────────────────
+app.use('/api/*', (_req, res) => {
+  res.status(404).json({ error: 'API route not found' })
+})
+
 // ── Serve le frontend en production ──────────────────────
 if (env.isProd) {
   const distPath = path.join(__dirname, '../dist')

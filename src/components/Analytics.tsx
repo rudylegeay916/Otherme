@@ -16,11 +16,18 @@ declare global {
 }
 
 function injectScript(src: string): void {
-  if (document.querySelector(`script[src="${src}"]`)) return
-  const s = document.createElement('script')
-  s.src = src
-  s.async = true
-  document.head.appendChild(s)
+  try {
+    if (document.querySelector(`script[src="${src}"]`)) return
+    const s = document.createElement('script')
+    s.src = src
+    s.async = true
+    s.onerror = () => {
+      if (import.meta.env.DEV) console.warn(`[Analytics] Failed to load: ${src}`)
+    }
+    document.head.appendChild(s)
+  } catch {
+    // Analytics failures must never break the app
+  }
 }
 
 function initGA4(measurementId: string): void {
@@ -47,11 +54,15 @@ function initClarity(projectId: string): void {
 
 export default function Analytics() {
   useEffect(() => {
-    if (clientEnv.gaMeasurementId) {
-      initGA4(clientEnv.gaMeasurementId)
-    }
-    if (clientEnv.clarityProjectId) {
-      initClarity(clientEnv.clarityProjectId)
+    try {
+      if (clientEnv.gaMeasurementId) {
+        initGA4(clientEnv.gaMeasurementId)
+      }
+      if (clientEnv.clarityProjectId) {
+        initClarity(clientEnv.clarityProjectId)
+      }
+    } catch {
+      // Analytics failures must never break the app
     }
   }, [])
 
