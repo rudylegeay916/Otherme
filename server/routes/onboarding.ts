@@ -2,16 +2,15 @@ import { Router } from 'express'
 import multer from 'multer'
 import { supabase, createOnboardingResponse, createReport } from '../lib/supabase'
 import { generateTrajectories } from '../lib/openai'
-import type { OnboardingData, Trajectory } from '../../src/types'
+import type { OnboardingData, QuestionAnswer } from '../../src/types'
 
 const router = Router()
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+  limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
     const allowed = [
-      'application/pdf',
-      'text/plain',
+      'application/pdf', 'text/plain',
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     ]
@@ -21,45 +20,15 @@ const upload = multer({
 
 async function extractCvText(file: Express.Multer.File): Promise<string> {
   try {
-    if (file.mimetype === 'text/plain') {
-      return file.buffer.toString('utf-8').slice(0, 3000)
-    }
+    if (file.mimetype === 'text/plain') return file.buffer.toString('utf-8').slice(0, 3000)
     if (file.mimetype === 'application/pdf') {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const pdfParse = require('pdf-parse') as (buf: Buffer) => Promise<{ text: string }>
       const result = await pdfParse(file.buffer)
       return result.text.slice(0, 3000)
     }
-  } catch {
-    // Extraction optionnelle — échec silencieux
-  }
+  } catch { /* extraction optionnelle */ }
   return ''
-}
-
-// Construit les champs structurés à partir des réponses du formulaire
-function buildStructuredFields(data: OnboardingData): {
-  current_situation: string
-  regrets_or_desires: string
-  goals: string
-} {
-  return {
-    current_situation: [
-      `Métier actuel : ${data.currentJob}`,
-      `Secteur : ${data.sector}`,
-      `Expérience : ${data.yearsExperience} an(s)`,
-      `Formation : ${data.educationLevel} en ${data.educationField}`,
-    ].join(' · '),
-
-    regrets_or_desires: [
-      `Rêve professionnel : ${data.dreamJob}`,
-      `Valeurs importantes : ${data.values.join(', ')}`,
-    ].join(' · '),
-
-    goals: [
-      `Points forts : ${data.strengths.join(', ')}`,
-      `Langues : ${data.languages.join(', ')}`,
-    ].join(' · '),
-  }
 }
 
 async function getUserIdFromBearer(authHeader?: string): Promise<string | null> {
@@ -69,57 +38,66 @@ async function getUserIdFromBearer(authHeader?: string): Promise<string | null> 
   return data.user?.id ?? null
 }
 
+function parseAnswers(raw: string | undefined): Record<string, QuestionAnswer> {
+  if (!raw) return {}
+  try {
+    const parsed = JSON.parse(raw) as Record<string, unknown>
+    const result: Record<string, QuestionAnswer> = {}
+    for (const [key, val] of Object.entries(parsed)) {
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        const v = val as Record<string, unknown>
+        result[key] = {
+          selectedOptions: Array.isArray(v.selectedOptions) ? (v.selectedOptions as string[]) : [],
+          freeText: typeof v.freeText === 'string' ? v.freeText : '',
+        }
+      }
+    }
+    return result
+  } catch { return {} }
+}
+
 router.post('/', upload.single('cv'), async (req, res) => {
   try {
     const body = req.body as Record<string, string>
 
-    const parseArr = (key: string): string[] => {
-      try { return JSON.parse(body[key] || '[]') } catch { return [] }
-    }
+    const answers = parseAnswers(body.answers)
 
     const data: OnboardingData = {
       firstName:       body.firstName?.trim() || '',
       email:           body.email?.trim().toLowerCase() || '',
       age:             parseInt(body.age) || 0,
-      city:            body.city?.trim() || '',
-      currentJob:      body.currentJob?.trim() || '',
-      sector:          body.sector?.trim() || '',
-      yearsExperience: parseInt(body.yearsExperience) || 0,
-      educationLevel:  body.educationLevel?.trim() || '',
-      educationField:  body.educationField?.trim() || '',
-      dreamJob:        body.dreamJob?.trim() || '',
-      values:          parseArr('values'),
-      strengths:       parseArr('strengths'),
-      languages:       parseArr('languages'),
+      currentSituation: body.currentSituation?.trim() || '',
+      gender:          body.gender?.trim() || undefined,
+      city:            body.city?.trim() || undefined,
+      currentJob:      body.currentJob?.trim() || undefined,
+      sector:          body.sector?.trim() || undefined,
+      yearsExperience: body.yearsExperience ? parseInt(body.yearsExperience) : undefined,
+      educationLevel:  body.educationLevel?.trim() || undefined,
+      educationField:  body.educationField?.trim() || undefined,
+      languages:       body.languages ? (JSON.parse(body.languages) as string[]) : undefined,
+      answers,
     }
 
-    if (!data.firstName || !data.email || !data.currentJob) {
-      return res.status(400).json({ message: 'Champs obligatoires manquants' })
+    if (!data.firstName || !data.email) {
+      return res.status(400).json({ message: 'Prénom et email sont obligatoires' })
     }
 
-    // Extraction texte CV (optionnel)
     if (req.file) {
       data.cvText = await extractCvText(req.file)
     }
 
-    // Récupérer l'utilisateur authentifié si un token est fourni
     const userId = await getUserIdFromBearer(req.headers.authorization)
-
-    // 1. Enregistrer les réponses d'onboarding
-    const { current_situation, regrets_or_desires, goals } = buildStructuredFields(data)
 
     const onboardingRow = await createOnboardingResponse({
       user_id:            userId,
-      current_situation,
-      regrets_or_desires,
-      goals,
+      current_situation:  buildCurrentSituation(data),
+      regrets_or_desires: buildRegrets(data),
+      goals:              buildGoals(data),
       raw_answers:        data as unknown as Record<string, unknown>,
     })
 
-    // 2. Générer les trajectoires via OpenAI
-    const trajectories: Trajectory[] = await generateTrajectories(data)
+    const trajectories = await generateTrajectories(data)
 
-    // 3. Créer le rapport
     const reportRow = await createReport({
       user_id:                userId,
       onboarding_response_id: onboardingRow.id,
@@ -136,5 +114,54 @@ router.post('/', upload.single('cv'), async (req, res) => {
     })
   }
 })
+
+function buildCurrentSituation(data: OnboardingData): string {
+  const parts = [
+    `Situation : ${data.currentSituation}`,
+    data.currentJob ? `Métier : ${data.currentJob}` : '',
+    data.sector ? `Secteur : ${data.sector}` : '',
+    data.yearsExperience !== undefined ? `Expérience : ${data.yearsExperience} an(s)` : '',
+    data.educationLevel ? `Formation : ${data.educationLevel}${data.educationField ? ` en ${data.educationField}` : ''}` : '',
+    data.city ? `Ville : ${data.city}` : '',
+  ].filter(Boolean)
+  return parts.join(' · ')
+}
+
+function buildRegrets(data: OnboardingData): string {
+  const a = data.answers ?? {}
+  const motivation  = formatAnswer(a['motivation'])
+  const drains      = formatAnswer(a['drains'])
+  const avoidNext   = formatAnswer(a['avoidNext'])
+  const vision      = formatAnswer(a['vision5y'])
+  return [
+    motivation  ? `Envies principales : ${motivation}` : '',
+    drains      ? `Ce qui fatigue : ${drains}` : '',
+    avoidNext   ? `À éviter : ${avoidNext}` : '',
+    vision      ? `Dans 5 ans : ${vision}` : '',
+  ].filter(Boolean).join(' · ')
+}
+
+function buildGoals(data: OnboardingData): string {
+  const a = data.answers ?? {}
+  const skills    = formatAnswer(a['skills'])
+  const energy    = formatAnswer(a['energy'])
+  const lifestyle = formatAnswer(a['lifestyle'])
+  const risk      = formatAnswer(a['risk'])
+  return [
+    skills    ? `Compétences : ${skills}` : '',
+    energy    ? `Énergie naturelle : ${energy}` : '',
+    lifestyle ? `Style de vie voulu : ${lifestyle}` : '',
+    risk      ? `Tolérance au risque : ${risk}` : '',
+    data.languages?.length ? `Langues : ${data.languages.join(', ')}` : '',
+  ].filter(Boolean).join(' · ')
+}
+
+function formatAnswer(a: QuestionAnswer | undefined): string {
+  if (!a) return ''
+  const parts: string[] = []
+  if (a.selectedOptions.length) parts.push(a.selectedOptions.join(', '))
+  if (a.freeText.trim()) parts.push(`"${a.freeText.trim()}"`)
+  return parts.join(' — ')
+}
 
 export default router

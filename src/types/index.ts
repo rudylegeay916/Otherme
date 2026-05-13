@@ -1,18 +1,32 @@
+export interface QuestionAnswer {
+  selectedOptions: string[]
+  freeText: string
+}
+
 export interface OnboardingData {
+  // ── Étape 1 — Identité (champs requis) ───────────────────────────
   firstName: string
   email: string
   age: number
-  city: string
-  currentJob: string
-  sector: string
-  yearsExperience: number
-  educationLevel: string
-  educationField: string
-  dreamJob: string
-  values: string[]
-  strengths: string[]
-  languages: string[]
+  currentSituation: string
+
+  // ── Étape 1 — Identité (optionnels) ──────────────────────────────
+  gender?: string
+  city?: string
+
+  // ── Étape 2 — CV (optionnel) ─────────────────────────────────────
   cvText?: string
+
+  // ── Étape 3 — Parcours ───────────────────────────────────────────
+  currentJob?: string
+  sector?: string
+  yearsExperience?: number
+  educationLevel?: string
+  educationField?: string
+  languages?: string[]
+
+  // ── Questions (Q1–Q20 + adaptatives) — toutes optionnelles ───────
+  answers?: Record<string, QuestionAnswer>
 }
 
 export interface TimelineStep {
