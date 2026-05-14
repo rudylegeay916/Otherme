@@ -54,7 +54,7 @@ function OtherMeIcon({ size }: { size: number }) {
 }
 
 export default function Logo({
-  size = 36,
+  size = 44,
   withText = true,
   className = '',
   to = '/',

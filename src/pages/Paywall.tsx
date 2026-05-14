@@ -140,11 +140,11 @@ export default function Paywall() {
 
   return (
     <div className="min-h-screen bg-dark-950">
-      <nav className="sticky top-0 z-40 flex items-center justify-between px-6 py-4 bg-dark-950/90 backdrop-blur-md border-b border-dark-800">
-        <Logo size={30} />
+      <nav className="sticky top-0 z-40 flex items-center justify-between px-6 py-3.5 bg-dark-950/85 backdrop-blur-md border-b border-white/[0.06]">
+        <Logo size={40} />
         <div className="flex items-center gap-3">
           <LanguageToggle />
-          <button onClick={handlePay} disabled={paying} className="btn-primary text-sm py-2 px-5">
+          <button onClick={handlePay} disabled={paying} className="btn-primary py-2 px-5">
             {paying ? tr.c.redirecting : t.unlockBtn}
           </button>
         </div>
@@ -153,8 +153,8 @@ export default function Paywall() {
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-600/15 border border-green-600/30 text-green-300 text-sm font-medium mb-6">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-green-600/10 border border-green-500/20 text-green-300/90 text-xs font-medium mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
             {t.reportReady(report.firstName)}
           </div>
           <h1 className="text-3xl md:text-4xl font-bold mb-3 text-slate-100">
@@ -162,7 +162,7 @@ export default function Paywall() {
               ? <>Tes <span className="gradient-text">3 trajectoires</span> sont prêtes</>
               : <>Your <span className="gradient-text">3 paths</span> are ready</>}
           </h1>
-          <p className="text-slate-400 max-w-xl mx-auto leading-relaxed">{t.freeSub}</p>
+          <p className="text-slate-500 max-w-xl mx-auto leading-relaxed">{t.freeSub}</p>
         </div>
 
         {/* 3 Teaser cards */}
@@ -202,47 +202,47 @@ export default function Paywall() {
         )}
 
         {/* CTA block */}
-        <div className="card p-8 text-center glow relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-900/30 to-transparent pointer-events-none rounded-2xl" />
-          <div className="relative">
-            <div className="text-4xl mb-4">🔓</div>
-            <h2 className="text-2xl font-bold mb-2">{t.ctaTitle}</h2>
-            <p className="text-slate-400 mb-2 max-w-md mx-auto">{t.ctaSub(report.email)}</p>
-            <p className="text-brand-300 text-sm font-medium mb-6">{t.ctaUnlimited}</p>
+        <div className="card glow relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-600/30 to-transparent" />
+          <div className="p-8 text-center">
+            <h2 className="text-2xl font-bold mb-2 text-slate-100">{t.ctaTitle}</h2>
+            <p className="text-slate-500 mb-1 max-w-md mx-auto text-sm">{t.ctaSub(report.email)}</p>
+            <p className="text-brand-400/80 text-xs font-medium mb-8">{t.ctaUnlimited}</p>
 
-            <div className="inline-flex flex-col items-center bg-dark-800/60 border border-dark-600 rounded-2xl px-8 py-5 mb-6">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold uppercase tracking-wider">
-                  {t.priceBadge}
-                </span>
+            {/* Prix — lisible et sans ambiguïté */}
+            <div className="inline-flex flex-col items-center border border-white/[0.08] bg-dark-950/60 rounded-2xl px-8 py-6 mb-6">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300/90 text-xs font-semibold uppercase tracking-wider mb-3">
+                {t.priceBadge}
+              </span>
+              <div className="flex items-baseline justify-center gap-1.5 mb-1">
+                <span className="text-5xl font-black text-slate-100 tracking-tight">{t.priceAmount}</span>
+                <span className="text-slate-500 text-sm">{t.pricePeriod}</span>
               </div>
-              <div className="flex items-baseline justify-center gap-2 mt-2">
-                <span className="text-5xl font-black text-slate-100">{t.priceAmount}</span>
-                <span className="text-slate-400 text-sm">{t.pricePeriod}</span>
-              </div>
-              <div className="flex items-center gap-1.5 mt-2 text-slate-500 text-sm">
-                <span>{t.priceThen}</span>
-                <span className="font-semibold text-slate-400">{t.priceThenAmount}</span>
-                <span>· {t.priceThenSub}</span>
-              </div>
+              <p className="text-slate-500 text-xs mt-1">
+                {t.priceThen} <span className="font-semibold text-slate-400">{t.priceThenAmount}</span> · {t.priceThenSub}
+              </p>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8 text-sm text-slate-400">
+            {/* Features */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-8 text-left max-w-md mx-auto">
               {t.features.map((f) => (
-                <span key={f} className="flex items-center gap-1.5">
-                  <span className="text-brand-400">✓</span> {f}
+                <span key={f} className="flex items-center gap-2 text-sm text-slate-400">
+                  <span className="w-4 h-4 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-green-400 text-[9px] font-bold">✓</span>
+                  </span>
+                  {f}
                 </span>
               ))}
             </div>
 
             {payErr && (
-              <div className="mb-4 flex items-start gap-2 px-4 py-3 rounded-xl bg-red-900/20 border border-red-700/50 text-red-300 text-sm text-left">
+              <div className="mb-5 flex items-start gap-2 px-4 py-3 rounded-xl bg-red-900/15 border border-red-700/30 text-red-300 text-sm text-left">
                 <span className="flex-shrink-0 mt-0.5">⚠</span>
                 <span>{payErr}</span>
               </div>
             )}
 
-            <button onClick={handlePay} disabled={paying} className="btn-primary text-lg py-4 px-10">
+            <button onClick={handlePay} disabled={paying} className="btn-primary text-base py-3.5 px-10 w-full sm:w-auto">
               {paying ? (
                 <span className="flex items-center gap-2">
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -250,7 +250,17 @@ export default function Paywall() {
                 </span>
               ) : 'Débloquer mes 3 trajectoires complètes →'}
             </button>
-            <p className="text-xs text-slate-600 mt-3">{t.ctaNote}</p>
+
+            {/* Trust row */}
+            <div className="flex items-center justify-center gap-4 mt-4 flex-wrap">
+              <span className="flex items-center gap-1.5 text-xs text-dark-500">
+                <span className="text-dark-500">🔒</span> Paiement sécurisé
+              </span>
+              <span className="w-px h-3 bg-dark-700" />
+              <span className="text-xs text-dark-500">Stripe</span>
+              <span className="w-px h-3 bg-dark-700" />
+              <span className="text-xs text-dark-500">{t.ctaNote}</span>
+            </div>
           </div>
         </div>
       </div>
