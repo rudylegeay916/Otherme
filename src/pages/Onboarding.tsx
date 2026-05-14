@@ -247,7 +247,7 @@ export default function Onboarding() {
       const { reportId } = await submitOnboarding(data, cvFile, session?.access_token)
       clearInterval(interval)
       clearProgress()
-      navigate(`/paywall/${reportId}`)
+      navigate(`/social-proof/${reportId}`)
     } catch (e) {
       clearInterval(interval)
       console.error('[Onboarding] Erreur génération rapport:', e)
