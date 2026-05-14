@@ -87,8 +87,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       mode: 'payment',
       customer_email: email,
       line_items: lineItems,
-      metadata: { reportId },
-      success_url: `${appUrl}/success?report_id=${reportId}`,
+      metadata: { reportId, product: 'otherme_premium' },
+      success_url: `${appUrl}/success?report_id=${reportId}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${appUrl}/cancel?report_id=${reportId}`,
       locale: 'fr',
     })

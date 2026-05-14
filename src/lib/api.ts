@@ -106,6 +106,25 @@ export async function createCheckoutSession(
   return res.json() as Promise<{ url: string }>
 }
 
+// ── verifyPayment ─────────────────────────────────────────────────
+
+export async function verifyPayment(
+  sessionId: string,
+  reportId: string
+): Promise<{ verified: boolean; error?: string }> {
+  try {
+    const res = await fetch(`${BASE}/verify-payment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId, reportId }),
+    })
+    const data = await res.json() as { verified: boolean; error?: string }
+    return data
+  } catch {
+    return { verified: false, error: 'Impossible de vérifier le paiement. Vérifie ta connexion.' }
+  }
+}
+
 // ── Local fallback (aucune connectivité) ──────────────────────────
 
 function generateLocalFallback(data: OnboardingData): OnboardingResponse {

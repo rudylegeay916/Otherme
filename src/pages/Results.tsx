@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { fetchReport } from '../lib/api'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
+import { fetchReport, verifyPayment } from '../lib/api'
 import type { PathData, Report, RichTimelineStep, ActionPlanWeek } from '../types'
 import Logo from '../components/Logo'
 
@@ -420,33 +420,65 @@ function ComparisonTable({ paths }: { paths: PathData[] }) {
 // ── Main page ─────────────────────────────────────────────────────
 
 export default function Results() {
-  const { reportId } = useParams<{ reportId: string }>()
-  const navigate     = useNavigate()
+  const { reportId }    = useParams<{ reportId: string }>()
+  const navigate        = useNavigate()
+  const [searchParams]  = useSearchParams()
+  const sessionId       = searchParams.get('session_id') ?? ''
 
-  const [report,  setReport]  = useState<Report | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error,   setError]   = useState('')
+  const [report,       setReport]       = useState<Report | null>(null)
+  const [loading,      setLoading]      = useState(true)
+  const [accessDenied, setAccessDenied] = useState(false)
+  const [error,        setError]        = useState('')
 
   useEffect(() => {
     if (!reportId) { navigate('/'); return }
+
+    const isMock = reportId.startsWith('mock_')
+
+    // ── Flux A : session_id présent → vérification directe auprès de Stripe ──
+    if (sessionId && !isMock) {
+      verifyPayment(sessionId, reportId)
+        .then(async ({ verified, error: apiError }) => {
+          if (!verified) {
+            setAccessDenied(true)
+            setError(
+              apiError ??
+              'Le paiement n\'a pas encore été confirmé. Veuillez finaliser votre accès pour consulter le rapport complet.'
+            )
+            setLoading(false)
+            return
+          }
+          // Paiement vérifié → charger le rapport complet
+          const r = await fetchReport(reportId)
+          setReport(r)
+        })
+        .catch((e) => setError(e instanceof Error ? e.message : 'Erreur lors du chargement'))
+        .finally(() => setLoading(false))
+      return
+    }
+
+    // ── Flux B : accès direct → vérification via statut en base ──────────────
     fetchReport(reportId)
       .then((r) => {
-        const isMock = r.id?.startsWith('mock_')
+        // Mock : pas de vérification de paiement (dev / fallback local)
+        if (isMock) { setReport(r); return }
+
         // Rapport réel non payé → rediriger vers la paywall
-        if (!isMock && r.status !== 'paid' && r.status !== 'complete') {
+        if (r.status !== 'paid' && r.status !== 'complete') {
           navigate(`/paywall/${reportId}`, { replace: true })
           return
         }
-        // Aucune trajectoire disponible → rediriger
+        // Paths absents malgré le statut payé → anomalie DB
         if (!r.paths?.length && !r.trajectories?.length) {
-          navigate(`/paywall/${reportId}`, { replace: true })
+          setError('Rapport indisponible. Contacte le support.')
           return
         }
         setReport(r)
       })
-      .catch((e) => setError(e.message))
+      .catch((e) => setError(e instanceof Error ? e.message : 'Rapport introuvable'))
       .finally(() => setLoading(false))
-  }, [reportId, navigate])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportId])
 
   if (loading) {
     return (
@@ -459,14 +491,42 @@ export default function Results() {
     )
   }
 
+  // Paiement non confirmé → message clair + lien retour paywall
+  if (accessDenied) {
+    return (
+      <div className="min-h-screen bg-dark-950 flex items-center justify-center px-4">
+        <div className="text-center max-w-md">
+          <div className="text-5xl mb-4">🔒</div>
+          <h2 className="text-xl font-bold mb-3 text-slate-100">Accès au rapport complet</h2>
+          <p className="text-slate-400 text-sm mb-8 leading-relaxed">{error}</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            {reportId && (
+              <button
+                onClick={() => navigate(`/paywall/${reportId}`)}
+                className="btn-primary"
+              >
+                Finaliser mon accès →
+              </button>
+            )}
+            <button onClick={() => navigate('/')} className="btn-secondary">Accueil</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Erreur technique ou rapport introuvable
   if (error || !report) {
     return (
       <div className="min-h-screen bg-dark-950 flex items-center justify-center px-4">
         <div className="text-center max-w-sm">
           <div className="text-5xl mb-4">⚠️</div>
           <h2 className="text-xl font-bold mb-2 text-slate-100">Rapport introuvable</h2>
-          <p className="text-slate-500 mb-6">{error}</p>
-          <button onClick={() => navigate('/onboarding')} className="btn-primary">Recommencer</button>
+          <p className="text-slate-500 mb-6">{error || 'Ce rapport n\'existe pas ou n\'est plus disponible.'}</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button onClick={() => navigate('/onboarding')} className="btn-primary">Recommencer</button>
+            <button onClick={() => navigate('/')} className="btn-secondary">Accueil</button>
+          </div>
         </div>
       </div>
     )
