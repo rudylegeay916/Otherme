@@ -73,33 +73,40 @@ export default function Paywall() {
   const tr           = useTr(lang)
   const t            = tr.paywall
 
-  const [report,  setReport]  = useState<Report | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [paying,  setPaying]  = useState(false)
-  const [error,   setError]   = useState('')
+  const [report,    setReport]    = useState<Report | null>(null)
+  const [loading,   setLoading]   = useState(true)
+  const [paying,    setPaying]    = useState(false)
+  const [fetchErr,  setFetchErr]  = useState('')   // erreur chargement rapport
+  const [payErr,    setPayErr]    = useState('')   // erreur paiement (inline)
 
   useEffect(() => {
     if (!reportId) return
     fetchReport(reportId)
       .then((r) => {
         setReport(r)
-        // If already paid, redirect directly to results
         if (r.status === 'paid' || r.status === 'complete') {
           navigate(`/results/${reportId}`, { replace: true })
         }
       })
-      .catch((e) => setError(e.message))
+      .catch((e) => setFetchErr(e.message))
       .finally(() => setLoading(false))
   }, [reportId, navigate])
 
   const handlePay = async () => {
     if (!report || !reportId) return
+    setPayErr('')
     setPaying(true)
     try {
       const { url } = await createCheckoutSession(reportId, report.email)
       window.location.href = url
     } catch (e) {
-      setError(e instanceof Error ? e.message : (lang === 'fr' ? 'Erreur de paiement' : 'Payment error'))
+      setPayErr(
+        e instanceof Error
+          ? e.message
+          : (lang === 'fr'
+              ? 'Le paiement n\'a pas pu être lancé. Réessaie dans quelques instants.'
+              : 'Payment could not be started. Please try again.')
+      )
       setPaying(false)
     }
   }
@@ -115,14 +122,14 @@ export default function Paywall() {
     )
   }
 
-  if (error || !report) {
+  if (fetchErr || !report) {
     return (
       <div className="min-h-screen bg-dark-950 flex items-center justify-center px-4">
         <div className="absolute top-4 right-4"><LanguageToggle /></div>
         <div className="text-center max-w-sm">
           <div className="text-5xl mb-4">⚠️</div>
           <h2 className="text-xl font-bold mb-2">{t.notFound}</h2>
-          <p className="text-slate-500 mb-6">{error || t.notFoundSub}</p>
+          <p className="text-slate-500 mb-6">{fetchErr || t.notFoundSub}</p>
           <button onClick={() => navigate('/onboarding')} className="btn-primary">{t.restartBtn}</button>
         </div>
       </div>
@@ -227,6 +234,13 @@ export default function Paywall() {
                 </span>
               ))}
             </div>
+
+            {payErr && (
+              <div className="mb-4 flex items-start gap-2 px-4 py-3 rounded-xl bg-red-900/20 border border-red-700/50 text-red-300 text-sm text-left">
+                <span className="flex-shrink-0 mt-0.5">⚠</span>
+                <span>{payErr}</span>
+              </div>
+            )}
 
             <button onClick={handlePay} disabled={paying} className="btn-primary text-lg py-4 px-10">
               {paying ? (

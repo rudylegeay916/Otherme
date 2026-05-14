@@ -54,6 +54,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     const firstName  = (rawAnswers?.firstName as string) ?? report.title?.split('pour ').pop() ?? ''
     const email      = (rawAnswers?.email as string) ?? ''
     const fullReport = report.full_report as unknown
+    const isPaid     = report.status === 'paid' || report.status === 'complete'
 
     // Detect new format (ReportData object with .paths) vs legacy (Trajectory[])
     const isNewFormat = fullReport && typeof fullReport === 'object' && !Array.isArray(fullReport)
@@ -68,14 +69,30 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
 
     if (isNewFormat) {
-      const rd = fullReport as Record<string, unknown>
-      responsePayload.paths            = rd.paths
-      responsePayload.reportSummary    = rd.reportSummary
-      responsePayload.comparison       = rd.comparison
-      responsePayload.bestFirstStep48h = rd.bestFirstStep48h
+      const rd    = fullReport as Record<string, unknown>
+      const paths = Array.isArray(rd.paths) ? rd.paths as Array<Record<string, unknown>> : []
+
+      if (isPaid) {
+        // Rapport payé — contenu complet
+        responsePayload.paths            = paths
+        responsePayload.reportSummary    = rd.reportSummary
+        responsePayload.comparison       = rd.comparison
+        responsePayload.bestFirstStep48h = rd.bestFirstStep48h
+      } else {
+        // Rapport non payé — données partielles uniquement (teaser Paywall)
+        responsePayload.paths = paths.map((p) => ({
+          pathType:        p.pathType,
+          title:           p.title,
+          sector:          p.sector,
+          revenueEstimate: p.revenueEstimate,
+          longDescription: typeof p.longDescription === 'string'
+            ? p.longDescription.slice(0, 140)
+            : '',
+        }))
+      }
     } else {
-      // Legacy: full_report is Trajectory[]
-      responsePayload.trajectories = fullReport
+      // Legacy : full_report est Trajectory[]
+      responsePayload.trajectories = isPaid ? fullReport : []
     }
 
     res.statusCode = 200

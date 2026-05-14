@@ -94,7 +94,7 @@ export async function createCheckoutSession(
   reportId: string,
   email: string
 ): Promise<{ url: string }> {
-  const res = await fetch(`${BASE}/stripe/create-checkout`, {
+  const res = await fetch(`${BASE}/create-checkout-session`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ reportId, email }),

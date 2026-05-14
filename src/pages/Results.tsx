@@ -431,7 +431,13 @@ export default function Results() {
     if (!reportId) { navigate('/'); return }
     fetchReport(reportId)
       .then((r) => {
-        // If not paid and has no mock paths, go back to paywall
+        const isMock = r.id?.startsWith('mock_')
+        // Rapport réel non payé → rediriger vers la paywall
+        if (!isMock && r.status !== 'paid' && r.status !== 'complete') {
+          navigate(`/paywall/${reportId}`, { replace: true })
+          return
+        }
+        // Aucune trajectoire disponible → rediriger
         if (!r.paths?.length && !r.trajectories?.length) {
           navigate(`/paywall/${reportId}`, { replace: true })
           return
