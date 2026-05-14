@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
-import { fetchReport, verifyPayment } from '../lib/api'
+import { useParams, useNavigate } from 'react-router-dom'
+import { fetchReport } from '../lib/api'
 import type { PathData, Report, RichTimelineStep, ActionPlanWeek } from '../types'
 import Logo from '../components/Logo'
 
@@ -420,10 +420,8 @@ function ComparisonTable({ paths }: { paths: PathData[] }) {
 // ── Main page ─────────────────────────────────────────────────────
 
 export default function Results() {
-  const { reportId }    = useParams<{ reportId: string }>()
-  const navigate        = useNavigate()
-  const [searchParams]  = useSearchParams()
-  const sessionId       = searchParams.get('session_id') ?? ''
+  const { reportId } = useParams<{ reportId: string }>()
+  const navigate     = useNavigate()
 
   const [report,       setReport]       = useState<Report | null>(null)
   const [loading,      setLoading]      = useState(true)
@@ -446,29 +444,8 @@ export default function Results() {
       return
     }
 
-    // ── Flux A : session_id présent → vérification directe auprès de Stripe ──
-    if (sessionId && !isMock) {
-      verifyPayment(sessionId, reportId)
-        .then(async ({ verified, error: apiError }) => {
-          if (!verified) {
-            setAccessDenied(true)
-            setError(
-              apiError ??
-              'Le paiement n\'a pas encore été confirmé. Veuillez finaliser votre accès pour consulter le rapport complet.'
-            )
-            setLoading(false)
-            return
-          }
-          // Paiement vérifié → charger le rapport complet
-          const r = await fetchReport(reportId)
-          setReport(r)
-        })
-        .catch((e) => setError(e instanceof Error ? e.message : 'Erreur lors du chargement'))
-        .finally(() => setLoading(false))
-      return
-    }
-
-    // ── Flux B : accès direct → vérification via statut en base ──────────────
+    // Le cookie HttpOnly d'accès est posé par Success.tsx via /api/verify-payment.
+    // Results.tsx vérifie uniquement via le cookie (credentials: 'include') + statut DB.
     fetchReport(reportId)
       .then((r) => {
         // Mock : pas de vérification de paiement (dev / fallback local)

@@ -31,6 +31,8 @@ export default function Success() {
       const { verified: ok, error: apiError } = await verifyPayment(sessionId, reportId)
 
       if (ok) {
+        // Nettoyer l'URL : supprimer session_id de l'historique navigateur
+        window.history.replaceState({}, '', `/success?report_id=${reportId}`)
         setVerified(true)
         setLoading(false)
         return
@@ -137,7 +139,7 @@ export default function Success() {
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
-                onClick={() => navigate(`/results/${reportId}${sessionId ? `?session_id=${sessionId}` : ''}`)}
+                onClick={() => navigate(`/results/${reportId}`)}
                 className="btn-primary text-lg py-3 px-8"
               >
                 Voir mon rapport complet →
