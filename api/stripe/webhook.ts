@@ -2,7 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'http'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 
-// Vercel : désactiver le body parser pour accéder au raw body (requis par Stripe)
+// Vercel : raw body obligatoire pour que stripe.webhooks.constructEvent valide la signature
 export const config = { api: { bodyParser: false } }
 
 function readRawBody(req: IncomingMessage): Promise<Buffer> {
@@ -21,19 +21,29 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return
   }
 
-  const stripeKey    = process.env.STRIPE_SECRET_KEY
+  const stripeKey     = process.env.STRIPE_SECRET_KEY
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
   if (!stripeKey || !webhookSecret) {
+    console.error('[webhook] STRIPE_SECRET_KEY ou STRIPE_WEBHOOK_SECRET manquante')
     res.statusCode = 503
     res.end('Stripe non configuré')
     return
   }
 
-  const rawBody = await readRawBody(req)
-  const sig     = req.headers['stripe-signature'] as string
+  let rawBody: Buffer
+  try {
+    rawBody = await readRawBody(req)
+  } catch (err) {
+    console.error('[webhook] Erreur lecture body:', err)
+    res.statusCode = 400
+    res.end('Erreur lecture body')
+    return
+  }
 
+  const sig = req.headers['stripe-signature'] as string
   let event: Stripe.Event
+
   try {
     const stripe = new Stripe(stripeKey, { apiVersion: '2023-10-16' })
     event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret)
@@ -44,40 +54,97 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return
   }
 
-  if (event.type === 'checkout.session.completed') {
-    const session  = event.data.object as Stripe.Checkout.Session
-    const reportId = session.metadata?.reportId
-    if (!reportId) {
-      res.statusCode = 200
-      res.end()
+  switch (event.type) {
+    case 'checkout.session.completed':
+      await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session)
+      break
+    default:
+      // Événement non géré — Stripe ne doit pas recevoir d'erreur pour ça
+      break
+  }
+
+  // Toujours 200 après validation de signature pour éviter les retries Stripe inutiles
+  res.statusCode = 200
+  res.end(JSON.stringify({ received: true }))
+}
+
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+  const reportId = session.metadata?.reportId
+
+  if (!reportId) {
+    console.warn(`[webhook] checkout.session.completed sans reportId — session: ${session.id}`)
+    return
+  }
+
+  // Vérifier que le paiement est réellement validé
+  if (session.payment_status !== 'paid' && session.payment_status !== 'no_payment_required') {
+    console.warn(
+      `[webhook] Session ${session.id} non payée (payment_status: ${session.payment_status}) — ignorée`
+    )
+    return
+  }
+
+  const supabaseUrl = process.env.VITE_SUPABASE_URL
+  const serviceKey  = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!supabaseUrl || !serviceKey) {
+    console.error('[webhook] VITE_SUPABASE_URL ou SUPABASE_SERVICE_ROLE_KEY manquante')
+    return
+  }
+
+  try {
+    const sb = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
+
+    // Vérifier que le rapport existe — ne pas crasher si absent
+    const { data: report, error: reportErr } = await sb
+      .from('reports')
+      .select('id, status')
+      .eq('id', reportId)
+      .single()
+
+    if (reportErr || !report) {
+      console.error(
+        `[webhook] Rapport ${reportId} introuvable — session: ${session.id}`,
+        reportErr?.message ?? 'null'
+      )
       return
     }
 
-    const supabaseUrl = process.env.VITE_SUPABASE_URL
-    const serviceKey  = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-    if (supabaseUrl && serviceKey) {
-      try {
-        const sb = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
-
-        await sb.from('payments').insert({
-          report_id:          reportId,
-          stripe_session_id:  session.id,
-          stripe_customer_id: session.customer as string | null,
-          amount_total:       session.amount_total ?? 1499,
-          currency:           session.currency ?? 'eur',
-          payment_status:     session.payment_status,
-        })
-
-        await sb.from('reports').update({ status: 'paid' }).eq('id', reportId)
-
-        console.log(`[webhook] ✅ Rapport ${reportId} marqué payé`)
-      } catch (err) {
-        console.error('[webhook] Erreur Supabase:', err)
-      }
+    // Idempotence : si déjà payé, ne rien faire (webhook retry possible)
+    if (report.status === 'paid' || report.status === 'complete') {
+      console.log(`[webhook] Rapport ${reportId} déjà payé — session ${session.id} ignorée`)
+      return
     }
-  }
 
-  res.statusCode = 200
-  res.end()
+    // Stocker le paiement avec tous les champs disponibles
+    const { error: payErr } = await sb.from('payments').insert({
+      report_id:              reportId,
+      stripe_session_id:      session.id,
+      stripe_customer_id:     (session.customer  as string | null) ?? null,
+      stripe_subscription_id: (session.subscription as string | null) ?? null,
+      amount_total:           session.amount_total ?? 1499,
+      currency:               session.currency ?? 'eur',
+      payment_status:         session.payment_status,
+      paid_at:                new Date().toISOString(),
+    })
+
+    if (payErr) {
+      // Doublon probable (retry Stripe) — logguer mais continuer pour mettre à jour le rapport
+      console.warn(`[webhook] Insert payment ignoré pour session ${session.id}:`, payErr.message)
+    }
+
+    // Marquer le rapport comme payé
+    const { error: updateErr } = await sb
+      .from('reports')
+      .update({ status: 'paid' })
+      .eq('id', reportId)
+
+    if (updateErr) {
+      console.error(`[webhook] Erreur mise à jour rapport ${reportId}:`, updateErr.message)
+    } else {
+      console.log(`[webhook] ✅ Rapport ${reportId} marqué payé via webhook (session: ${session.id})`)
+    }
+  } catch (err) {
+    console.error('[webhook] Erreur inattendue:', err)
+  }
 }
