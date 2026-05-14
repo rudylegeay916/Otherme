@@ -1,8 +1,30 @@
 import type { IncomingMessage, ServerResponse } from 'http'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import { createHmac, timingSafeEqual } from 'crypto'
 
 export const config = { api: { bodyParser: false } }
+
+// ── Token helpers (dupliqués depuis server/lib/accessToken.ts pour éviter les imports cross-codebase) ──
+
+function hmac(data: string, secret: string): string {
+  return createHmac('sha256', secret).update(data).digest('hex')
+}
+
+function signAccessToken(reportId: string, sessionId: string): string {
+  const payload = JSON.stringify({ reportId, sessionId, exp: Date.now() + 7 * 24 * 60 * 60 * 1000 })
+  const encoded = Buffer.from(payload).toString('base64url')
+  const secret  = process.env.ACCESS_TOKEN_SECRET ?? ''
+  return `${encoded}.${hmac(encoded, secret)}`
+}
+
+function buildAccessCookie(token: string): string {
+  const isProd  = process.env.NODE_ENV === 'production'
+  const secure  = isProd ? ' Secure;' : ''
+  return `otherme_report_access=${encodeURIComponent(token)}; HttpOnly;${secure} SameSite=Strict; Path=/; Max-Age=604800`
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 function readBody(req: IncomingMessage): Promise<Record<string, string>> {
   return new Promise((resolve, reject) => {
@@ -53,23 +75,20 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       return
     }
 
-    // ── 2. Vérifier le paiement ─────────────────────────────────────
-    const paymentOk = session.payment_status === 'paid'
+    // ── 2. Vérifier le paiement et la correspondance reportId ───────
+    const paymentOk = session.payment_status === 'paid' || session.payment_status === 'no_payment_required'
+    const metaMatch = session.metadata?.reportId === reportId
 
-    // Vérifier que le reportId correspond aux metadata (si présent)
-    const metaReportId = session.metadata?.reportId
-    const reportMatch  = !metaReportId || metaReportId === reportId
-
-    if (!paymentOk || !reportMatch) {
+    if (!paymentOk || !metaMatch) {
       res.statusCode = 200
       res.end(JSON.stringify({
         verified: false,
-        error: 'Le paiement n\'a pas encore été confirmé. Veuillez finaliser votre accès pour consulter le rapport complet.',
+        error: "Le paiement n'a pas encore été confirmé. Veuillez finaliser votre accès pour consulter le rapport complet.",
       }))
       return
     }
 
-    // ── 3. Mettre à jour Supabase (fallback si le webhook n'est pas arrivé) ──
+    // ── 3. Fallback webhook : mettre à jour Supabase si nécessaire ───
     const supabaseUrl = process.env.VITE_SUPABASE_URL
     const serviceKey  = process.env.SUPABASE_SERVICE_ROLE_KEY
 
@@ -77,7 +96,6 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       try {
         const sb = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } })
 
-        // Met à jour le statut uniquement si pas encore payé
         const { data: existing } = await sb
           .from('reports')
           .select('status')
@@ -86,8 +104,6 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
         if (existing && existing.status !== 'paid' && existing.status !== 'complete') {
           await sb.from('reports').update({ status: 'paid' }).eq('id', reportId)
-
-          // Enregistre le paiement — ignore les doublons si le webhook est arrivé entre temps
           await sb.from('payments').insert({
             report_id:          reportId,
             stripe_session_id:  session.id,
@@ -95,15 +111,18 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             amount_total:       session.amount_total ?? 1499,
             currency:           session.currency ?? 'eur',
             payment_status:     session.payment_status,
-          }).then(() => {}).catch(() => {})  // doublon webhook → silencieux
-
+            paid_at:            new Date().toISOString(),
+          }).then(() => {}).catch(() => {})
           console.log(`[verify-payment] ✅ Rapport ${reportId} marqué payé (fallback webhook)`)
         }
       } catch (dbErr) {
-        // Supabase down — Stripe a confirmé, on retourne quand même verified:true
         console.warn('[verify-payment] Mise à jour Supabase ignorée:', dbErr)
       }
     }
+
+    // ── 4. Émettre le cookie d'accès signé ───────────────────────────
+    const token = signAccessToken(reportId, session_id)
+    res.setHeader('Set-Cookie', buildAccessCookie(token))
 
     res.statusCode = 200
     res.end(JSON.stringify({ verified: true }))

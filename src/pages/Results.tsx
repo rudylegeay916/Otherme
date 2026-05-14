@@ -486,7 +486,15 @@ export default function Results() {
         }
         setReport(r)
       })
-      .catch((e) => setError(e instanceof Error ? e.message : 'Rapport introuvable'))
+      .catch((e: unknown) => {
+        const msg = e instanceof Error ? e.message : 'Rapport introuvable'
+        if (msg === 'ACCESS_DENIED') {
+          setAccessDenied(true)
+          setError('Accès au rapport non autorisé. Finalise ton paiement pour obtenir un lien d\'accès valide.')
+        } else {
+          setError(msg)
+        }
+      })
       .finally(() => setLoading(false))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reportId])

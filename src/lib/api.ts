@@ -80,9 +80,12 @@ export async function fetchReport(reportId: string): Promise<Report> {
     }
   } catch {}
 
-  const res = await fetch(`${BASE}/report/${reportId}`)
+  const res = await fetch(`${BASE}/report/${reportId}`, { credentials: 'include' })
   if (!res.ok) {
-    const err = await res.json().catch(() => ({})) as { error?: string }
+    const err = await res.json().catch(() => ({})) as { error?: string; requiresToken?: boolean }
+    if (res.status === 403 || err.requiresToken) {
+      throw new Error('ACCESS_DENIED')
+    }
     throw new Error(err.error || 'Rapport introuvable')
   }
   return res.json() as Promise<Report>
@@ -116,6 +119,7 @@ export async function verifyPayment(
     const res = await fetch(`${BASE}/verify-payment`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ session_id: sessionId, reportId }),
     })
     const data = await res.json() as { verified: boolean; error?: string }

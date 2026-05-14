@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url'
 import onboardingRouter from './routes/onboarding'
 import reportRouter from './routes/report'
 import stripeRouter from './routes/stripe'
+import accessRouter from './routes/access'
 
 const app = express()
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api/onboarding', onboardingRouter)
 app.use('/api/report', reportRouter)
 app.use('/api/stripe', stripeRouter)
+app.use('/api', accessRouter)
 
 // ── 404 pour les routes /api/* inconnues ──────────────────
 app.use('/api/*', (_req, res) => {

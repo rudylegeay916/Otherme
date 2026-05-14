@@ -40,6 +40,10 @@ const REQUIRED: ReadonlyArray<{ key: string; hint: string }> = [
     key: 'FROM_EMAIL',
     hint: 'Ex: OtherMe <noreply@tondomaine.com> — domaine vérifié dans Resend',
   },
+  {
+    key: 'ACCESS_TOKEN_SECRET',
+    hint: 'Chaîne aléatoire ≥ 32 caractères — signe les tokens d\'accès aux rapports payés',
+  },
 ]
 
 // ── Variables optionnelles (dégradation gracieuse) ───────────────────────────
@@ -98,6 +102,9 @@ export const env = {
   // Resend
   resendApiKey: get('RESEND_API_KEY'),
   fromEmail:    get('FROM_EMAIL'),
+
+  // Access tokens
+  accessTokenSecret: get('ACCESS_TOKEN_SECRET'),
 
   // App
   appUrl:  get('VITE_APP_URL', 'http://localhost:5173'),

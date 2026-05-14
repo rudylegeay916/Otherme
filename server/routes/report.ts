@@ -1,11 +1,12 @@
 import { Router } from 'express'
 import { getReport } from '../lib/supabase'
+import { verifyAccessToken, parseCookieHeader } from '../lib/accessToken'
 import type { Report, Trajectory } from '../../src/types'
 
 const router = Router()
 
 // GET /api/report/:id
-// Retourne le rapport avec les trajectoires masquées si non payé
+// Retourne le rapport complet si le token d'accès est valide, masqué sinon.
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params
@@ -22,6 +23,14 @@ router.get('/:id', async (req, res) => {
 
     const isPaid = row.status === 'paid' || row.status === 'emailed'
 
+    // Vérifier le token d'accès signé dans le cookie HttpOnly
+    const rawCookie = req.headers.cookie
+    const token     = parseCookieHeader(rawCookie, 'otherme_report_access')
+    const { valid } = token ? verifyAccessToken(token, id) : { valid: false }
+
+    // Rapport complet uniquement si paid EN BASE et token valide
+    const hasFullAccess = isPaid && valid
+
     // Adapter le statut interne au format attendu par le frontend
     const frontendStatus: Report['status'] = (() => {
       if (row.status === 'emailed') return 'complete'
@@ -35,12 +44,20 @@ router.get('/:id', async (req, res) => {
     // Pour l'instant on expose ce qui est nécessaire au frontend
     const firstName = row.title?.split('pour ').pop() ?? ''
 
+    // Si le rapport est payé mais que le token est absent/invalide, signaler sans exposer le contenu
+    if (isPaid && !valid) {
+      return res.status(403).json({
+        message: 'Accès au rapport non autorisé.',
+        requiresToken: true,
+      })
+    }
+
     const report: Report = {
       id:           row.id,
       email:        '', // l'email n'est pas stocké directement dans reports
       firstName,
       status:       frontendStatus,
-      trajectories: isPaid ? trajectories : maskLockedTrajectories(trajectories),
+      trajectories: hasFullAccess ? trajectories : maskLockedTrajectories(trajectories),
       createdAt:    row.created_at,
     }
 
