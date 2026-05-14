@@ -15,6 +15,7 @@ import ForgotPassword from './pages/ForgotPassword'
 import Dashboard from './pages/Dashboard'
 import Account from './pages/Account'
 import SocialProof from './pages/SocialProof'
+import Results from './pages/Results'
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/social-proof/:reportId" element={<SocialProof />} />
           <Route path="/paywall/:reportId" element={<Paywall />} />
+          <Route path="/results/:reportId" element={<Results />} />
           <Route path="/success" element={<Success />} />
           <Route path="/cancel" element={<Cancel />} />
 

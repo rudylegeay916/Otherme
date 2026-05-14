@@ -22,7 +22,7 @@ export default function Success() {
       try {
         const r = await fetchReport(reportId)
         setReport(r)
-        if (r.status === 'complete' || attempts >= 10) {
+        if (r.status === 'complete' || r.status === 'paid' || attempts >= 10) {
           setLoading(false)
         } else {
           attempts++
@@ -65,13 +65,13 @@ export default function Success() {
         ) : (
           <>
             <p className="text-slate-300 text-lg mb-2">
-              Ton rapport PDF a été envoyé à
+              Tes 3 trajectoires complètes sont prêtes.
             </p>
             {report?.email && (
               <p className="text-brand-400 font-semibold text-lg mb-6">{report.email}</p>
             )}
             <p className="text-slate-500 text-sm mb-10">
-              Vérifie ta boite mail (et les spams). Le rapport contient tes 3 trajectoires complètes avec leur plan d'action.
+              Ton accès complet est activé. Consulte ton rapport détaillé ci-dessous.
             </p>
           </>
         )}
@@ -96,13 +96,13 @@ export default function Success() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {reportId && (
             <button
-              onClick={() => navigate(`/paywall/${reportId}`)}
-              className="btn-secondary"
+              onClick={() => navigate(`/results/${reportId}`)}
+              className="btn-primary"
             >
-              Voir le rapport en ligne
+              Voir mon rapport complet →
             </button>
           )}
-          <button onClick={() => navigate('/')} className="btn-primary">
+          <button onClick={() => navigate('/')} className="btn-secondary">
             Retour à l'accueil
           </button>
         </div>

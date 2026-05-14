@@ -10,7 +10,6 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return
   }
 
-  // Extraire reportId depuis l'URL (/api/report/xxx)
   const urlParts = req.url?.split('/') ?? []
   const reportId = urlParts[urlParts.length - 1]?.split('?')[0]
 
@@ -20,7 +19,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return
   }
 
-  // Les IDs mock n'existent pas en base — le frontend les gère via sessionStorage
+  // Les IDs mock sont gérés côté client via sessionStorage
   if (reportId.startsWith('mock_')) {
     res.statusCode = 404
     res.end(JSON.stringify({ error: 'Rapport mock — données disponibles côté client' }))
@@ -52,18 +51,35 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
 
     const rawAnswers = (report as any).onboarding_responses?.raw_answers as Record<string, unknown> | undefined
-    const firstName = (rawAnswers?.firstName as string) ?? report.title?.split('pour ').pop() ?? ''
-    const email     = (rawAnswers?.email as string) ?? ''
+    const firstName  = (rawAnswers?.firstName as string) ?? report.title?.split('pour ').pop() ?? ''
+    const email      = (rawAnswers?.email as string) ?? ''
+    const fullReport = report.full_report as unknown
 
-    res.statusCode = 200
-    res.end(JSON.stringify({
-      id:           report.id,
-      status:       report.status,
-      trajectories: report.full_report,
+    // Detect new format (ReportData object with .paths) vs legacy (Trajectory[])
+    const isNewFormat = fullReport && typeof fullReport === 'object' && !Array.isArray(fullReport)
+      && 'paths' in (fullReport as Record<string, unknown>)
+
+    const responsePayload: Record<string, unknown> = {
+      id:        report.id,
+      status:    report.status,
       firstName,
       email,
-      createdAt:    report.created_at,
-    }))
+      createdAt: report.created_at,
+    }
+
+    if (isNewFormat) {
+      const rd = fullReport as Record<string, unknown>
+      responsePayload.paths            = rd.paths
+      responsePayload.reportSummary    = rd.reportSummary
+      responsePayload.comparison       = rd.comparison
+      responsePayload.bestFirstStep48h = rd.bestFirstStep48h
+    } else {
+      // Legacy: full_report is Trajectory[]
+      responsePayload.trajectories = fullReport
+    }
+
+    res.statusCode = 200
+    res.end(JSON.stringify(responsePayload))
   } catch (err) {
     console.error('[report] Erreur:', err)
     res.statusCode = 500

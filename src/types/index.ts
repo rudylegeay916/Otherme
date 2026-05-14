@@ -4,30 +4,23 @@ export interface QuestionAnswer {
 }
 
 export interface OnboardingData {
-  // ── Étape 1 — Identité (champs requis) ───────────────────────────
   firstName: string
   email: string
   age: number
   currentSituation: string
-
-  // ── Étape 1 — Identité (optionnels) ──────────────────────────────
   gender?: string
   city?: string
-
-  // ── Étape 2 — CV (optionnel) ─────────────────────────────────────
   cvText?: string
-
-  // ── Étape 3 — Parcours ───────────────────────────────────────────
   currentJob?: string
   sector?: string
   yearsExperience?: number
   educationLevel?: string
   educationField?: string
   languages?: string[]
-
-  // ── Questions (Q1–Q20 + adaptatives) — toutes optionnelles ───────
   answers?: Record<string, QuestionAnswer>
 }
+
+// ── Legacy (backward compat) ──────────────────────────────────────
 
 export interface TimelineStep {
   year: string
@@ -45,12 +38,74 @@ export interface Trajectory {
   feasibilityNote: string
 }
 
+// ── New rich format ───────────────────────────────────────────────
+
+export interface RichTimelineStep {
+  period: string
+  objective: string
+  actions: string[]
+  skills: string[]
+  proofsToBuild: string[]
+  expectedResult: string
+}
+
+export interface ActionPlanWeek {
+  week: number
+  title: string
+  actions: string[]
+}
+
+export interface PathData {
+  pathType: 'current_aligned' | 'passion_based' | 'high_potential'
+  title: string
+  sector: string
+  revenueEstimate: string
+  happinessScore: number
+  riskLevel: string
+  difficultyLevel: string
+  fitScore: number
+  securityScore: number
+  freedomScore: number
+  incomePotentialScore: number
+  alignmentScore: number
+  longDescription: string
+  keyInsight: string
+  whyItFits: string[]
+  dailyLife: string
+  alreadyAcquiredStrengths: string[]
+  missingSkills: string[]
+  likelyObstacles: string[]
+  mistakesToAvoid: string[]
+  fiveYearTimeline: RichTimelineStep[]
+  detailedActionPlan30Days: ActionPlanWeek[]
+  firstWeekActions: string[]
+  miniProjectToLaunch: string
+  peopleToContact: string[]
+  proofsToBuild: string[]
+  recommendedTrainingTypes: string[]
+  similarJobs: string[]
+  risksAndLimits: string[]
+  firstConcreteStep: string
+}
+
+export interface ReportComparison {
+  safestPath: string
+  mostPassionAlignedPath: string
+  highestPotentialPath: string
+  recommendedFirstChoice: string
+  reason: string
+}
+
 export interface Report {
   id: string
   email: string
   firstName: string
   status: 'generating' | 'ready' | 'paid' | 'complete'
-  trajectories: Trajectory[]
+  paths?: PathData[]
+  reportSummary?: string
+  comparison?: ReportComparison
+  bestFirstStep48h?: string
+  trajectories?: Trajectory[]
   createdAt: string
 }
 
@@ -58,6 +113,10 @@ export interface OnboardingResponse {
   reportId: string
   status: string
   isMock?: boolean
+  mockPaths?: PathData[]
+  mockReportSummary?: string
+  mockComparison?: ReportComparison
+  mockBestFirstStep?: string
   mockTrajectories?: Trajectory[]
   firstName?: string
   email?: string

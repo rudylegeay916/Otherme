@@ -287,43 +287,89 @@ export default function Onboarding() {
 
   return (
     <div className="min-h-screen bg-dark-950 flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-dark-800">
-        <Logo size={36} />
-        <div className="flex items-center gap-3">
-          <LanguageToggle />
-          <span className="text-sm text-slate-500">{tr.c.stepLabel(step + 1, TOTAL_STEPS)}</span>
+      {/* ── Sticky top nav ─────────────────────────────────────────── */}
+      <div className="sticky top-0 z-50 bg-dark-950/95 backdrop-blur-md border-b border-dark-800">
+        {/* Row 1: Logo / Back / Continue */}
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-2">
+            <Logo size={30} />
+            {step > 0 && (
+              <>
+                <div className="hidden sm:block h-4 w-px bg-dark-700 mx-1" />
+                <span className="hidden sm:block text-xs text-slate-500 truncate max-w-[160px]">
+                  {stepTitles[step]?.title ?? ''}
+                </span>
+              </>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <LanguageToggle />
+            {step > 0 && (
+              <button
+                type="button"
+                onClick={handleBack}
+                className="btn-secondary text-sm py-1.5 px-3"
+              >
+                ← {tr.c.back}
+              </button>
+            )}
+            {!isLastStep ? (
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={!canProceed()}
+                className="btn-primary text-sm py-1.5 px-4 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {tr.c.continue} →
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="btn-primary text-sm py-1.5 px-4"
+              >
+                {tr.onb.generateBtn}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Row 2: Progress bar + step counter */}
+        <div className="px-4 pb-2.5">
+          <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5">
+            <span>{tr.c.stepLabel(step + 1, TOTAL_STEPS)}</span>
+            <span>{Math.round(progressPct)}%</span>
+          </div>
+          <div className="h-1 bg-dark-800 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-brand-600 to-purple-500 transition-all duration-500 rounded-full"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+
+          {/* Step dots */}
+          <div className="flex items-center justify-center gap-1.5 mt-2 overflow-x-auto py-0.5">
+            {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+              <div
+                key={i}
+                className={`flex-shrink-0 transition-all duration-300 ${
+                  i < step
+                    ? 'w-4 h-4 rounded-full bg-brand-600 flex items-center justify-center'
+                    : i === step
+                    ? 'w-4 h-4 rounded-full bg-brand-600/30 border border-brand-500'
+                    : 'w-1.5 h-1.5 rounded-full bg-dark-700'
+                }`}
+              >
+                {i < step && <span className="text-white text-[9px] font-bold">✓</span>}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Barre de progression */}
-      <div className="h-1 bg-dark-800">
-        <div
-          className="h-full bg-gradient-to-r from-brand-600 to-purple-500 transition-all duration-500"
-          style={{ width: `${progressPct}%` }}
-        />
-      </div>
-
-      {/* Indicateur d'étapes */}
-      <div className="flex items-center justify-center gap-1.5 py-4 px-4 overflow-x-auto">
-        {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-          <div
-            key={i}
-            className={`flex-shrink-0 transition-all duration-300 ${
-              i < step
-                ? 'w-5 h-5 rounded-full bg-brand-600 flex items-center justify-center'
-                : i === step
-                ? 'w-5 h-5 rounded-full bg-brand-600/30 border border-brand-500'
-                : 'w-2 h-2 rounded-full bg-dark-700'
-            }`}
-          >
-            {i < step && <span className="text-white text-[10px] font-bold">✓</span>}
-          </div>
-        ))}
-      </div>
-
-      {/* Contenu */}
-      <div className="flex-1 flex items-start justify-center px-4 pb-16">
+      {/* ── Content ─────────────────────────────────────────────────── */}
+      <div className="flex-1 flex items-start justify-center px-4 py-8 pb-16">
         <div className="w-full max-w-lg">
           <div className="card p-6 md:p-8 animate-slide-up">
 
@@ -586,16 +632,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Navigation */}
-            <div className="flex items-center justify-between mt-8 pt-6 border-t border-dark-700">
-              <button
-                type="button"
-                onClick={handleBack}
-                className={`btn-secondary ${step === 0 ? 'invisible' : ''}`}
-              >
-                {tr.c.back}
-              </button>
-
+            {/* Navigation bottom (duplicate for long forms) */}
+            <div className="flex items-center justify-end mt-8 pt-6 border-t border-dark-700">
               {!isLastStep ? (
                 <button
                   type="button"
@@ -603,7 +641,7 @@ export default function Onboarding() {
                   disabled={!canProceed()}
                   className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  {tr.c.continue}
+                  {tr.c.continue} →
                 </button>
               ) : (
                 <button
