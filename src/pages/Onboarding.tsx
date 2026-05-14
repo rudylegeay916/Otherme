@@ -101,10 +101,9 @@ function LoadingScreen({ msgIdx, messages }: { msgIdx: number; messages: string[
   return (
     <div className="min-h-screen bg-dark-950 flex flex-col items-center justify-center px-4">
       <div className="text-center max-w-sm">
-        <div className="relative w-20 h-20 mx-auto mb-8">
-          <div className="absolute inset-0 rounded-full border-4 border-brand-900" />
-          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-brand-500 animate-spin" />
-          <div className="absolute inset-3 rounded-full bg-brand-600/20 flex items-center justify-center text-2xl">✨</div>
+        <div className="relative mx-auto mb-8 w-fit">
+          <div className="absolute -inset-3 rounded-full bg-purple-600/20 blur-xl animate-pulse-slow" />
+          <Logo size={80} withText={false} to={null} />
         </div>
         <h2 className="text-2xl font-bold mb-3 text-slate-100">{messages[msgIdx]}</h2>
         <p className="text-slate-500 text-sm">{messages.length > 0 ? '15 – 30 sec' : ''}</p>
