@@ -435,6 +435,17 @@ export default function Results() {
 
     const isMock = reportId.startsWith('mock_')
 
+    // ── Garde production : les rapports mock ne donnent jamais accès aux résultats complets
+    // En développement local (import.meta.env.DEV = true), les mocks sont autorisés.
+    // En production Vercel, VITE_ALLOW_MOCK_REPORTS doit être "true" pour les activer (ne jamais le faire).
+    const allowMockReports = import.meta.env.DEV || import.meta.env.VITE_ALLOW_MOCK_REPORTS === 'true'
+    if (isMock && !allowMockReports) {
+      setAccessDenied(true)
+      setError('Rapport de démonstration indisponible en production. Génère un rapport réel pour accéder aux résultats.')
+      setLoading(false)
+      return
+    }
+
     // ── Flux A : session_id présent → vérification directe auprès de Stripe ──
     if (sessionId && !isMock) {
       verifyPayment(sessionId, reportId)
