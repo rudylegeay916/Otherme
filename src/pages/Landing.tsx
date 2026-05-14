@@ -6,7 +6,7 @@ import { hasStartedTest, clearProgress } from '../lib/onboardingStorage'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTr } from '../lib/i18n/translations'
 
-// ── Données statiques bilingues des nouvelles sections ────────────────────────
+// ── Données statiques bilingues ───────────────────────────────────────────────
 
 const DELIVERABLES = [
   {
@@ -31,13 +31,18 @@ const DELIVERABLES = [
   },
   {
     icon: '📅',
-    fr: { title: 'Timeline sur 5 ans', desc: 'Jalons trimestriels pour visualiser concrètement ton chemin vers la transition.' },
-    en: { title: '5-year timeline', desc: 'Quarterly milestones to concretely visualise your path to transition.' },
+    fr: { title: 'Timeline 6 à 24 mois', desc: 'Jalons clairs pour visualiser concrètement chaque étape de ta transition.' },
+    en: { title: 'Timeline 6 to 24 months', desc: 'Clear milestones to concretely visualise each step of your transition.' },
   },
   {
     icon: '🎯',
-    fr: { title: 'Plan d\'action 30 jours', desc: 'Les premières actions à lancer dès cette semaine pour amorcer le changement.' },
-    en: { title: '30-day action plan', desc: 'First actions to launch this week to kickstart the change.' },
+    fr: { title: 'Plan d\'action 30 jours', desc: 'Les premières actions concrètes à lancer dès cette semaine pour amorcer le changement.' },
+    en: { title: '30-day action plan', desc: 'Concrete first actions to launch this week to kick off the change.' },
+  },
+  {
+    icon: '🔁',
+    fr: { title: 'Compétences transférables', desc: 'Ce que tu as déjà et que tu peux valoriser immédiatement dans une nouvelle voie.' },
+    en: { title: 'Transferable skills', desc: 'What you already have and can leverage immediately in a new direction.' },
   },
   {
     icon: '🧠',
@@ -53,44 +58,63 @@ const DELIVERABLES = [
 
 const FOR_WHO = [
   {
+    icon: '💼',
+    featured: true,
+    fr: { title: 'Jeunes actifs (25–35 ans)', desc: 'Tu travailles, mais tu te demandes si tu es vraiment au bon endroit — et tu veux changer sans repartir de zéro.' },
+    en: { title: 'Young professionals (25–35)', desc: 'You\'re working but wondering if you\'re in the right place — and want to change without starting over.' },
+  },
+  {
+    icon: '🔄',
+    fr: { title: 'Profils en reconversion', desc: 'Tu sais que tu veux changer, mais tu ne sais pas encore vers quoi te diriger ni par où commencer.' },
+    en: { title: 'Career changers', desc: 'You know you want to change, but haven\'t found your direction or where to start.' },
+  },
+  {
+    icon: '😔',
+    fr: { title: 'Salariés en perte de sens', desc: 'Tu fais bien ton travail, mais il ne te nourrit plus. Tu cherches à te réaligner avec ce qui compte vraiment.' },
+    en: { title: 'Employees losing meaning', desc: 'You do your job well, but it no longer fulfils you. You\'re seeking realignment with what truly matters.' },
+  },
+  {
     icon: '🎓',
     fr: { title: 'Étudiants en questionnement', desc: 'Tu hésites entre plusieurs orientations et tu veux voir plus loin que les débouchés classiques.' },
     en: { title: 'Students at a crossroads', desc: 'Unsure between directions and want to see beyond conventional career paths.' },
   },
   {
-    icon: '💼',
-    fr: { title: 'Jeunes actifs (25–35 ans)', desc: 'Tu travailles, mais tu te demandes si tu es vraiment au bon endroit.' },
-    en: { title: 'Young professionals (25–35)', desc: 'You\'re working, but wondering if you\'re really in the right place.' },
-  },
-  {
-    icon: '😔',
-    fr: { title: 'Salariés en perte de sens', desc: 'Tu fais bien ton travail, mais il ne te nourrit plus. Tu cherches à te réaligner.' },
-    en: { title: 'Employees losing meaning', desc: 'You do your job well, but it no longer fulfils you. You\'re seeking realignment.' },
-  },
-  {
-    icon: '🔄',
-    fr: { title: 'Profils en reconversion', desc: 'Tu sais que tu veux changer, mais tu ne sais pas encore vers quoi te diriger.' },
-    en: { title: 'Career changers', desc: 'You know you want to change, but haven\'t found your direction yet.' },
-  },
-  {
     icon: '🎨',
-    fr: { title: 'Profils créatifs', desc: 'Tes projets perso méritent peut-être d\'être ton vrai métier — OtherMe l\'explore.' },
-    en: { title: 'Creative profiles', desc: 'Your personal projects might deserve to become your real job — OtherMe explores it.' },
+    fr: { title: 'Profils créatifs', desc: 'Tes projets perso méritent peut-être d\'être ton vrai métier — OtherMe l\'explore sérieusement.' },
+    en: { title: 'Creative profiles', desc: 'Your personal projects might deserve to become your real job — OtherMe explores it seriously.' },
   },
   {
     icon: '📈',
-    fr: { title: 'Ambitieux discrets', desc: 'Tu as plus de potentiel que ce que ton CV laisse paraître. Il est temps de le voir.' },
+    fr: { title: 'Ambitieux discrets', desc: 'Tu as plus de potentiel que ce que ton CV laisse paraître. Il est temps de le voir clairement.' },
     en: { title: 'Quiet ambitious', desc: 'You have more potential than your CV reveals. It\'s time to see it clearly.' },
   },
 ]
 
 const AVOIDS = [
-  { fr: 'Rester bloqué dans une voie par défaut, faute d\'avoir exploré les alternatives', en: 'Staying stuck in a default path for lack of exploring alternatives' },
-  { fr: 'Choisir une reconversion trop floue, sans plan ni projection réaliste', en: 'Choosing a vague career change with no plan or realistic projection' },
-  { fr: 'Repartir de zéro quand une transition progressive est possible', en: 'Starting over when a gradual transition is achievable' },
-  { fr: 'Sous-estimer son expérience et ses compétences transférables', en: 'Underestimating your experience and transferable skills' },
-  { fr: 'Confondre passion et projet professionnel viable', en: 'Confusing a passion with a viable professional project' },
-  { fr: 'Prendre une décision sans avoir sérieusement exploré ses options', en: 'Making a decision without seriously exploring your options' },
+  {
+    fr: 'Continuer dans un métier qui ne te correspond plus simplement parce que tu ne sais pas quoi faire d\'autre',
+    en: 'Continuing in a career that no longer fits you simply because you don\'t know what else to do',
+  },
+  {
+    fr: 'Choisir une reconversion trop floue, sans plan ni projection réaliste',
+    en: 'Choosing a vague career change with no plan or realistic projection',
+  },
+  {
+    fr: 'Croire qu\'il faut repartir de zéro alors que certaines compétences sont déjà transférables',
+    en: 'Believing you have to start over when some of your skills are already transferable',
+  },
+  {
+    fr: 'Sous-estimer ton expérience et les passerelles possibles vers d\'autres métiers',
+    en: 'Underestimating your experience and the bridges possible to other careers',
+  },
+  {
+    fr: 'Confondre passion et projet professionnel viable',
+    en: 'Confusing a passion with a viable professional project',
+  },
+  {
+    fr: 'Prendre une décision importante sans avoir sérieusement exploré plusieurs options',
+    en: 'Making an important decision without seriously exploring multiple options',
+  },
 ]
 
 const WHY_DIFFERENT = [
@@ -111,8 +135,8 @@ const WHY_DIFFERENT = [
   },
   {
     icon: '🚫',
-    fr: { title: 'Sans promesses magiques', desc: 'On te montre ce qui est accessible et réaliste selon ton profil, pas ce que tu veux entendre.' },
-    en: { title: 'No magic promises', desc: 'We show you what\'s accessible and realistic for your profile, not what you want to hear.' },
+    fr: { title: 'Sans promesses magiques', desc: 'OtherMe ne remplace pas un conseiller en évolution professionnelle. Il t\'aide à clarifier tes options et à avancer avec une feuille de route structurée.' },
+    en: { title: 'No magic promises', desc: 'OtherMe doesn\'t replace a career coach. It helps you clarify your options and move forward with a structured roadmap.' },
   },
 ]
 
@@ -140,7 +164,7 @@ export default function Landing() {
 
       {/* ── Navbar ─────────────────────────────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3.5 bg-dark-950/85 backdrop-blur-md border-b border-white/[0.06]">
-        <Logo size={44} />
+        <Logo size={48} />
         <div className="flex items-center gap-3">
           <LanguageToggle />
           {started ? (
@@ -174,7 +198,6 @@ export default function Landing() {
       {/* ── Hero ───────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-20 overflow-hidden">
 
-        {/* Orbes décoratifs — subtils, non agressifs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-violet-700/[0.09] rounded-full blur-[140px]" />
           <div className="absolute top-[60%] left-[18%] w-[300px] h-[300px] bg-indigo-800/[0.07] rounded-full blur-[100px]" />
@@ -192,7 +215,7 @@ export default function Landing() {
           {/* Titre hero */}
           <h1 className="text-4xl sm:text-5xl md:text-[3.4rem] font-bold leading-[1.15] tracking-tight mb-6 text-slate-100">
             {t.heroTitle}{' '}
-            <span className="text-brand-400">{t.heroAccent}</span>{' '}
+            <span className="gradient-text">{t.heroAccent}</span>{' '}
             {t.heroTitle2}
           </h1>
 
@@ -214,11 +237,9 @@ export default function Landing() {
             </div>
           )}
 
-          {/* Stats */}
+          {/* Microcopy sous CTA */}
           <div className="flex items-center justify-center gap-4 sm:gap-6 text-xs text-slate-600 flex-wrap">
-            <span className="flex items-center gap-1.5">
-              <span className="text-yellow-400 text-sm">★★★★★</span> {t.statRating}
-            </span>
+            <span>{t.statRating}</span>
             <span className="hidden sm:block w-px h-3 bg-dark-600" />
             <span>{t.statReports}</span>
             <span className="hidden sm:block w-px h-3 bg-dark-600" />
@@ -290,7 +311,7 @@ export default function Landing() {
                 : 'A structured, concrete and actionable report — not a generic test.'}
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-3 gap-4">
             {DELIVERABLES.map((d) => (
               <div key={d.fr.title} className="card p-5 flex flex-col gap-3 hover:border-white/[0.12] transition-colors duration-300">
                 <span className="text-2xl">{d.icon}</span>
@@ -318,7 +339,9 @@ export default function Landing() {
           </div>
           <div className="card glow relative overflow-hidden p-8">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-600/40 to-transparent" />
-            <div className="flex items-start justify-between mb-6 gap-4">
+
+            {/* Header */}
+            <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
               <div>
                 <span className="text-xs font-semibold text-brand-400/80 uppercase tracking-widest">{t.exTrajLabel}</span>
                 <h3 className="text-xl font-bold mt-1.5 text-slate-100">{t.exTrajTitle}</h3>
@@ -329,12 +352,79 @@ export default function Landing() {
                 <div className="text-xs text-slate-600 mt-0.5">{tr.paywall.feasibility}</div>
               </div>
             </div>
-            <p className="text-slate-400 leading-relaxed mb-6 text-sm">{t.exTrajDesc}</p>
-            <div className="flex flex-wrap gap-2 mb-6">
-              {t.exSkills.map((skill) => (
-                <span key={skill} className="text-xs px-3 py-1 rounded-full bg-brand-600/10 text-brand-300/80 border border-brand-600/15">{skill}</span>
+
+            {/* Stats grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+              {[
+                { label: lang === 'fr' ? 'Durée estimée' : 'Est. duration', value: lang === 'fr' ? '6 à 9 mois' : '6 to 9 months' },
+                { label: lang === 'fr' ? 'Salaire cible' : 'Target salary', value: '30k – 38k €' },
+                { label: lang === 'fr' ? 'Niveau de risque' : 'Risk level', value: lang === 'fr' ? 'Modéré' : 'Moderate' },
+                { label: lang === 'fr' ? 'Formation nécessaire' : 'Training needed', value: lang === 'fr' ? 'Courte / certifiante' : 'Short / certified' },
+                { label: lang === 'fr' ? 'Télétravail' : 'Remote work', value: lang === 'fr' ? 'Élevé' : 'High' },
+              ].map(item => (
+                <div key={item.label} className="bg-dark-900/60 border border-white/[0.05] rounded-xl p-3">
+                  <div className="text-xs text-slate-600 mb-1">{item.label}</div>
+                  <div className="text-sm font-semibold text-slate-200">{item.value}</div>
+                </div>
               ))}
             </div>
+
+            {/* Description */}
+            <p className="text-slate-400 leading-relaxed mb-6 text-sm">{t.exTrajDesc}</p>
+
+            {/* Compétences */}
+            <div className="grid sm:grid-cols-2 gap-4 mb-6">
+              <div>
+                <div className="text-xs font-semibold text-green-400/80 uppercase tracking-wider mb-2.5">
+                  {lang === 'fr' ? 'Déjà transférables' : 'Already transferable'}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {t.exSkills.map((skill) => (
+                    <span key={skill} className="text-xs px-2.5 py-1 rounded-full bg-green-500/8 text-green-300/70 border border-green-500/15">{skill}</span>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div className="text-xs font-semibold text-amber-400/80 uppercase tracking-wider mb-2.5">
+                  {lang === 'fr' ? 'À développer' : 'To develop'}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {(lang === 'fr'
+                    ? ['Méthodes agiles', 'Outils digitaux', 'Suivi de budget']
+                    : ['Agile methods', 'Digital tools', 'Budget tracking']
+                  ).map((skill) => (
+                    <span key={skill} className="text-xs px-2.5 py-1 rounded-full bg-amber-500/8 text-amber-300/70 border border-amber-500/15">{skill}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Plan 30 jours */}
+            <div className="mb-6">
+              <div className="text-xs font-semibold text-brand-400/80 uppercase tracking-wider mb-3">
+                {lang === 'fr' ? 'Plan 30 jours' : '30-day plan'}
+              </div>
+              <div className="space-y-2">
+                {(lang === 'fr' ? [
+                  { week: 'Sem. 1', text: 'Clarifier le positionnement et analyser 10 offres d\'emploi ciblées' },
+                  { week: 'Sem. 2', text: 'Identifier les compétences manquantes et les formations disponibles' },
+                  { week: 'Sem. 3', text: 'Créer un mini-projet ou cas pratique démontrant ses capacités' },
+                  { week: 'Sem. 4', text: 'Adapter le CV et préparer les premières candidatures' },
+                ] : [
+                  { week: 'Wk 1', text: 'Clarify positioning and analyse 10 targeted job listings' },
+                  { week: 'Wk 2', text: 'Identify missing skills and available training options' },
+                  { week: 'Wk 3', text: 'Create a mini-project or case study demonstrating your capabilities' },
+                  { week: 'Wk 4', text: 'Update your CV and prepare first applications' },
+                ]).map(item => (
+                  <div key={item.week} className="flex items-start gap-3 text-sm">
+                    <span className="flex-shrink-0 text-xs font-semibold text-brand-400/70 w-12 pt-0.5">{item.week}</span>
+                    <span className="text-slate-500 leading-relaxed">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Footer */}
             <div className="flex items-center gap-3 pt-4 border-t border-white/[0.06]">
               <div className="w-7 h-7 rounded-full bg-brand-600/15 flex items-center justify-center text-brand-400 text-sm">→</div>
               <span className="text-slate-600 text-sm">{t.exMore}</span>
@@ -343,8 +433,65 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Pourquoi pas un simple test ───────────────────────────── */}
+      {/* ── OtherMe Reality Score ─────────────────────────────────── */}
       <section className="py-24 px-4 bg-dark-900/60">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
+              {lang === 'fr' ? 'Évaluation' : 'Assessment'}
+            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
+              OtherMe <span className="gradient-text">Reality Score</span>
+            </h2>
+            <p className="text-slate-500 text-base max-w-lg mx-auto">
+              {lang === 'fr'
+                ? 'OtherMe ne cherche pas seulement le métier qui te plaît. Il évalue aussi ce qui est réaliste selon ton niveau actuel, tes contraintes, ton temps disponible et le marché.'
+                : 'OtherMe doesn\'t just find a career you\'ll enjoy. It evaluates what\'s realistic given your current level, constraints, available time and the market.'}
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {[
+              {
+                label: lang === 'fr' ? 'Compatibilité personnelle' : 'Personal compatibility',
+                desc: lang === 'fr' ? 'Alignement avec tes valeurs, tes motivations et ton mode de fonctionnement' : 'Alignment with your values, motivations and work style',
+                pct: 88, color: 'from-violet-500 to-purple-400',
+              },
+              {
+                label: lang === 'fr' ? 'Faisabilité réelle' : 'Real feasibility',
+                desc: lang === 'fr' ? 'Accessibilité selon ton niveau actuel, ton parcours et tes ressources disponibles' : 'Accessibility given your current level, background and available resources',
+                pct: 82, color: 'from-blue-500 to-indigo-400',
+              },
+              {
+                label: lang === 'fr' ? 'Opportunité marché' : 'Market opportunity',
+                desc: lang === 'fr' ? 'Dynamisme du secteur, demande actuelle et perspectives d\'évolution' : 'Sector dynamism, current demand and growth prospects',
+                pct: 74, color: 'from-emerald-500 to-teal-400',
+              },
+              {
+                label: lang === 'fr' ? 'Effort de transition' : 'Transition effort',
+                desc: lang === 'fr' ? 'Estimation du temps et des ressources nécessaires pour atteindre ce métier' : 'Estimate of time and resources needed to reach this career',
+                pct: 65, color: 'from-amber-500 to-orange-400',
+              },
+            ].map(dim => (
+              <div key={dim.label} className="card p-6 hover:border-white/[0.12] transition-colors duration-300">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-slate-100 font-semibold text-sm">{dim.label}</h4>
+                  <span className="text-2xl font-black text-slate-200">{dim.pct}%</span>
+                </div>
+                <p className="text-slate-500 text-xs leading-relaxed mb-4">{dim.desc}</p>
+                <div className="h-1.5 bg-dark-700 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full bg-gradient-to-r ${dim.color} rounded-full`}
+                    style={{ width: `${dim.pct}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pourquoi pas un simple test ───────────────────────────── */}
+      <section className="py-24 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
@@ -357,8 +504,8 @@ export default function Landing() {
             </h2>
             <p className="text-slate-500 text-base max-w-lg mx-auto">
               {lang === 'fr'
-                ? 'OtherMe analyse, projette et planifie. Les tests classiques se contentent d\'étiqueter.'
-                : 'OtherMe analyses, projects and plans. Classic tests just label you.'}
+                ? 'Les tests classiques te disent ce que tu pourrais être. OtherMe te montre comment y arriver.'
+                : 'Classic tests tell you what you could be. OtherMe shows you how to get there.'}
             </p>
           </div>
           <div className="grid sm:grid-cols-2 gap-5">
@@ -392,7 +539,7 @@ export default function Landing() {
       </section>
 
       {/* ── Pour qui ──────────────────────────────────────────────── */}
-      <section className="py-24 px-4">
+      <section className="py-24 px-4 bg-dark-900/60">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
@@ -405,16 +552,16 @@ export default function Landing() {
             </h2>
             <p className="text-slate-500 text-base max-w-lg mx-auto">
               {lang === 'fr'
-                ? 'Pour toute personne qui se demande si elle est sur la bonne voie.'
-                : 'For anyone wondering if they\'re on the right path.'}
+                ? 'Pour celles et ceux qui veulent changer de direction professionnelle, mais ne savent pas encore quelle voie est réaliste.'
+                : 'For those who want to change career direction, but don\'t yet know which path is realistic.'}
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {FOR_WHO.map((p) => (
-              <div key={p.fr.title} className="card p-5 flex items-start gap-4 hover:border-white/[0.12] transition-colors duration-300">
+              <div key={p.fr.title} className={`card p-5 flex items-start gap-4 hover:border-white/[0.12] transition-colors duration-300 ${p.featured ? 'border-brand-600/25 bg-brand-600/[0.04]' : ''}`}>
                 <span className="text-2xl flex-shrink-0 mt-0.5">{p.icon}</span>
                 <div>
-                  <h4 className="text-slate-100 font-semibold text-sm mb-1">{lang === 'fr' ? p.fr.title : p.en.title}</h4>
+                  <h4 className={`font-semibold text-sm mb-1 ${p.featured ? 'text-brand-300' : 'text-slate-100'}`}>{lang === 'fr' ? p.fr.title : p.en.title}</h4>
                   <p className="text-slate-500 text-xs leading-relaxed">{lang === 'fr' ? p.fr.desc : p.en.desc}</p>
                 </div>
               </div>
@@ -424,7 +571,7 @@ export default function Landing() {
       </section>
 
       {/* ── Ce que ça évite ───────────────────────────────────────── */}
-      <section className="py-24 px-4 bg-dark-900/60">
+      <section className="py-24 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
@@ -454,27 +601,35 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Témoignages ───────────────────────────────────────────── */}
-      <section className="py-24 px-4">
+      {/* ── Exemples de transitions ───────────────────────────────── */}
+      <section className="py-24 px-4 bg-dark-900/60">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
-              {lang === 'fr' ? 'Témoignages' : 'Testimonials'}
+              {lang === 'fr' ? 'Trajectoires' : 'Paths'}
             </p>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
               {t.testiTitle}{' '}<span className="gradient-text">{t.testiAccent}</span>{' '}{t.testiTitle2}
             </h2>
+            <p className="text-slate-500 text-sm max-w-md mx-auto">
+              {lang === 'fr'
+                ? 'Ces exemples illustrent des transitions type. Ton rapport sera entièrement adapté à ton profil spécifique.'
+                : 'These examples illustrate typical transitions. Your report will be fully tailored to your specific profile.'}
+            </p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
-            {t.testimonials.map((testi, i) => (
+            {t.testimonials.map((ex, i) => (
               <div key={i} className="card p-6 flex flex-col hover:border-white/[0.12] transition-colors duration-300">
-                <div className="flex mb-4">
-                  {Array.from({ length: testi.stars }).map((_, s) => <span key={s} className="text-yellow-400 text-sm">★</span>)}
+                <div className="mb-4">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-400/70 uppercase tracking-wider">
+                    <span className="w-3 h-px bg-brand-600/40" />
+                    {lang === 'fr' ? 'Exemple' : 'Example'}
+                  </span>
                 </div>
-                <p className="text-slate-300 text-sm leading-relaxed mb-5 flex-1">"{testi.text}"</p>
+                <h4 className="text-slate-100 font-bold text-sm mb-2 leading-snug">{ex.name}</h4>
+                <p className="text-slate-400 text-sm leading-relaxed mb-5 flex-1">{ex.text}</p>
                 <div className="pt-4 border-t border-white/[0.06]">
-                  <div className="font-semibold text-slate-200 text-sm">{testi.name}</div>
-                  <div className="text-slate-600 text-xs mt-0.5">{testi.job}</div>
+                  <div className="text-brand-400/70 text-xs font-medium">{ex.job}</div>
                 </div>
               </div>
             ))}
@@ -483,13 +638,13 @@ export default function Landing() {
       </section>
 
       {/* ── CTA final ─────────────────────────────────────────────── */}
-      <section className="py-24 px-4 bg-dark-900/60">
+      <section className="py-24 px-4">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-4">
             {lang === 'fr' ? 'Prochaine étape' : 'Next step'}
           </p>
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
-            {t.ctaTitle}{' '}<span className="text-brand-400">{t.ctaAccent}</span>{t.ctaTitle2}
+            {t.ctaTitle}{' '}<span className="gradient-text">{t.ctaAccent}</span>{t.ctaTitle2}
           </h2>
           <p className="text-slate-500 mb-10 text-base leading-relaxed">{t.ctaSub}</p>
           {started ? (
@@ -505,7 +660,7 @@ export default function Landing() {
       </section>
 
       {/* ── FAQ ───────────────────────────────────────────────────── */}
-      <section className="py-24 px-4">
+      <section className="py-24 px-4 bg-dark-900/60">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">FAQ</p>
@@ -527,7 +682,7 @@ export default function Landing() {
       {/* ── Footer ────────────────────────────────────────────────── */}
       <footer className="py-10 px-4 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <Logo size={38} />
+          <Logo size={44} />
           <p className="text-dark-500 text-xs text-center">© {new Date().getFullYear()} OtherMe · {t.footerRights}</p>
           <div className="flex gap-6 text-xs text-dark-500">
             <a href="#" className="hover:text-slate-400 transition-colors">{t.footerPrivacy}</a>

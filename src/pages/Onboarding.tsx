@@ -292,7 +292,7 @@ export default function Onboarding() {
         {/* Row 1: Logo / Back / Continue */}
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
-            <Logo size={30} />
+            <Logo size={40} />
             {step > 0 && (
               <>
                 <div className="hidden sm:block h-4 w-px bg-dark-700 mx-1" />

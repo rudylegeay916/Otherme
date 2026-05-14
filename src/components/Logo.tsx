@@ -29,18 +29,7 @@ function OtherMeIcon({ size }: { size: number }) {
           <stop offset="100%" stopColor="#5b21b6" />
         </linearGradient>
       </defs>
-
-      {/* O — anneau circulaire, blanc → lavande */}
-      <circle
-        cx="36"
-        cy="50"
-        r="25"
-        stroke="url(#om-grad-o)"
-        strokeWidth="12"
-        fill="none"
-      />
-
-      {/* M — angulaire, lavande → violet profond */}
+      <circle cx="36" cy="50" r="25" stroke="url(#om-grad-o)" strokeWidth="12" fill="none" />
       <path
         d="M 54 82 L 54 18 L 74 52 L 94 18 L 94 82"
         stroke="url(#om-grad-m)"
@@ -59,18 +48,18 @@ export default function Logo({
   className = '',
   to = '/',
 }: LogoProps) {
-  const inner = (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
+  const inner = withText ? (
+    <span className={`inline-flex items-center ${className}`}>
+      <img
+        src="/otherme-logo.png"
+        alt="OtherMe"
+        style={{ height: size, width: 'auto' }}
+        className="object-contain"
+      />
+    </span>
+  ) : (
+    <span className={`inline-flex items-center ${className}`}>
       <OtherMeIcon size={size} />
-      {withText && (
-        <span
-          className="font-bold tracking-tight"
-          style={{ fontSize: size * 0.44 }}
-        >
-          <span className="text-white">Other</span>
-          <span className="bg-gradient-to-r from-violet-400 to-purple-600 bg-clip-text text-transparent">Me</span>
-        </span>
-      )}
     </span>
   )
 

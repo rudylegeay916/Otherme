@@ -534,7 +534,7 @@ export default function Results() {
     <div className="min-h-screen bg-dark-950">
       {/* Navbar */}
       <nav className="sticky top-0 z-40 flex items-center justify-between px-6 py-4 bg-dark-950/90 backdrop-blur-md border-b border-dark-800">
-        <Logo size={30} />
+        <Logo size={40} />
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500 hidden sm:block">
             Rapport de {report.firstName}
@@ -621,7 +621,7 @@ export default function Results() {
 
         {/* ── Footer ───────────────────────────────────────────────── */}
         <div className="text-center pt-4 border-t border-dark-800">
-          <Logo size={28} className="justify-center mb-2" />
+          <Logo size={36} className="justify-center mb-2" />
           <p className="text-xs text-slate-600">Rapport généré par OtherMe · Analyse personnalisée basée sur ton profil</p>
           <button onClick={() => navigate('/')} className="btn-secondary text-sm py-2 px-5 mt-4">
             Retour à l'accueil
