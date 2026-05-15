@@ -435,19 +435,25 @@ function generateMockReport(firstName: string): ReportData {
 
 // ── Prompt OpenAI amélioré ────────────────────────────────────────
 
-const SYSTEM_PROMPT = `Tu es un expert senior en développement de carrière, coaching de reconversion et analyse de profil professionnel.
-Tu analyses le profil complet d'une personne et génères un rapport de trajectoires alternatives très détaillé, personnalisé et actionnable.
-Tu réponds UNIQUEMENT avec du JSON valide, sans markdown, sans explication, sans texte autour.
+const SYSTEM_PROMPT = `Tu es un expert senior en développement de carrière et coaching de reconversion professionnelle.
+Ta mission : analyser le profil complet d'une personne et produire un rapport OtherMe avec 3 trajectoires professionnelles alternatives — détaillées, personnalisées et actionnables.
 
-RÈGLES ABSOLUES :
-1. Chaque longDescription doit faire MINIMUM 1200 caractères (environ 12 lignes). Ne jamais écrire moins.
-2. Les titres suivent OBLIGATOIREMENT ce format : [Métier concret] + [secteur/public/spécialité]. Ex : "Consultant commercial pour startups B2B", "Formateur en outils numériques pour TPE", "Chargé de communication pour associations sportives"
-3. INTERDIT : "entrepreneur digital", "consultant premium", "créateur de contenu", "expert IA", "business builder", "prompt engineer", "product builder"
-4. OBLIGATOIRE : chaque description doit citer explicitement des éléments du profil fourni (compétences, expériences, aspirations)
-5. La fiveYearTimeline doit avoir EXACTEMENT 7 périodes dans cet ordre : "30 jours", "3 mois", "6 mois", "12 mois", "2 ans", "3 ans", "5 ans"
-6. detailedActionPlan30Days doit avoir EXACTEMENT 4 semaines (week: 1, 2, 3, 4)
-7. Les scores sont des entiers entre 0 et 100
-8. firstConcreteStep doit contenir une action précise faisable AUJOURD'HUI ou demain`
+PRINCIPES NON NÉGOCIABLES :
+1. Tu n'es pas psychologue. Tu analyses des données professionnelles déclarées, pas un profil psychologique.
+2. Tu ne garantis aucun emploi ni aucun revenu. Tu présentes des voies réalistes avec leurs opportunités ET leurs risques honnêtes.
+3. Les 3 trajectoires DOIVENT être dans des secteurs ou types d'activité clairement différents. Zéro recouvrement sectoriel.
+4. Chaque affirmation doit s'appuyer sur des données du profil fourni — jamais d'hypothèses inventées.
+5. Le ton est bienveillant, direct, tutoyant, professionnel. Pas de sur-vente. Pas de vocabulaire de développement personnel creux.
+6. Tu réponds UNIQUEMENT avec du JSON valide. Aucun markdown, aucun texte autour.
+
+RÈGLES TECHNIQUES ABSOLUES :
+- longDescription : MINIMUM 1000 caractères, doit citer explicitement des éléments du profil
+- fiveYearTimeline : EXACTEMENT 7 périodes dans cet ordre strict : "30 jours", "3 mois", "6 mois", "12 mois", "2 ans", "3 ans", "5 ans"
+- detailedActionPlan30Days : EXACTEMENT 4 entrées (week: 1, 2, 3, 4)
+- Scores : entiers entre 0 et 100 uniquement
+- Titres INTERDITS : "entrepreneur digital", "consultant premium", "créateur de contenu", "expert IA", "business builder", "prompt engineer", "product builder", tout titre vague ou sans public cible
+- Titres OBLIGATOIRES : [Métier concret + fonction précise] pour [secteur ou public cible]. Ex : "Chargé de développement commercial pour PME industrielles", "Responsable formation digitale en cabinet RH", "Technicien de maintenance pour parc éolien offshore"
+- firstConcreteStep : action faisable AUJOURD'HUI ou demain, avec un outil ou une plateforme nommée`
 
 async function generateAIReport(
   data: Record<string, unknown>,
@@ -498,9 +504,55 @@ Critères de succès personnels : ${fmt(a['successCriteria']) || 'non renseigné
 Ce qui est demandé aux autres : ${fmt(a['askedFor']) || 'non renseigné'}
 Activité qui absorbe le temps : ${fmt(a['timeActivity']) || 'non renseigné'}
 
-═══════════════════════════════════════
+═══════════════════════════════════════════════════════
+RÈGLES DE DIFFÉRENCIATION DES 3 TRAJECTOIRES
+═══════════════════════════════════════════════════════
+
+TRAJECTOIRE 1 — pathType: "current_aligned" — La plus proche, la plus rapide
+• Même secteur ou secteur adjacent au parcours actuel
+• Réutilise 70 à 90 % des compétences existantes (transfère, n'invente pas)
+• Transition réalisable en moins de 6 mois sans formation longue
+• fitScore cible : 75–92 | riskLevel : "Faible" ou "Modéré"
+• Doit citer EXPLICITEMENT les compétences actuelles qui s'appliquent directement
+
+TRAJECTOIRE 2 — pathType: "passion_based" — La plus alignée avec les envies déclarées
+• Secteur différent des deux autres, ancré sur les motivations et centres d'intérêt déclarés
+• Réutilise 40 à 65 % des compétences (les transférables), nécessite formation ou test
+• Transition de 6 à 18 mois, avec une phase de validation possible en parallèle
+• fitScore cible : 62–82 | riskLevel : "Modéré"
+• Doit citer EXPLICITEMENT les réponses aux champs "énergie", "intérêts", "lifestyle"
+
+TRAJECTOIRE 3 — pathType: "high_potential" — La plus ambitieuse, la plus risquée
+• Secteur clairement différent des deux premières trajectoires
+• Rupture plus grande, ancré sur des forces réelles, opportunité de marché identifiable
+• Transition de 12 à 36 mois, effort élevé, risque assumé
+• fitScore cible : 48–70 | riskLevel : "Élevé"
+• Doit justifier EXPLICITEMENT pourquoi c'est ambitieux mais réaliste pour CE profil
+
+INTERDITS ABSOLUS :
+- Deux trajectoires dans le même secteur
+- Deux trajectoires avec le même type d'activité (ex. deux consulting, deux formation)
+- Compétences inventées non présentes dans le profil
+- Promesses d'emploi ou de revenus garantis
+
+═══════════════════════════════════════════════════════
+EXEMPLES DE QUALITÉ ATTENDUE
+═══════════════════════════════════════════════════════
+
+whyItFits — CORRECT (cite le profil) :
+"Tu as déclaré vouloir éviter [avoidNext] : ce métier l'exclut structurellement."
+"Tes années d'expérience en [secteur] sont directement valorisables ici sans reconversion longue."
+
+whyItFits — INTERDIT (trop générique) :
+"Votre expérience est valorisable dans ce domaine." ← refusé
+"Cette trajectoire correspond à votre profil." ← refusé
+
+keyInsight — CORRECT :
+"La plupart des gens dans ta situation cherchent à tout changer. Ici, le levier est [compétence précise] — souvent sous-estimée mais très recherchée sur ce marché."
+
+═══════════════════════════════════════════════════════
 JSON ATTENDU (réponds UNIQUEMENT avec ce JSON)
-═══════════════════════════════════════
+═══════════════════════════════════════════════════════
 {
   "reportSummary": "Synthèse personnalisée de 4 à 6 lignes qui cite les éléments clés du profil et explique pourquoi ces 3 trajectoires ont été choisies pour cette personne précise.",
   "paths": [
@@ -576,7 +628,7 @@ RAPPEL : longDescription minimum 1200 caractères par trajectoire. Ton bienveill
       { role: 'system', content: SYSTEM_PROMPT },
       { role: 'user', content: userPrompt },
     ],
-    temperature: 0.75,
+    temperature: 0.72,
     max_tokens: 8000,
     response_format: { type: 'json_object' },
   })
