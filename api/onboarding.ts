@@ -127,7 +127,7 @@ function generateMockReport(firstName: string): ReportData {
         personalCompatibilityScore: 84,
         feasibilityScore: 88,
         marketOpportunityScore: 72,
-        transitionEffortScore: 82,
+        transitionEffortScore: 20,
         longDescription: `Cette trajectoire s'appuie directement sur ce que vous savez déjà faire, en repositionnant votre expertise dans un cadre indépendant. Les PME françaises sont massivement en retard sur leur transformation digitale : elles cherchent des profils capables de comprendre à la fois leurs contraintes opérationnelles et les outils numériques disponibles. Vous n'avez pas besoin d'être un développeur pour occuper ce rôle — vous avez besoin de savoir poser le bon diagnostic, proposer des solutions concrètes, et accompagner la mise en place.\n\nEn tant que consultant indépendant, votre quotidien alternera entre phases d'analyse client, ateliers de travail, recommandations stratégiques et suivi de mise en œuvre. Vous choisirez vos missions, vos secteurs préférés, et progressivement vos tarifs. Le marché est large et peu saturé sur ce segment PME.\n\nFinancièrement, les premiers 6 à 12 mois seront en phase de lancement : 1 à 3 clients, un chiffre d'affaires encore modeste. Mais dès la deuxième année, avec une niche bien définie et des références clients, atteindre 50 à 70 k€ brut annuel est réaliste. La liberté de rythme et la variété des missions sont des bénéfices très concrets dès la première année.\n\nLe principal frein est psychologique : sortir du salariat, prospecter ses premiers clients, assumer l'incertitude des débuts. Ces obstacles sont réels mais surmontables avec une préparation sérieuse des 30 premiers jours.`,
         keyInsight: `Vous avez déjà 80 % des compétences nécessaires. Il manque principalement la posture commerciale et la structure juridique — deux éléments qui s'acquièrent en quelques semaines.`,
         whyItFits: [
@@ -343,7 +343,7 @@ function generateMockReport(firstName: string): ReportData {
         personalCompatibilityScore: 65,
         feasibilityScore: 40,
         marketOpportunityScore: 88,
-        transitionEffortScore: 28,
+        transitionEffortScore: 80,
         longDescription: `Cette trajectoire est la plus ambitieuse et la plus risquée — mais aussi celle avec le plus fort potentiel de liberté totale et d'impact. Elle convient à quelqu'un qui a identifié un problème réel que les outils existants ne résolvent pas bien, et qui est prêt à passer 12 à 24 mois difficiles avant de voir le fruit de son travail.\n\nCrter une micro-startup SaaS ne nécessite pas d'être développeur. Des outils no-code comme Bubble, Webflow, ou Glide permettent de construire un MVP en quelques semaines. La clé est d'abord de valider que le problème existe et que des gens sont prêts à payer pour le résoudre — avant d'écrire une seule ligne de code ou de dépenser un seul euro.\n\nLe quotidien du fondateur en phase early-stage : interviewer des clients potentiels, tester des hypothèses, itérer vite, vendre des abonnements avant même que le produit soit parfait. Il faut une très forte tolérance à l'ambiguïté, à l'échec partiel, et à la solitude des débuts.\n\nFinancièrement, cette trajectoire peut aller dans tous les sens : échouer complètement, générer quelques centaines d'euros par mois, ou exploser à 100 k€ d'ARR en 3 ans. L'issue dépend en grande partie de la qualité de la validation initiale et de la capacité à trouver des clients très tôt. Un cofondateur technique est un atout majeur — il permet de réduire les coûts et d'accélérer le développement.\n\nCette trajectoire est recommandée uniquement si vous avez au moins 6 mois d'épargne de sécurité, une vraie tolérance à l'incertitude, et une idée de problème précis sur lequel vous avez une conviction forte.`,
         keyInsight: `La plupart des startups échouent non par manque de technologie, mais par manque de clients. Votre premier travail n'est pas de construire un produit : c'est de trouver 10 personnes prêtes à payer pour résoudre le problème que vous avez identifié.`,
         whyItFits: [
@@ -468,7 +468,7 @@ RÈGLES TECHNIQUES ABSOLUES :
 - personalCompatibilityScore : adéquation profil ↔ métier (compétences, valeurs, style de vie souhaité)
 - feasibilityScore : faisabilité réelle de la transition (délai, ressources nécessaires, obstacles)
 - marketOpportunityScore : opportunité de marché actuelle et tendance du secteur
-- transitionEffortScore : facilité de la transition (100 = quasi sans effort, 0 = rupture totale exigeante)
+- transitionEffortScore : effort nécessaire pour atteindre la trajectoire (0 = effort très faible, transition facile ; 100 = effort très élevé, rupture exigeante)
 - Titres INTERDITS : "entrepreneur digital", "consultant premium", "créateur de contenu", "expert IA", "business builder", "prompt engineer", "product builder", tout titre vague ou sans public cible
 - Titres OBLIGATOIRES : [Métier concret + fonction précise] pour [secteur ou public cible]. Ex : "Chargé de développement commercial pour PME industrielles", "Responsable formation digitale en cabinet RH", "Technicien de maintenance pour parc éolien offshore"
 - firstConcreteStep : action faisable AUJOURD'HUI ou demain, avec un outil ou une plateforme nommée`

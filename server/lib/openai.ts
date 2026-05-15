@@ -32,7 +32,7 @@ RÈGLES TECHNIQUES ABSOLUES :
 - personalCompatibilityScore : adéquation profil ↔ métier (compétences, valeurs, style de vie souhaité)
 - feasibilityScore : faisabilité réelle de la transition (délai, ressources nécessaires, obstacles)
 - marketOpportunityScore : opportunité de marché actuelle et tendance du secteur
-- transitionEffortScore : facilité de la transition (100 = quasi sans effort, 0 = rupture totale exigeante)
+- transitionEffortScore : effort nécessaire pour atteindre la trajectoire (0 = effort très faible, transition facile ; 100 = effort très élevé, rupture exigeante)
 - Titres INTERDITS : "entrepreneur digital", "consultant premium", "créateur de contenu", "expert IA", "business builder", "prompt engineer", "product builder", tout titre vague ou sans public cible
 - Titres OBLIGATOIRES : [Métier concret + fonction précise] pour [secteur ou public cible]. Ex : "Chargé de développement commercial pour PME industrielles", "Responsable formation digitale en cabinet RH", "Technicien de maintenance pour parc éolien offshore"
 - firstConcreteStep : action faisable AUJOURD'HUI ou demain, avec un outil ou une plateforme nommée`
