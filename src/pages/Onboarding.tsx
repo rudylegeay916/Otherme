@@ -8,7 +8,7 @@ import Logo from '../components/Logo'
 import type { OnboardingData, QuestionAnswer } from '../types'
 import {
   EMPTY_ANSWER, SITUATIONS, GENDERS, SECTORS, EDUCATION_LEVELS, LANGUAGES,
-  LOADING_MESSAGES, QUESTIONS, getAdaptiveQuestions,
+  QUESTIONS, getAdaptiveQuestions,
 } from './onboarding-data'
 import { saveProgress, loadProgress, clearProgress } from '../lib/onboardingStorage'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -97,18 +97,95 @@ const DEFAULT_DATA: OnboardingData = {
 
 // ── Écran de chargement ───────────────────────────────────────────
 
-function LoadingScreen({ msgIdx, messages }: { msgIdx: number; messages: string[] }) {
+const ANALYSIS_STEPS = [
+  'Analyse de ton parcours',
+  'Identification de tes compétences transférables',
+  'Évaluation des trajectoires réalistes',
+  'Construction de ton plan d\'action',
+]
+
+function LoadingScreen() {
+  const [progress, setProgress] = useState(1)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 95) return prev
+        const remaining = 95 - prev
+        return Math.min(95, prev + Math.max(0.15, remaining * 0.038))
+      })
+    }, 250)
+    return () => clearInterval(timer)
+  }, [])
+
+  const activeStep = progress < 25 ? 0 : progress < 50 ? 1 : progress < 75 ? 2 : 3
+
   return (
-    <div className="min-h-screen bg-dark-950 flex flex-col items-center justify-center px-4">
-      <div className="text-center max-w-sm">
-        <div className="relative mx-auto mb-8 w-fit">
-          <div className="absolute -inset-3 rounded-full bg-purple-600/20 blur-xl animate-pulse-slow" />
-          <Logo size={80} withText={false} to={null} />
+    <div className="min-h-screen bg-dark-950 flex flex-col items-center justify-center px-6">
+      <div className="w-full max-w-md">
+
+        {/* Logo */}
+        <div className="relative flex justify-center mb-10">
+          <div className="absolute inset-0 bg-violet-600/10 blur-3xl rounded-full pointer-events-none" />
+          <Logo size={68} to={null} />
         </div>
-        <h2 className="text-2xl font-bold mb-3 text-slate-100">{messages[msgIdx]}</h2>
-        <p className="text-slate-500 text-sm">{messages.length > 0 ? '15 – 30 sec' : ''}</p>
-        <div className="mt-8 h-1.5 bg-dark-700 rounded-full overflow-hidden max-w-xs mx-auto">
-          <div className="h-full bg-gradient-to-r from-brand-600 to-purple-500 rounded-full animate-pulse-slow w-3/4" />
+
+        {/* Titre + sous-titre */}
+        <div className="text-center mb-10">
+          <h2 className="text-2xl font-bold text-slate-100 mb-3">
+            OtherMe analyse ton profil
+          </h2>
+          <p className="text-slate-500 text-sm leading-relaxed max-w-sm mx-auto">
+            Nous croisons ton parcours, tes envies, tes contraintes et tes compétences pour construire tes trajectoires professionnelles.
+          </p>
+        </div>
+
+        {/* Barre de progression */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-2.5">
+            <span className="text-sm text-slate-500">Analyse en cours...</span>
+            <span className="text-sm font-semibold text-slate-200 tabular-nums">{Math.round(progress)}%</span>
+          </div>
+          <div className="h-2 bg-dark-800 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-300 ease-out"
+              style={{
+                width: `${progress}%`,
+                background: 'linear-gradient(to right, #7c3aed, #a855f7, #d946ef)',
+                boxShadow: '0 0 10px rgba(139, 92, 246, 0.45)',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Étapes */}
+        <div className="space-y-3.5">
+          {ANALYSIS_STEPS.map((label, i) => {
+            const done   = i < activeStep
+            const active = i === activeStep
+            return (
+              <div
+                key={i}
+                className={`flex items-center gap-3 text-sm transition-colors duration-500 ${
+                  done ? 'text-slate-600' : active ? 'text-slate-100' : 'text-slate-700'
+                }`}
+              >
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 border transition-all duration-500 ${
+                  done   ? 'bg-violet-900/40 border-violet-700/40'
+                  : active ? 'bg-violet-600/20 border-violet-500/50'
+                  : 'bg-dark-800 border-dark-700'
+                }`}>
+                  {done && (
+                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                      <path d="M1 4l2.5 2.5L9 1" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                  {active && <div className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />}
+                </div>
+                <span>{label}</span>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>
@@ -173,7 +250,6 @@ export default function Onboarding() {
   const [cvFile,            setCvFile]            = useState<File | null>(null)
   const [cvMeta,            setCvMeta]            = useState<{ name: string; size: number } | null>(null)
   const [loading,           setLoading]           = useState(false)
-  const [loadingMsg,        setLoadingMsg]        = useState(0)
   const [error,             setError]             = useState('')
   const [showingCheckpoint, setShowingCheckpoint] = useState<number | null>(null)
 
@@ -248,14 +324,11 @@ export default function Onboarding() {
   const handleSubmit = async () => {
     setLoading(true)
     setError('')
-    const interval = setInterval(() => setLoadingMsg((m) => (m + 1) % LOADING_MESSAGES.length), 2500)
     try {
       const { reportId } = await submitOnboarding(data, cvFile, session?.access_token)
-      clearInterval(interval)
       clearProgress()
       navigate(`/social-proof/${reportId}`)
     } catch (e) {
-      clearInterval(interval)
       console.error('[Onboarding] Erreur génération rapport:', e)
       const msg = e instanceof Error ? e.message : 'Une erreur est survenue'
       setError(`${msg} — Vérifie ta connexion et réessaie.`)
@@ -266,7 +339,7 @@ export default function Onboarding() {
   const isLastStep  = step === TOTAL_STEPS - 1
   const progressPct = ((step + 1) / TOTAL_STEPS) * 100
 
-  if (loading) return <LoadingScreen msgIdx={loadingMsg} messages={tr.onb.loadingMessages} />
+  if (loading) return <LoadingScreen />
 
   // ── Checkpoint motivationnel ──────────────────────────────────────
   if (showingCheckpoint !== null) {
