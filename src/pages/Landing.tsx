@@ -164,7 +164,7 @@ export default function Landing() {
 
       {/* ── Navbar ─────────────────────────────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3.5 bg-dark-950/85 backdrop-blur-md border-b border-white/[0.06]">
-        <Logo size={56} />
+        <Logo size={68} />
         <div className="flex items-center gap-3">
           <LanguageToggle />
           {started ? (
@@ -214,13 +214,13 @@ export default function Landing() {
 
           {/* Titre hero */}
           <h1 className="font-bold tracking-tight mb-8">
-            <span className="block text-slate-100 text-[2.4rem] sm:text-[3rem] md:text-[3.5rem] leading-[1.18]">
+            <span className="block text-slate-100 text-[2.4rem] sm:text-[3rem] md:text-[3.5rem] leading-[1.28]">
               {t.heroTitle}
             </span>
-            <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.22]">
+            <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.28]">
               {t.heroAccent}
             </span>
-            <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.22]">
+            <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.28]">
               {t.heroTitle2}
             </span>
           </h1>
