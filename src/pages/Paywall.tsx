@@ -20,46 +20,58 @@ function TeaserCard({ path, index }: { path: PathData; index: number }) {
     'from-amber-500 to-orange-500',
   ]
   const typeInfo = PATH_TYPE_LABELS[path.pathType] ?? PATH_TYPE_LABELS.current_aligned
-  const shortTitle = path.title.length > 38 ? path.title.slice(0, 38) + '…' : path.title
-  const shortDesc  = (path.longDescription || '').slice(0, 140) + '…'
+  const scoreColor = path.fitScore >= 75 ? 'text-green-400' : path.fitScore >= 55 ? 'text-amber-400' : 'text-red-400'
 
   return (
-    <div className="card relative overflow-hidden select-none">
-      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradients[index]} rounded-t-2xl`} />
-      <div className="p-6">
-        {/* Type badge */}
-        <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full border ${typeInfo.bg} ${typeInfo.color} mb-3`}>
-          {typeInfo.label}
-        </span>
+    <div className="card relative overflow-hidden select-none flex flex-col">
+      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradients[index]}`} />
 
-        {/* Partial title */}
-        <h3 className="text-lg font-bold text-slate-100 mb-1">{shortTitle}</h3>
-        <p className="text-xs text-slate-500 mb-4">{path.sector}</p>
+      <div className="p-6 flex flex-col flex-1">
+        {/* Type badge + aperçu label */}
+        <div className="flex items-center justify-between mb-3">
+          <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full border ${typeInfo.bg} ${typeInfo.color}`}>
+            {typeInfo.label}
+          </span>
+          <span className="text-[10px] font-semibold text-slate-600 uppercase tracking-widest">Aperçu</span>
+        </div>
 
-        {/* Partial description */}
-        <p className="text-slate-400 text-sm leading-relaxed mb-4">{shortDesc}</p>
+        {/* Title — word-aware via line-clamp */}
+        <h3 className="text-lg font-bold text-slate-100 leading-snug line-clamp-2 mb-1">{path.title}</h3>
+        <p className="text-xs text-slate-500 mb-3">{path.sector}</p>
 
-        {/* Blurred / locked content */}
-        <div className="relative">
-          <div className="space-y-2 blur-sm pointer-events-none select-none opacity-60">
+        {/* Fit score teaser */}
+        <div className="flex items-center gap-2 mb-4">
+          <span className={`text-2xl font-black ${scoreColor}`}>{path.fitScore}%</span>
+          <span className="text-xs text-slate-500">d'adéquation estimée</span>
+        </div>
+
+        {/* Description with gradient mask */}
+        <div className="relative mb-4 overflow-hidden" style={{ maxHeight: '4.5rem' }}>
+          <p className="text-slate-400 text-sm leading-relaxed">{path.longDescription}</p>
+          <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[#11111a] to-transparent pointer-events-none" />
+        </div>
+
+        {/* Blurred locked content */}
+        <div className="relative mt-auto pt-2">
+          <div className="space-y-2 blur-sm pointer-events-none select-none opacity-50">
             <div className="h-3 bg-dark-700 rounded w-full" />
             <div className="h-3 bg-dark-700 rounded w-5/6" />
             <div className="h-3 bg-dark-700 rounded w-4/6" />
-            <div className="h-3 bg-dark-700 rounded w-full mt-4" />
+            <div className="h-3 bg-dark-700 rounded w-full mt-3" />
             <div className="h-3 bg-dark-700 rounded w-3/4" />
           </div>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center">
             <div className="bg-dark-900/90 border border-dark-600 rounded-xl px-4 py-2.5 flex items-center gap-2 shadow-lg">
-              <span className="text-lg">🔒</span>
-              <span className="text-slate-300 text-sm font-medium">Contenu verrouillé</span>
+              <span className="text-base">🔒</span>
+              <span className="text-slate-300 text-xs font-semibold">Rapport complet verrouillé</span>
             </div>
           </div>
         </div>
 
         {/* Revenue teaser */}
-        <div className="mt-4 flex items-center justify-between text-xs text-slate-600">
+        <div className="mt-4 pt-3 border-t border-dark-700 flex items-center justify-between text-xs text-slate-600">
           <span>Revenu estimé</span>
-          <span className="blur-sm select-none">████████████</span>
+          <span className="blur-sm select-none text-slate-700">██████████</span>
         </div>
       </div>
     </div>
