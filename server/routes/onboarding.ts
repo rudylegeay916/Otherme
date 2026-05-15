@@ -3,6 +3,7 @@ import multer from 'multer'
 import { supabase, createOnboardingResponse, createReport } from '../lib/supabase'
 import { generateTrajectories } from '../lib/openai'
 import type { OnboardingData, QuestionAnswer } from '../../src/types'
+import type { GeneratedReport } from '../lib/openai'
 
 const router = Router()
 const upload = multer({
@@ -96,14 +97,14 @@ router.post('/', upload.single('cv'), async (req, res) => {
       raw_answers:        data as unknown as Record<string, unknown>,
     })
 
-    const trajectories = await generateTrajectories(data)
+    const report: GeneratedReport = await generateTrajectories(data)
 
     const reportRow = await createReport({
       user_id:                userId,
       onboarding_response_id: onboardingRow.id,
       title:                  `Trajectoires alternatives pour ${data.firstName}`,
-      summary:                trajectories[0]?.tagline ?? '',
-      full_report:            trajectories,
+      summary:                report.reportSummary?.slice(0, 200) ?? '',
+      full_report:            report,
     })
 
     return res.json({ reportId: reportRow.id, status: reportRow.status })

@@ -35,7 +35,7 @@ export interface ReportRow {
   onboarding_response_id: string | null
   title: string | null
   summary: string | null
-  full_report: unknown[]     // tableau de Trajectory
+  full_report: unknown     // GeneratedReport object (new) or Trajectory[] (legacy)
   pdf_url: string | null
   status: 'draft' | 'generated' | 'paid' | 'emailed' | 'failed'
   created_at: string
@@ -114,7 +114,7 @@ export interface CreateReportInput {
   onboarding_response_id: string
   title: string
   summary: string
-  full_report: unknown[]
+  full_report: unknown
 }
 
 export async function createReport(input: CreateReportInput): Promise<ReportRow> {
