@@ -447,6 +447,104 @@ function generateMockReport(firstName: string): ReportData {
   }
 }
 
+// ── Validation du rapport IA ──────────────────────────────────────
+
+const SCORE_FIELDS = [
+  'fitScore', 'alignmentScore', 'personalCompatibilityScore',
+  'feasibilityScore', 'marketOpportunityScore', 'transitionEffortScore',
+] as const
+
+type ValidationResult =
+  | { ok: true;  data: ReportData }
+  | { ok: false; error: string }
+
+function validateAIReport(raw: unknown): ValidationResult {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    return { ok: false, error: 'La réponse IA n\'est pas un objet' }
+  }
+  const r = raw as Record<string, unknown>
+
+  if (!r.reportSummary || typeof r.reportSummary !== 'string' || !r.reportSummary.trim()) {
+    return { ok: false, error: 'reportSummary manquant ou vide' }
+  }
+  if (!r.bestFirstStep48h || typeof r.bestFirstStep48h !== 'string' || !r.bestFirstStep48h.trim()) {
+    return { ok: false, error: 'bestFirstStep48h manquant ou vide' }
+  }
+  if (!r.comparison || typeof r.comparison !== 'object' || Array.isArray(r.comparison)) {
+    return { ok: false, error: 'comparison manquant ou invalide' }
+  }
+  if (!Array.isArray(r.paths)) {
+    return { ok: false, error: 'paths doit être un tableau' }
+  }
+  if (r.paths.length !== 3) {
+    return { ok: false, error: `paths doit contenir exactement 3 trajectoires, reçu : ${r.paths.length}` }
+  }
+
+  const VALID_TYPES = new Set(['current_aligned', 'passion_based', 'high_potential'])
+  const foundTypes  = new Set<string>()
+
+  for (let i = 0; i < r.paths.length; i++) {
+    const p   = r.paths[i] as Record<string, unknown>
+    const idx = `paths[${i}]`
+
+    if (!p.title || typeof p.title !== 'string' || !p.title.trim()) {
+      return { ok: false, error: `${idx}.title vide ou manquant` }
+    }
+    if (!p.pathType || !VALID_TYPES.has(p.pathType as string)) {
+      return { ok: false, error: `${idx}.pathType invalide : "${p.pathType}"` }
+    }
+    if (!p.sector || typeof p.sector !== 'string') {
+      return { ok: false, error: `${idx}.sector manquant` }
+    }
+    if (!p.revenueEstimate || typeof p.revenueEstimate !== 'string') {
+      return { ok: false, error: `${idx}.revenueEstimate manquant` }
+    }
+    if (!p.riskLevel || typeof p.riskLevel !== 'string') {
+      return { ok: false, error: `${idx}.riskLevel manquant` }
+    }
+    if (!p.firstConcreteStep || typeof p.firstConcreteStep !== 'string') {
+      return { ok: false, error: `${idx}.firstConcreteStep manquant` }
+    }
+
+    for (const sf of SCORE_FIELDS) {
+      const v = p[sf]
+      if (typeof v !== 'number' || !Number.isInteger(v) || v < 0 || v > 100) {
+        return { ok: false, error: `${idx}.${sf} doit être un entier 0-100, reçu : ${JSON.stringify(v)}` }
+      }
+    }
+
+    const arrays: Array<[string, number | null]> = [
+      ['risksAndLimits', 1],
+      ['alreadyAcquiredStrengths', 1],
+      ['missingSkills', 1],
+      ['firstWeekActions', 1],
+      ['whyItFits', 1],
+      ['detailedActionPlan30Days', 4],
+      ['fiveYearTimeline', 7],
+    ]
+    for (const [field, expectedLen] of arrays) {
+      if (!Array.isArray(p[field])) {
+        return { ok: false, error: `${idx}.${field} doit être un tableau` }
+      }
+      if (expectedLen !== null && (p[field] as unknown[]).length !== expectedLen) {
+        return { ok: false, error: `${idx}.${field} : longueur attendue ${expectedLen}, reçu ${(p[field] as unknown[]).length}` }
+      }
+      if (expectedLen === 1 && (p[field] as unknown[]).length === 0) {
+        return { ok: false, error: `${idx}.${field} ne peut pas être vide` }
+      }
+    }
+
+    foundTypes.add(p.pathType as string)
+  }
+
+  if (foundTypes.size !== 3) {
+    const types = (r.paths as Array<Record<string, unknown>>).map(p => p.pathType)
+    return { ok: false, error: `Les 3 pathTypes doivent être distincts. Reçu : [${types.join(', ')}]` }
+  }
+
+  return { ok: true, data: raw as ReportData }
+}
+
 // ── Prompt OpenAI amélioré ────────────────────────────────────────
 
 const SYSTEM_PROMPT = `Tu es un expert senior en développement de carrière et coaching de reconversion professionnelle.
@@ -656,12 +754,23 @@ RAPPEL : longDescription minimum 1200 caractères par trajectoire. Ton bienveill
   })
 
   const content = response.choices[0]?.message?.content
-  if (!content) throw new Error("Réponse vide de l'IA")
+  if (!content) throw new Error('[openai] Réponse vide de l\'IA')
 
-  const parsed = JSON.parse(content) as ReportData
-  if (!Array.isArray(parsed.paths) || parsed.paths.length === 0) throw new Error('Format IA invalide')
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(content)
+  } catch {
+    throw new Error('[openai] La réponse IA n\'est pas du JSON valide')
+  }
 
-  return parsed
+  const validation = validateAIReport(parsed)
+  if (!validation.ok) {
+    console.error('[onboarding][validation] Rapport IA INVALIDE :', validation.error)
+    console.error('[onboarding][validation] Extrait reçu :', JSON.stringify(parsed).slice(0, 500))
+    throw new Error(`[openai] Rapport IA invalide — ${validation.error}`)
+  }
+
+  return validation.data
 }
 
 // ── Sauvegarde Supabase ───────────────────────────────────────────
@@ -771,7 +880,12 @@ export default async function handler(
     try {
       report = await generateAIReport(data, answers)
     } catch (err) {
-      console.error('[onboarding] OpenAI indisponible, utilisation du mock:', err)
+      const msg = err instanceof Error ? err.message : String(err)
+      if (msg.includes('invalide')) {
+        console.error('[onboarding] ⚠️  RAPPORT IA INVALIDE — fallback mock activé. Raison :', msg)
+      } else {
+        console.error('[onboarding] ⚠️  OpenAI indisponible — fallback mock activé :', msg)
+      }
       report = generateMockReport(firstName)
     }
 
@@ -781,7 +895,7 @@ export default async function handler(
     try {
       reportId = await saveToSupabase(data, report, userId)
     } catch (err) {
-      console.error('[onboarding] Supabase indisponible, ID mock:', err)
+      console.error('[onboarding] ⚠️  Supabase indisponible — rapport non sauvegardé, ID mock généré :', err)
       reportId = `mock_${crypto.randomUUID()}`
       isMock = true
     }

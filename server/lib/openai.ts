@@ -1,6 +1,7 @@
 import OpenAI from 'openai'
 import { env } from '../config/env'
 import type { OnboardingData, PathData, ReportComparison, QuestionAnswer } from '../../src/types'
+import { validateGeneratedReport } from './reportSchema'
 
 const client = new OpenAI({ apiKey: env.openaiApiKey })
 
@@ -346,11 +347,19 @@ export async function generateTrajectories(data: OnboardingData): Promise<Genera
   const content = response.choices[0]?.message?.content
   if (!content) throw new Error("Réponse vide de l'IA")
 
-  const parsed = JSON.parse(content) as GeneratedReport
-
-  if (!Array.isArray(parsed.paths) || parsed.paths.length === 0) {
-    throw new Error('Format de réponse IA invalide : champ "paths" manquant ou vide')
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(content)
+  } catch {
+    throw new Error('[openai] La réponse IA n\'est pas du JSON valide')
   }
 
-  return parsed
+  const validation = validateGeneratedReport(parsed)
+  if (!validation.success) {
+    console.error('[openai] Rapport IA invalide :', validation.error)
+    if (validation.details) console.error('[openai] Détails :', validation.details)
+    throw new Error(`[openai] Rapport IA invalide — ${validation.error}`)
+  }
+
+  return validation.data as GeneratedReport
 }
