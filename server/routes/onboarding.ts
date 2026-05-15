@@ -21,12 +21,12 @@ const upload = multer({
 
 async function extractCvText(file: Express.Multer.File): Promise<string> {
   try {
-    if (file.mimetype === 'text/plain') return file.buffer.toString('utf-8').slice(0, 3000)
+    if (file.mimetype === 'text/plain') return file.buffer.toString('utf-8').slice(0, 8000)
     if (file.mimetype === 'application/pdf') {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const pdfParse = require('pdf-parse') as (buf: Buffer) => Promise<{ text: string }>
       const result = await pdfParse(file.buffer)
-      return result.text.slice(0, 3000)
+      return result.text.slice(0, 8000)
     }
   } catch { /* extraction optionnelle */ }
   return ''

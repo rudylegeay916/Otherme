@@ -68,14 +68,67 @@ function runMulter(req: any, res: any): Promise<void> {
 
 async function extractCvText(file: Express.Multer.File): Promise<string> {
   try {
-    if (file.mimetype === 'text/plain') return file.buffer.toString('utf-8').slice(0, 3000)
+    if (file.mimetype === 'text/plain') return file.buffer.toString('utf-8').slice(0, 8000)
     if (file.mimetype === 'application/pdf') {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const pdfParse = require('pdf-parse') as (b: Buffer) => Promise<{ text: string }>
-      return (await pdfParse(file.buffer)).text.slice(0, 3000)
+      return (await pdfParse(file.buffer)).text.slice(0, 8000)
     }
   } catch { /* extraction optionnelle */ }
   return ''
+}
+
+// ── CV parser (même logique que server/lib/openai.ts) ────────────
+
+const CV_SECTION_RX: RegExp[] = [
+  /^(expériences?\s*(professionnelles?|de\s+travail)?|emplois?\s*(occupés?)?|parcours\s+professionnel|work\s+experience|professional\s+experience|career\s+history)/i,
+  /^(compétences?\s*(techniques?|professionnelles?|clés?)?|skills?|savoir[s]?-faire|aptitudes?|hard\s+skills?|core\s+competencies)/i,
+  /^(formations?\s*(académiques?|professionnelles?)?|éducation|diplômes?|études|scolarité|education|qualifications?)/i,
+  /^(outils?|logiciels?|technologies?|stack\s+technique|langages?\s+(de\s+programmation)?|environnement\s+technique|tools?|software|tech\s+stack)/i,
+  /^(réalisations?|accomplissements?|projets?\s*(professionnels?|réalisés?)?|achievements?|key\s+achievements?)/i,
+  /^(responsabilités?|missions?\s*(principales?)?|principales?\s+(missions?|responsabilités?)|key\s+responsibilities?)/i,
+  /^(certifications?|accréditations?|habilitations?)/i,
+  /^(langues?|languages?|maîtrise\s+des\s+langues?)/i,
+]
+
+function buildCvSection(rawText: string | undefined): string {
+  if (!rawText?.trim()) return ''
+  const text = rawText.trim()
+  if (text.length <= 3000) return text
+
+  const lines = text.split(/\r?\n/).map((l: string) => l.trim()).filter((l: string) => l.length > 0)
+  interface Sec { header: string; lines: string[] }
+  const sections: Sec[] = []
+  let cur: Sec | null = null
+
+  for (const line of lines) {
+    const isHeader = line.length < 80 && CV_SECTION_RX.some(rx => rx.test(line))
+    if (isHeader) {
+      if (cur) sections.push(cur)
+      cur = { header: line, lines: [] }
+    } else {
+      if (cur) cur.lines.push(line)
+      else {
+        if (!cur) cur = { header: '── Résumé / Informations générales', lines: [] }
+        cur.lines.push(line)
+      }
+    }
+  }
+  if (cur) sections.push(cur)
+
+  if (sections.length >= 2) {
+    const parts: string[] = ['── Synthèse structurée du CV ──']
+    let total = parts[0].length
+    for (const s of sections) {
+      const block = `\n${s.header}\n${s.lines.slice(0, 20).join('\n')}`
+      if (total + block.length > 3000) break
+      parts.push(block)
+      total += block.length
+    }
+    if (parts.length >= 2) return parts.join('').trim()
+  }
+
+  return text.slice(0, 3000)
 }
 
 function parseAnswers(raw?: string): Record<string, QuestionAnswer> {
@@ -569,7 +622,8 @@ RÈGLES TECHNIQUES ABSOLUES :
 - transitionEffortScore : effort nécessaire pour atteindre la trajectoire (0 = effort très faible, transition facile ; 100 = effort très élevé, rupture exigeante)
 - Titres INTERDITS : "entrepreneur digital", "consultant premium", "créateur de contenu", "expert IA", "business builder", "prompt engineer", "product builder", tout titre vague ou sans public cible
 - Titres OBLIGATOIRES : [Métier concret + fonction précise] pour [secteur ou public cible]. Ex : "Chargé de développement commercial pour PME industrielles", "Responsable formation digitale en cabinet RH", "Technicien de maintenance pour parc éolien offshore"
-- firstConcreteStep : action faisable AUJOURD'HUI ou demain, avec un outil ou une plateforme nommée`
+- firstConcreteStep : action faisable AUJOURD'HUI ou demain, avec un outil ou une plateforme nommée
+- Si un CV est fourni : ses postes, outils, réalisations et secteurs sont des FAITS vérifiés. Cite-les nommément (jamais de façon générique) dans alreadyAcquiredStrengths, whyItFits et longDescription de chaque trajectoire.`
 
 async function generateAIReport(
   data: Record<string, unknown>,
@@ -581,6 +635,13 @@ async function generateAIReport(
   const client = new OpenAI({ apiKey })
   const a = answers
   const firstName = data.firstName as string
+
+  const cvSection = buildCvSection(data.cvText as string | undefined)
+  if (cvSection) {
+    console.log(`[cv] CV fourni — ${String(data.cvText ?? '').length} chars extraits → ${cvSection.length} chars envoyés à l'IA`)
+  } else {
+    console.log('[cv] Aucun CV fourni — analyse basée uniquement sur le questionnaire')
+  }
 
   const userPrompt = `Analyse ce profil complet et génère un rapport OtherMe avec 3 trajectoires de vie alternatives très détaillées.
 
@@ -595,7 +656,13 @@ Secteur : ${data.sector || 'non renseigné'}
 Années d'expérience : ${data.yearsExperience ?? 'non renseigné'}
 Formation : ${[data.educationLevel, data.educationField].filter(Boolean).join(' en ') || 'non renseigné'}
 Ville : ${data.city || 'non renseigné'}
-${data.cvText ? `\nEXTRAIT CV :\n${String(data.cvText).slice(0, 1200)}` : ''}
+${cvSection ? `
+═══════════════════════════════════════════════════════
+CONTENU DU CV (source de vérité — ${cvSection.length} caractères)
+═══════════════════════════════════════════════════════
+${cvSection}
+
+⚠️ INSTRUCTION CV : Dans CHAQUE trajectoire, cite EXPLICITEMENT au moins 3 éléments concrets de ce CV (intitulés de postes, outils nommés, réalisations chiffrées, secteurs connus) dans les champs alreadyAcquiredStrengths, whyItFits et longDescription. Ne paraphrase pas — nomme.` : ''}
 
 ═══════════════════════════════════════
 RÉPONSES AU QUESTIONNAIRE
