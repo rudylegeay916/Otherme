@@ -260,18 +260,20 @@ export default function Paywall() {
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   {t.ctaRedirecting}
                 </span>
-              ) : 'Débloquer mes 3 trajectoires complètes →'}
+              ) : t.ctaBtn}
             </button>
 
             {/* Trust row */}
-            <div className="flex items-center justify-center gap-4 mt-4 flex-wrap">
-              <span className="flex items-center gap-1.5 text-xs text-dark-500">
-                <span className="text-dark-500">🔒</span> Paiement sécurisé
+            <div className="flex items-center justify-center gap-3 mt-5 flex-wrap">
+              <span className="flex items-center gap-1.5 text-xs text-slate-600">
+                <span>🔒</span> Paiement sécurisé
               </span>
-              <span className="w-px h-3 bg-dark-700" />
-              <span className="text-xs text-dark-500">Stripe</span>
-              <span className="w-px h-3 bg-dark-700" />
-              <span className="text-xs text-dark-500">{t.ctaNote}</span>
+              <span className="w-px h-3 bg-dark-800" />
+              <span className="text-xs text-slate-600">Stripe</span>
+              <span className="w-px h-3 bg-dark-800" />
+              <span className="text-xs text-slate-600">Sans engagement</span>
+              <span className="w-px h-3 bg-dark-800" />
+              <span className="text-xs text-slate-600">{t.ctaNote}</span>
             </div>
           </div>
         </div>
