@@ -68,6 +68,10 @@ export interface PathData {
   freedomScore: number
   incomePotentialScore: number
   alignmentScore: number
+  personalCompatibilityScore: number
+  feasibilityScore: number
+  marketOpportunityScore: number
+  transitionEffortScore: number
   longDescription: string
   keyInsight: string
   whyItFits: string[]

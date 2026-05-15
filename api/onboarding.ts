@@ -23,6 +23,8 @@ interface PathData {
   happinessScore: number; riskLevel: string; difficultyLevel: string
   fitScore: number; securityScore: number; freedomScore: number
   incomePotentialScore: number; alignmentScore: number
+  personalCompatibilityScore: number; feasibilityScore: number
+  marketOpportunityScore: number; transitionEffortScore: number
   longDescription: string; keyInsight: string
   whyItFits: string[]; dailyLife: string
   alreadyAcquiredStrengths: string[]; missingSkills: string[]
@@ -122,6 +124,10 @@ function generateMockReport(firstName: string): ReportData {
         freedomScore: 78,
         incomePotentialScore: 70,
         alignmentScore: 76,
+        personalCompatibilityScore: 84,
+        feasibilityScore: 88,
+        marketOpportunityScore: 72,
+        transitionEffortScore: 82,
         longDescription: `Cette trajectoire s'appuie directement sur ce que vous savez déjà faire, en repositionnant votre expertise dans un cadre indépendant. Les PME françaises sont massivement en retard sur leur transformation digitale : elles cherchent des profils capables de comprendre à la fois leurs contraintes opérationnelles et les outils numériques disponibles. Vous n'avez pas besoin d'être un développeur pour occuper ce rôle — vous avez besoin de savoir poser le bon diagnostic, proposer des solutions concrètes, et accompagner la mise en place.\n\nEn tant que consultant indépendant, votre quotidien alternera entre phases d'analyse client, ateliers de travail, recommandations stratégiques et suivi de mise en œuvre. Vous choisirez vos missions, vos secteurs préférés, et progressivement vos tarifs. Le marché est large et peu saturé sur ce segment PME.\n\nFinancièrement, les premiers 6 à 12 mois seront en phase de lancement : 1 à 3 clients, un chiffre d'affaires encore modeste. Mais dès la deuxième année, avec une niche bien définie et des références clients, atteindre 50 à 70 k€ brut annuel est réaliste. La liberté de rythme et la variété des missions sont des bénéfices très concrets dès la première année.\n\nLe principal frein est psychologique : sortir du salariat, prospecter ses premiers clients, assumer l'incertitude des débuts. Ces obstacles sont réels mais surmontables avec une préparation sérieuse des 30 premiers jours.`,
         keyInsight: `Vous avez déjà 80 % des compétences nécessaires. Il manque principalement la posture commerciale et la structure juridique — deux éléments qui s'acquièrent en quelques semaines.`,
         whyItFits: [
@@ -226,6 +232,10 @@ function generateMockReport(firstName: string): ReportData {
         freedomScore: 82,
         incomePotentialScore: 58,
         alignmentScore: 88,
+        personalCompatibilityScore: 78,
+        feasibilityScore: 62,
+        marketOpportunityScore: 70,
+        transitionEffortScore: 55,
         longDescription: `Cette trajectoire est pour ceux qui trouvent leur énergie dans le fait de transmettre, d'expliquer, de voir quelqu'un progresser. La formation professionnelle est un secteur en forte croissance grâce au CPF et aux financements Pôle Emploi — des adultes en reconversion cherchent en permanence des formateurs capables d'expliquer clairement des outils numériques souvent mal documentés.\n\nVous n'avez pas besoin d'une certification de formateur pour commencer. Vous avez besoin de maîtriser votre sujet, d'être capable de créer un programme structuré, et de trouver vos premiers apprenants. La plupart des formateurs indépendants commencent en intervenant pour des organismes de formation existants (OF) avant de créer leur propre offre.\n\nLe quotidien d'un formateur est varié : préparation de modules, animation d'ateliers en présentiel ou distanciel, suivi individuel, création de ressources pédagogiques. C'est un métier qui demande de la patience, de la clarté pédagogique, et une vraie capacité à adapter son discours à des publics très différents.\n\nFinancièrement, le démarrage est plus lent qu'en consulting : les premières formations sont souvent sous-payées ou gratuites pour construire une réputation. Mais à partir de 18 mois, un formateur avec une niche claire et des certifications Qualiopi peut facturer entre 1 000 et 2 000 € par jour de formation. Et une formation en ligne peut générer des revenus passifs durables.\n\nCette voie est particulièrement adaptée à quelqu'un qui valorise l'impact humain, la flexibilité de lieu, et la satisfaction de voir des gens évoluer grâce à soi.`,
         keyInsight: `Le marché de la formation CPF explose mais se régule. Se positionner sur une niche précise (ex : outils IA pour TPE, Excel pour PME, Notion pour équipes) est la clé pour sortir du lot et obtenir une certification Qualiopi rapidement.`,
         whyItFits: [
@@ -330,6 +340,10 @@ function generateMockReport(firstName: string): ReportData {
         freedomScore: 90,
         incomePotentialScore: 95,
         alignmentScore: 70,
+        personalCompatibilityScore: 65,
+        feasibilityScore: 40,
+        marketOpportunityScore: 88,
+        transitionEffortScore: 28,
         longDescription: `Cette trajectoire est la plus ambitieuse et la plus risquée — mais aussi celle avec le plus fort potentiel de liberté totale et d'impact. Elle convient à quelqu'un qui a identifié un problème réel que les outils existants ne résolvent pas bien, et qui est prêt à passer 12 à 24 mois difficiles avant de voir le fruit de son travail.\n\nCrter une micro-startup SaaS ne nécessite pas d'être développeur. Des outils no-code comme Bubble, Webflow, ou Glide permettent de construire un MVP en quelques semaines. La clé est d'abord de valider que le problème existe et que des gens sont prêts à payer pour le résoudre — avant d'écrire une seule ligne de code ou de dépenser un seul euro.\n\nLe quotidien du fondateur en phase early-stage : interviewer des clients potentiels, tester des hypothèses, itérer vite, vendre des abonnements avant même que le produit soit parfait. Il faut une très forte tolérance à l'ambiguïté, à l'échec partiel, et à la solitude des débuts.\n\nFinancièrement, cette trajectoire peut aller dans tous les sens : échouer complètement, générer quelques centaines d'euros par mois, ou exploser à 100 k€ d'ARR en 3 ans. L'issue dépend en grande partie de la qualité de la validation initiale et de la capacité à trouver des clients très tôt. Un cofondateur technique est un atout majeur — il permet de réduire les coûts et d'accélérer le développement.\n\nCette trajectoire est recommandée uniquement si vous avez au moins 6 mois d'épargne de sécurité, une vraie tolérance à l'incertitude, et une idée de problème précis sur lequel vous avez une conviction forte.`,
         keyInsight: `La plupart des startups échouent non par manque de technologie, mais par manque de clients. Votre premier travail n'est pas de construire un produit : c'est de trouver 10 personnes prêtes à payer pour résoudre le problème que vous avez identifié.`,
         whyItFits: [
@@ -451,6 +465,10 @@ RÈGLES TECHNIQUES ABSOLUES :
 - fiveYearTimeline : EXACTEMENT 7 périodes dans cet ordre strict : "30 jours", "3 mois", "6 mois", "12 mois", "2 ans", "3 ans", "5 ans"
 - detailedActionPlan30Days : EXACTEMENT 4 entrées (week: 1, 2, 3, 4)
 - Scores : entiers entre 0 et 100 uniquement
+- personalCompatibilityScore : adéquation profil ↔ métier (compétences, valeurs, style de vie souhaité)
+- feasibilityScore : faisabilité réelle de la transition (délai, ressources nécessaires, obstacles)
+- marketOpportunityScore : opportunité de marché actuelle et tendance du secteur
+- transitionEffortScore : facilité de la transition (100 = quasi sans effort, 0 = rupture totale exigeante)
 - Titres INTERDITS : "entrepreneur digital", "consultant premium", "créateur de contenu", "expert IA", "business builder", "prompt engineer", "product builder", tout titre vague ou sans public cible
 - Titres OBLIGATOIRES : [Métier concret + fonction précise] pour [secteur ou public cible]. Ex : "Chargé de développement commercial pour PME industrielles", "Responsable formation digitale en cabinet RH", "Technicien de maintenance pour parc éolien offshore"
 - firstConcreteStep : action faisable AUJOURD'HUI ou demain, avec un outil ou une plateforme nommée`
@@ -569,6 +587,10 @@ JSON ATTENDU (réponds UNIQUEMENT avec ce JSON)
       "freedomScore": 0-100,
       "incomePotentialScore": 0-100,
       "alignmentScore": 0-100,
+      "personalCompatibilityScore": 0-100,
+      "feasibilityScore": 0-100,
+      "marketOpportunityScore": 0-100,
+      "transitionEffortScore": 0-100,
       "longDescription": "MINIMUM 1200 caractères. Explication détaillée qui cite explicitement les compétences, expériences et aspirations de ${firstName}. Explique le métier, le quotidien, le niveau de risque, le potentiel financier, le style de vie associé, pourquoi c'est cohérent avec ce profil précis.",
       "keyInsight": "Une insight clé et surprenante sur cette trajectoire pour ${firstName}.",
       "whyItFits": ["raison 1 liée au profil", "raison 2", "raison 3", "raison 4"],

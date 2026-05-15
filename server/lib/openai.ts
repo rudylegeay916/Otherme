@@ -29,6 +29,10 @@ RÈGLES TECHNIQUES ABSOLUES :
 - fiveYearTimeline : EXACTEMENT 7 périodes dans cet ordre strict : "30 jours", "3 mois", "6 mois", "12 mois", "2 ans", "3 ans", "5 ans"
 - detailedActionPlan30Days : EXACTEMENT 4 entrées (week: 1, 2, 3, 4)
 - Scores : entiers entre 0 et 100 uniquement
+- personalCompatibilityScore : adéquation profil ↔ métier (compétences, valeurs, style de vie souhaité)
+- feasibilityScore : faisabilité réelle de la transition (délai, ressources nécessaires, obstacles)
+- marketOpportunityScore : opportunité de marché actuelle et tendance du secteur
+- transitionEffortScore : facilité de la transition (100 = quasi sans effort, 0 = rupture totale exigeante)
 - Titres INTERDITS : "entrepreneur digital", "consultant premium", "créateur de contenu", "expert IA", "business builder", "prompt engineer", "product builder", tout titre vague ou sans public cible
 - Titres OBLIGATOIRES : [Métier concret + fonction précise] pour [secteur ou public cible]. Ex : "Chargé de développement commercial pour PME industrielles", "Responsable formation digitale en cabinet RH", "Technicien de maintenance pour parc éolien offshore"
 - firstConcreteStep : action faisable AUJOURD'HUI ou demain, avec un outil ou une plateforme nommée`
@@ -166,6 +170,10 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
       "freedomScore": 0-100,
       "incomePotentialScore": 0-100,
       "alignmentScore": 0-100,
+      "personalCompatibilityScore": 0-100,
+      "feasibilityScore": 0-100,
+      "marketOpportunityScore": 0-100,
+      "transitionEffortScore": 0-100,
       "longDescription": "MINIMUM 1000 caractères. Description qui cite explicitement les compétences et expériences de ${fn}. Couvre : le métier et ses réalités concrètes, une journée type, le niveau de risque honnête, le potentiel financier réaliste, l'opportunité de marché, et pourquoi cette voie est cohérente avec CE profil précis.",
       "keyInsight": "Insight clé, surprenant ou contre-intuitif, spécifique à ${fn} pour cette trajectoire.",
       "whyItFits": [
@@ -216,6 +224,10 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
       "freedomScore": 0-100,
       "incomePotentialScore": 0-100,
       "alignmentScore": 0-100,
+      "personalCompatibilityScore": 0-100,
+      "feasibilityScore": 0-100,
+      "marketOpportunityScore": 0-100,
+      "transitionEffortScore": 0-100,
       "longDescription": "...",
       "keyInsight": "...",
       "whyItFits": ["...", "...", "...", "..."],
@@ -261,6 +273,10 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
       "freedomScore": 0-100,
       "incomePotentialScore": 0-100,
       "alignmentScore": 0-100,
+      "personalCompatibilityScore": 0-100,
+      "feasibilityScore": 0-100,
+      "marketOpportunityScore": 0-100,
+      "transitionEffortScore": 0-100,
       "longDescription": "...",
       "keyInsight": "...",
       "whyItFits": ["...", "...", "...", "..."],
