@@ -214,8 +214,8 @@ export default function Landing() {
 
           {/* Titre hero */}
           <h1 className="font-bold tracking-tight mb-6">
-            <span className="block text-slate-100 text-4xl sm:text-5xl md:text-[3.6rem] leading-[1.12]">{t.heroTitle}</span>
-            <span className="block gradient-text text-4xl sm:text-5xl md:text-[3.6rem] leading-[1.12]">{t.heroAccent}</span>
+            <span className="block text-slate-100 text-4xl sm:text-5xl md:text-[3.2rem] leading-[1.15]">{t.heroTitle}</span>
+            <span className="block gradient-text text-3xl sm:text-4xl md:text-[2.8rem] leading-[1.22]">{t.heroAccent}</span>
           </h1>
 
           {/* Sous-titre */}
