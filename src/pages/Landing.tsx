@@ -204,7 +204,7 @@ export default function Landing() {
           <div className="absolute top-[15%] right-[12%] w-[220px] h-[220px] bg-purple-800/[0.06] rounded-full blur-[80px]" />
         </div>
 
-        <div className="relative z-10 text-center max-w-3xl mx-auto animate-fade-in">
+        <div className="relative z-10 text-center max-w-4xl mx-auto animate-fade-in">
 
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-300/90 text-xs font-medium mb-8 tracking-wide">
@@ -213,9 +213,16 @@ export default function Landing() {
           </div>
 
           {/* Titre hero */}
-          <h1 className="font-bold tracking-tight mb-6">
-            <span className="block text-slate-100 text-4xl sm:text-5xl md:text-[3.2rem] leading-[1.15]">{t.heroTitle}</span>
-            <span className="block gradient-text text-3xl sm:text-4xl md:text-[2.8rem] leading-[1.22]">{t.heroAccent}</span>
+          <h1 className="font-bold tracking-tight mb-8">
+            <span className="block text-slate-100 text-[2.4rem] sm:text-[3rem] md:text-[3.5rem] leading-[1.18]">
+              {t.heroTitle}
+            </span>
+            <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.22]">
+              {t.heroAccent}
+            </span>
+            <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.22]">
+              {t.heroTitle2}
+            </span>
           </h1>
 
           {/* Sous-titre */}
