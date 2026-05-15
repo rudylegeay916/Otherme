@@ -108,8 +108,8 @@ const fr: Tr = {
   },
   landing: {
     badge: 'Pas un test d\'orientation. Un plan de transition.',
-    heroTitle: 'Change de voie', heroAccent: 'sans repartir', heroTitle2: 'de zéro.',
-    heroSub: 'OtherMe analyse ton parcours, tes compétences, tes contraintes et tes envies pour te proposer <strong>3 trajectoires professionnelles réalistes</strong>, avec une timeline claire et un plan d\'action concret.',
+    heroTitle: 'Découvre', heroAccent: '3 trajectoires professionnelles réalistes', heroTitle2: 'pour la suite de ta vie.',
+    heroSub: 'OtherMe analyse ton parcours, tes compétences, tes contraintes et tes envies pour te proposer des métiers cibles atteignables, avec une timeline claire et un plan d\'action concret.',
     heroCta: 'Découvrir mes trajectoires →',
     statRating: 'Questionnaire en 5 min', statReports: 'CV optionnel pour affiner l\'analyse', statSpeed: 'Première analyse en quelques minutes',
     howTitle: 'Comment ça', howAccent: 'fonctionne', howSub: 'Concret. Personnalisé. Actionnable.',
@@ -259,8 +259,8 @@ const en: Tr = {
   },
   landing: {
     badge: 'Not a career aptitude test. A transition plan.',
-    heroTitle: 'Change direction', heroAccent: 'without starting', heroTitle2: 'from scratch.',
-    heroSub: 'OtherMe analyses your background, skills, constraints and goals to propose <strong>3 realistic professional paths</strong>, with a clear timeline and a concrete action plan.',
+    heroTitle: 'Discover', heroAccent: '3 realistic professional paths', heroTitle2: 'for the next chapter of your life.',
+    heroSub: 'OtherMe analyses your background, skills, constraints and goals to propose reachable target careers, with a clear timeline and a concrete action plan.',
     heroCta: 'Discover my paths →',
     statRating: '5-minute questionnaire', statReports: 'Optional CV to refine results', statSpeed: 'First analysis in a few minutes',
     howTitle: 'How does it', howAccent: 'work', howSub: 'Concrete. Personalised. Actionable.',
