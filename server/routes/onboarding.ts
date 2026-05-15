@@ -98,13 +98,14 @@ router.post('/', upload.single('cv'), async (req, res) => {
     })
 
     const report: GeneratedReport = await generateTrajectories(data)
+    console.log(`[onboarding] Rapport IA valide — source: ai — ${data.firstName}`)
 
     const reportRow = await createReport({
       user_id:                userId,
       onboarding_response_id: onboardingRow.id,
       title:                  `Trajectoires alternatives pour ${data.firstName}`,
       summary:                report.reportSummary?.slice(0, 200) ?? '',
-      full_report:            report,
+      full_report:            { ...report, generationSource: 'ai' },
     })
 
     return res.json({ reportId: reportRow.id, status: reportRow.status })

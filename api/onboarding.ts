@@ -778,7 +778,8 @@ RAPPEL : longDescription minimum 1200 caractères par trajectoire. Ton bienveill
 async function saveToSupabase(
   data: Record<string, unknown>,
   report: ReportData,
-  userId: string | null
+  userId: string | null,
+  generationSource: 'ai' | 'mock_fallback' = 'ai'
 ): Promise<string> {
   const url = process.env.VITE_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -806,7 +807,7 @@ async function saveToSupabase(
       onboarding_response_id: onbRow.id,
       title:                  `Trajectoires alternatives pour ${data.firstName}`,
       summary:                report.reportSummary?.slice(0, 200) ?? '',
-      full_report:            report,
+      full_report:            { ...report, generationSource },
       status:                 'ready',
     })
     .select('id, status, created_at')
@@ -877,8 +878,10 @@ export default async function handler(
     const userId = await getUserId((req.headers as any).authorization)
 
     let report: ReportData
+    let generationSource: 'ai' | 'mock_fallback' = 'ai'
     try {
       report = await generateAIReport(data, answers)
+      console.log(`[onboarding] Rapport IA valide — source: ai — ${firstName}`)
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
       if (msg.includes('invalide')) {
@@ -887,13 +890,15 @@ export default async function handler(
         console.error('[onboarding] ⚠️  OpenAI indisponible — fallback mock activé :', msg)
       }
       report = generateMockReport(firstName)
+      generationSource = 'mock_fallback'
     }
 
     let reportId: string
     let isMock = false
 
     try {
-      reportId = await saveToSupabase(data, report, userId)
+      console.log(`[onboarding] Sauvegarde Supabase — generationSource: ${generationSource}`)
+      reportId = await saveToSupabase(data, report, userId, generationSource)
     } catch (err) {
       console.error('[onboarding] ⚠️  Supabase indisponible — rapport non sauvegardé, ID mock généré :', err)
       reportId = `mock_${crypto.randomUUID()}`
