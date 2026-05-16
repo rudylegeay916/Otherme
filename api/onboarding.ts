@@ -612,9 +612,9 @@ PRINCIPES NON NÉGOCIABLES :
 6. Tu réponds UNIQUEMENT avec du JSON valide. Aucun markdown, aucun texte autour.
 
 RÈGLES TECHNIQUES ABSOLUES :
-- longDescription : MINIMUM 1000 caractères, doit citer explicitement des éléments du profil
-- fiveYearTimeline : EXACTEMENT 7 périodes dans cet ordre strict : "30 jours", "3 mois", "6 mois", "12 mois", "2 ans", "3 ans", "5 ans"
-- detailedActionPlan30Days : EXACTEMENT 4 entrées (week: 1, 2, 3, 4)
+- longDescription : MINIMUM 1500 caractères par trajectoire, avec au moins 5 références explicites au profil
+- fiveYearTimeline : EXACTEMENT 7 périodes dans cet ordre strict : "30 jours", "1 à 3 mois", "3 à 6 mois", "6 à 12 mois", "12 à 24 mois", "2 à 3 ans", "3 à 5 ans"
+- detailedActionPlan30Days : EXACTEMENT 4 entrées (week: 1, 2, 3, 4), chaque semaine avec 3 à 5 actions incluant durée estimée et livrable attendu
 - Scores : entiers entre 0 et 100 uniquement
 - personalCompatibilityScore : adéquation profil ↔ métier (compétences, valeurs, style de vie souhaité)
 - feasibilityScore : faisabilité réelle de la transition (délai, ressources nécessaires, obstacles)
@@ -623,7 +623,26 @@ RÈGLES TECHNIQUES ABSOLUES :
 - Titres INTERDITS : "entrepreneur digital", "consultant premium", "créateur de contenu", "expert IA", "business builder", "prompt engineer", "product builder", tout titre vague ou sans public cible
 - Titres OBLIGATOIRES : [Métier concret + fonction précise] pour [secteur ou public cible]. Ex : "Chargé de développement commercial pour PME industrielles", "Responsable formation digitale en cabinet RH", "Technicien de maintenance pour parc éolien offshore"
 - firstConcreteStep : action faisable AUJOURD'HUI ou demain, avec un outil ou une plateforme nommée
-- Si un CV est fourni : ses postes, outils, réalisations et secteurs sont des FAITS vérifiés. Cite-les nommément (jamais de façon générique) dans alreadyAcquiredStrengths, whyItFits et longDescription de chaque trajectoire.`
+- Si un CV est fourni : ses postes, outils, réalisations et secteurs sont des FAITS vérifiés. Cite-les nommément (jamais de façon générique) dans alreadyAcquiredStrengths, whyItFits et longDescription de chaque trajectoire.
+
+QUALITÉ DU CONTENU — FORMATS OBLIGATOIRES PAR CHAMP :
+- alreadyAcquiredStrengths : chaque entrée = "Force [X] — Source : [poste ou réalisation concrète du profil] — Comment la valoriser dans [métier cible] : [action concrète avec exemple]"
+- missingSkills : chaque entrée = "Compétence [X] — Pourquoi critique : [raison liée au métier cible] — Acquisition : [méthode précise + outil ou organisme nommé] — Niveau cible : [débutant/intermédiaire/avancé] — Priorité : [haute/moyenne/faible]"
+- risksAndLimits : chaque entrée = "Risque [X] — Cause : [pourquoi ce risque existe concrètement] — Réduction : [action concrète pour l'atténuer] — Erreur classique : [ce que font ceux qui échouent]"
+- fiveYearTimeline.actions : chaque action = "[Verbe d'action] [objet précis + outil nommé si applicable] ([durée estimée]) → livrable : [résultat tangible et mesurable]"
+- fiveYearTimeline.expectedResult : "[Résultat chiffrable ou observable]. KPI : [indicateur mesurable]. Vigilance : [risque ou point critique à surveiller sur cette période]"
+- detailedActionPlan30Days.title : "Semaine [N] — [Thème clair] ([durée totale estimée])"
+- detailedActionPlan30Days.actions : chaque action = "[Verbe d'action] [objet précis] ([durée estimée]) → livrable : [résultat concret attendu]"
+- whyItFits : chaque entrée cite EXPLICITEMENT un élément du profil (poste, réponse questionnaire, compétence déclarée) ET explique son lien direct avec le métier cible
+
+INTERDITS ABSOLUS DE CONTENU — refus si présent :
+- "il faut se former" → écrire : "suivre [formation précise] sur [plateforme nommée] en [N semaines]"
+- "développer ses compétences" → écrire : "[compétence précise] via [méthode concrète + ressource nommée]"
+- "travailler son réseau" → écrire : "contacter [type de profil précis] via [LinkedIn/Slack/événement nommé]"
+- "se former en ligne" → écrire : "[cours/certification + plateforme + durée estimée]"
+- "explorer les opportunités" → écrire : "[action précise dans [secteur cible]"
+- Toute phrase applicable à n'importe quel profil sans modification → interdit
+- Toute action sans outil nommé, durée estimée ou livrable attendu → interdit`
 
 async function generateAIReport(
   data: Record<string, unknown>,
@@ -722,26 +741,32 @@ INTERDITS ABSOLUS :
 EXEMPLES DE QUALITÉ ATTENDUE
 ═══════════════════════════════════════════════════════
 
-whyItFits — CORRECT (cite le profil) :
-"Tu as déclaré vouloir éviter [avoidNext] : ce métier l'exclut structurellement."
-"Tes années d'expérience en [secteur] sont directement valorisables ici sans reconversion longue."
+whyItFits — CORRECT (cite le profil + lien direct) :
+"Tes années d'expérience en [secteur] t'ont donné [compétence précise] — directement transférable ici car [raison liée au métier cible]."
+"Tu as déclaré vouloir éviter [avoidNext] : la structure de ce métier l'exclut structurellement car [raison]."
 
-whyItFits — INTERDIT (trop générique) :
-"Votre expérience est valorisable dans ce domaine." ← refusé
-"Cette trajectoire correspond à votre profil." ← refusé
+whyItFits — INTERDIT :
+"Votre expérience est valorisable dans ce domaine." ← trop vague, refusé
+"Cette trajectoire correspond à votre profil." ← non citant, refusé
 
-keyInsight — CORRECT :
-"La plupart des gens dans ta situation cherchent à tout changer. Ici, le levier est [compétence précise] — souvent sous-estimée mais très recherchée sur ce marché."
+alreadyAcquiredStrengths — CORRECT :
+"Gestion de projet complexe — Source : [poste X] où tu pilotais [Y] — Valorisation en [métier cible] : directement utilisable pour [action concrète]"
+
+missingSkills — CORRECT :
+"Prospection commerciale B2B — Pourquoi critique : ce métier exige de trouver ses propres clients — Acquisition : formation 'Vente consultative' sur LinkedIn Learning (8h) — Niveau cible : intermédiaire — Priorité : haute"
+
+risksAndLimits — CORRECT :
+"Revenus irréguliers les 6 premiers mois — Cause : absence de clients récurrents en phase de démarrage — Réduction : constituer 3 mois de trésorerie avant lancement — Erreur classique : partir sans filet, puis baisser ses tarifs par peur"
 
 ═══════════════════════════════════════════════════════
 JSON ATTENDU (réponds UNIQUEMENT avec ce JSON)
 ═══════════════════════════════════════════════════════
 {
-  "reportSummary": "Synthèse personnalisée de 4 à 6 lignes qui cite les éléments clés du profil et explique pourquoi ces 3 trajectoires ont été choisies pour cette personne précise.",
+  "reportSummary": "Synthèse de 5 à 8 lignes : (1) contexte actuel de ${firstName} avec ses forces identifiées, (2) fil conducteur logique entre les 3 trajectoires proposées, (3) ce qui rend chaque trajectoire cohérente avec CE profil précis. Jamais générique.",
   "paths": [
     {
       "pathType": "current_aligned",
-      "title": "[Métier concret précis] + [secteur/public/spécialité]",
+      "title": "[Métier concret précis] pour [secteur/public cible spécifique]",
       "sector": "...",
       "revenueEstimate": "XX 000 – YY 000 €/an",
       "happinessScore": 0-100,
@@ -756,45 +781,194 @@ JSON ATTENDU (réponds UNIQUEMENT avec ce JSON)
       "feasibilityScore": 0-100,
       "marketOpportunityScore": 0-100,
       "transitionEffortScore": 0-100,
-      "longDescription": "MINIMUM 1200 caractères. Explication détaillée qui cite explicitement les compétences, expériences et aspirations de ${firstName}. Explique le métier, le quotidien, le niveau de risque, le potentiel financier, le style de vie associé, pourquoi c'est cohérent avec ce profil précis.",
-      "keyInsight": "Une insight clé et surprenante sur cette trajectoire pour ${firstName}.",
-      "whyItFits": ["raison 1 liée au profil", "raison 2", "raison 3", "raison 4"],
-      "dailyLife": "Description concrète d'une journée type dans ce métier.",
-      "alreadyAcquiredStrengths": ["force 1", "force 2", "force 3"],
-      "missingSkills": ["compétence à développer 1", "2", "3"],
-      "likelyObstacles": ["obstacle probable 1", "2", "3"],
-      "mistakesToAvoid": ["erreur à éviter 1", "2", "3"],
+      "longDescription": "MINIMUM 1500 caractères. Structurer en 5 blocs : (1) Pourquoi CE métier pour CE profil — cite au moins 3 éléments du parcours de ${firstName}. (2) Réalité concrète du métier : ce qu'on fait vraiment, difficultés réelles, avantages tangibles. (3) État du marché : demande actuelle, secteurs qui recrutent, tendances à 3 ans. (4) Trajectoire financière réaliste : fourchettes années 1, 2-3, 5+. (5) Pourquoi c'est réaliste ou ambitieux pour ${firstName} spécifiquement.",
+      "keyInsight": "Insight clé, surprenant ou contre-intuitif, spécifique à ${firstName} — jamais applicable à n'importe qui.",
+      "whyItFits": [
+        "Raison 1 — cite [compétence/expérience précise du profil] + explique son lien direct avec [aspect concret du métier cible]",
+        "Raison 2 — cite [réponse questionnaire ou élément CV] + explique pourquoi ça aide dans [ce métier]",
+        "Raison 3 — même format",
+        "Raison 4 — même format"
+      ],
+      "dailyLife": "Journée type détaillée : matin (9h-12h tâches précises + outils), après-midi (14h-18h tâches précises), avec qui, dans quel environnement, rythme de semaine. MINIMUM 300 caractères.",
+      "alreadyAcquiredStrengths": [
+        "Force [X] — Source : [poste ou réalisation concrète du profil de ${firstName}] — Comment la valoriser dans [métier cible] : [action concrète]",
+        "Force [Y] — Source : [...] — Comment la valoriser : [...]",
+        "Force [Z] — Source : [...] — Comment la valoriser : [...]",
+        "Force [W] — Source : [...] — Comment la valoriser : [...]"
+      ],
+      "missingSkills": [
+        "Compétence [X] — Pourquoi critique : [raison liée au métier cible] — Acquisition : [méthode précise + outil ou organisme nommé] — Niveau cible : intermédiaire — Priorité : haute",
+        "Compétence [Y] — Pourquoi critique : [...] — Acquisition : [...] — Niveau cible : [...] — Priorité : moyenne",
+        "Compétence [Z] — Pourquoi critique : [...] — Acquisition : [...] — Niveau cible : [...] — Priorité : faible"
+      ],
+      "likelyObstacles": ["Obstacle concret 1 lié à CE profil et CE métier", "Obstacle 2", "Obstacle 3"],
+      "mistakesToAvoid": ["Erreur classique 1 avec conséquence concrète", "Erreur 2", "Erreur 3"],
       "fiveYearTimeline": [
-        {"period": "30 jours", "objective": "...", "actions": ["action 1", "action 2", "action 3"], "skills": ["skill 1", "skill 2"], "proofsToBuild": ["preuve 1", "preuve 2"], "expectedResult": "..."},
-        {"period": "3 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "..."},
-        {"period": "6 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "..."},
-        {"period": "12 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "..."},
-        {"period": "2 ans", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "..."},
-        {"period": "3 ans", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "..."},
-        {"period": "5 ans", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "..."}
+        {
+          "period": "30 jours",
+          "objective": "Objectif sprint initial précis et mesurable",
+          "actions": [
+            "Analyser 10 offres d'emploi [métier cible] sur LinkedIn/Indeed (2h) → livrable : liste des 5 compétences les plus demandées",
+            "Contacter 3 professionnels du secteur sur LinkedIn avec message personnalisé (1h30) → livrable : 1 échange concret obtenu",
+            "Lire 3 témoignages de reconversion vers [métier cible] (1h) → livrable : 5 insights notés",
+            "Créer un document listant les compétences transférables prioritaires (1h) → livrable : document avec items classés"
+          ],
+          "skills": ["compétence mobilisée 1", "compétence 2"],
+          "proofsToBuild": ["preuve concrète 1 décrite précisément", "preuve 2"],
+          "expectedResult": "Résultat observable. KPI : [indicateur mesurable]. Vigilance : [point d'attention spécifique à cette période]"
+        },
+        {"period": "1 à 3 mois", "objective": "...", "actions": ["[Verbe + objet + outil] ([durée]) → livrable : [résultat]", "..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "3 à 6 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "6 à 12 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "12 à 24 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "2 à 3 ans", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "3 à 5 ans", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"}
       ],
       "detailedActionPlan30Days": [
-        {"week": 1, "title": "...", "actions": ["action 1", "action 2", "action 3"]},
-        {"week": 2, "title": "...", "actions": ["action 1", "action 2", "action 3"]},
-        {"week": 3, "title": "...", "actions": ["action 1", "action 2", "action 3"]},
-        {"week": 4, "title": "...", "actions": ["action 1", "action 2", "action 3"]}
+        {
+          "week": 1,
+          "title": "Semaine 1 — [Thème] ([durée totale estimée])",
+          "actions": [
+            "[Verbe d'action] [objet précis] ([durée estimée]) → livrable : [résultat concret et mesurable]",
+            "[Verbe d'action] [objet précis] ([durée estimée]) → livrable : [résultat concret]",
+            "[Verbe d'action] [objet précis] ([durée estimée]) → livrable : [résultat concret]",
+            "[Verbe d'action] [objet précis] ([durée estimée]) → livrable : [résultat concret]"
+          ]
+        },
+        {"week": 2, "title": "Semaine 2 — [Thème] ([durée])", "actions": ["[Verbe + objet + durée] → livrable : [résultat]", "...", "...", "..."]},
+        {"week": 3, "title": "Semaine 3 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]},
+        {"week": 4, "title": "Semaine 4 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]}
       ],
-      "firstWeekActions": ["action concrète 1", "action 2", "action 3", "action 4"],
-      "miniProjectToLaunch": "Description précise d'un mini-projet faisable en 1 à 2 semaines pour tester cette voie.",
-      "peopleToContact": ["type de personne 1 avec exemples concrets", "type 2", "type 3"],
-      "proofsToBuild": ["preuve concrète 1", "preuve 2", "preuve 3", "preuve 4"],
-      "recommendedTrainingTypes": ["formation recommandée 1 (durée estimée)", "formation 2"],
-      "similarJobs": ["métier proche 1", "métier proche 2", "métier proche 3"],
-      "risksAndLimits": ["risque réel 1", "risque 2", "risque 3"],
-      "firstConcreteStep": "Action très précise et concrète que ${firstName} peut faire AUJOURD'HUI ou dans les 48h, avec des détails spécifiques."
+      "firstWeekActions": [
+        "Action concrète 1 — outil nommé + durée estimée",
+        "Action concrète 2",
+        "Action concrète 3",
+        "Action concrète 4"
+      ],
+      "miniProjectToLaunch": "Mini-projet précis faisable en 1 à 2 semaines : ce qu'on fait concrètement, quel outil, quel livrable, comment ça teste réellement la voie.",
+      "peopleToContact": [
+        "Profil 1 : [type de personne précis] — Où : [LinkedIn/Slack/événement nommé] — Pourquoi : [objectif précis]",
+        "Profil 2 — Où : [...] — Pourquoi : [...]",
+        "Profil 3 — Où : [...] — Pourquoi : [...]",
+        "Profil 4 — Où : [...] — Pourquoi : [...]"
+      ],
+      "proofsToBuild": [
+        "Preuve 1 : [description précise du livrable] — Format : [article/dépôt/étude de cas...] — Durée : [N jours]",
+        "Preuve 2 : [...] — Format : [...] — Durée : [...]",
+        "Preuve 3 : [...] — Format : [...] — Durée : [...]",
+        "Preuve 4 : [...] — Format : [...] — Durée : [...]"
+      ],
+      "recommendedTrainingTypes": [
+        "Formation 1 : [nom/type] — Plateforme : [nommée] — Durée : [estimée] — Objectif : [compétence visée]",
+        "Formation 2 : [...] — Plateforme : [...] — Durée : [...] — Objectif : [...]",
+        "Formation 3 : [...] — Plateforme : [...] — Durée : [...] — Objectif : [...]"
+      ],
+      "similarJobs": ["Métier proche 1 — pourquoi similaire", "Métier 2", "Métier 3", "Métier 4"],
+      "risksAndLimits": [
+        "Risque [X] — Cause : [pourquoi concrètement pour ${firstName}] — Réduction : [action concrète] — Erreur classique : [ce que font ceux qui échouent]",
+        "Risque [Y] — Cause : [...] — Réduction : [...] — Erreur classique : [...]",
+        "Risque [Z] — Cause : [...] — Réduction : [...] — Erreur classique : [...]",
+        "Risque [W] — Cause : [...] — Réduction : [...] — Erreur classique : [...]"
+      ],
+      "firstConcreteStep": "Action ultra-précise que ${firstName} peut faire AUJOURD'HUI ou demain — outil exact, plateforme, action en 30 minutes ou moins, résultat attendu immédiat."
     },
     {
       "pathType": "passion_based",
-      ...même structure...
+      "title": "...",
+      "sector": "...",
+      "revenueEstimate": "...",
+      "happinessScore": 0-100,
+      "riskLevel": "...",
+      "difficultyLevel": "...",
+      "fitScore": 0-100,
+      "securityScore": 0-100,
+      "freedomScore": 0-100,
+      "incomePotentialScore": 0-100,
+      "alignmentScore": 0-100,
+      "personalCompatibilityScore": 0-100,
+      "feasibilityScore": 0-100,
+      "marketOpportunityScore": 0-100,
+      "transitionEffortScore": 0-100,
+      "longDescription": "MINIMUM 1500 caractères — même structure en 5 blocs, adaptée à passion_based",
+      "keyInsight": "Insight spécifique à ${firstName} pour cette trajectoire passion",
+      "whyItFits": ["Raison 1 — cite [élément profil] + lien avec métier", "Raison 2", "Raison 3", "Raison 4"],
+      "dailyLife": "Journée type détaillée (MINIMUM 300 caractères)",
+      "alreadyAcquiredStrengths": ["Force [X] — Source : [...] — Comment valoriser : [...]", "Force [Y]...", "Force [Z]...", "Force [W]..."],
+      "missingSkills": ["Compétence [X] — Pourquoi critique : [...] — Acquisition : [...] — Niveau : [...] — Priorité : [...]", "Compétence [Y]...", "Compétence [Z]..."],
+      "likelyObstacles": ["Obstacle 1", "Obstacle 2", "Obstacle 3"],
+      "mistakesToAvoid": ["Erreur 1 avec conséquence concrète", "Erreur 2", "Erreur 3"],
+      "fiveYearTimeline": [
+        {"period": "30 jours", "objective": "...", "actions": ["[Verbe + objet + outil] ([durée]) → livrable : [résultat]", "..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "1 à 3 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "3 à 6 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "6 à 12 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "12 à 24 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "2 à 3 ans", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "3 à 5 ans", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"}
+      ],
+      "detailedActionPlan30Days": [
+        {"week": 1, "title": "Semaine 1 — [Thème] ([durée])", "actions": ["[Verbe + objet + durée] → livrable : [résultat]", "...", "...", "..."]},
+        {"week": 2, "title": "Semaine 2 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]},
+        {"week": 3, "title": "Semaine 3 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]},
+        {"week": 4, "title": "Semaine 4 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]}
+      ],
+      "firstWeekActions": ["Action 1 — outil nommé + durée estimée", "Action 2", "Action 3", "Action 4"],
+      "miniProjectToLaunch": "Mini-projet précis : ce qu'on fait, quel outil, quel livrable, comment ça teste la voie.",
+      "peopleToContact": ["Profil 1 — Où : [...] — Pourquoi : [...]", "Profil 2...", "Profil 3...", "Profil 4..."],
+      "proofsToBuild": ["Preuve 1 — Format : [...] — Durée : [...]", "Preuve 2...", "Preuve 3...", "Preuve 4..."],
+      "recommendedTrainingTypes": ["Formation 1 — Plateforme : [...] — Durée : [...] — Objectif : [...]", "Formation 2...", "Formation 3..."],
+      "similarJobs": ["Métier proche 1", "Métier 2", "Métier 3", "Métier 4"],
+      "risksAndLimits": ["Risque [X] — Cause : [...] — Réduction : [...] — Erreur classique : [...]", "Risque [Y]...", "Risque [Z]...", "Risque [W]..."],
+      "firstConcreteStep": "Action ultra-précise — outil exact, plateforme, 30 minutes max, résultat attendu immédiat."
     },
     {
       "pathType": "high_potential",
-      ...même structure...
+      "title": "...",
+      "sector": "...",
+      "revenueEstimate": "...",
+      "happinessScore": 0-100,
+      "riskLevel": "...",
+      "difficultyLevel": "...",
+      "fitScore": 0-100,
+      "securityScore": 0-100,
+      "freedomScore": 0-100,
+      "incomePotentialScore": 0-100,
+      "alignmentScore": 0-100,
+      "personalCompatibilityScore": 0-100,
+      "feasibilityScore": 0-100,
+      "marketOpportunityScore": 0-100,
+      "transitionEffortScore": 0-100,
+      "longDescription": "MINIMUM 1500 caractères — même structure en 5 blocs, adaptée à high_potential. Justifier EXPLICITEMENT pourquoi c'est ambitieux mais réaliste pour CE profil.",
+      "keyInsight": "Insight spécifique à ${firstName} pour cette trajectoire haute ambition",
+      "whyItFits": ["Raison 1 — cite [élément profil] + lien avec métier", "Raison 2", "Raison 3", "Raison 4"],
+      "dailyLife": "Journée type détaillée (MINIMUM 300 caractères)",
+      "alreadyAcquiredStrengths": ["Force [X] — Source : [...] — Comment valoriser : [...]", "Force [Y]...", "Force [Z]...", "Force [W]..."],
+      "missingSkills": ["Compétence [X] — Pourquoi critique : [...] — Acquisition : [...] — Niveau : [...] — Priorité : [...]", "Compétence [Y]...", "Compétence [Z]..."],
+      "likelyObstacles": ["Obstacle 1", "Obstacle 2", "Obstacle 3"],
+      "mistakesToAvoid": ["Erreur 1 avec conséquence concrète", "Erreur 2", "Erreur 3"],
+      "fiveYearTimeline": [
+        {"period": "30 jours", "objective": "...", "actions": ["[Verbe + objet + outil] ([durée]) → livrable : [résultat]", "..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "1 à 3 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "3 à 6 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "6 à 12 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "12 à 24 mois", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "2 à 3 ans", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"},
+        {"period": "3 à 5 ans", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"}
+      ],
+      "detailedActionPlan30Days": [
+        {"week": 1, "title": "Semaine 1 — [Thème] ([durée])", "actions": ["[Verbe + objet + durée] → livrable : [résultat]", "...", "...", "..."]},
+        {"week": 2, "title": "Semaine 2 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]},
+        {"week": 3, "title": "Semaine 3 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]},
+        {"week": 4, "title": "Semaine 4 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]}
+      ],
+      "firstWeekActions": ["Action 1 — outil nommé + durée estimée", "Action 2", "Action 3", "Action 4"],
+      "miniProjectToLaunch": "Mini-projet précis : ce qu'on fait, quel outil, quel livrable, comment ça teste la voie.",
+      "peopleToContact": ["Profil 1 — Où : [...] — Pourquoi : [...]", "Profil 2...", "Profil 3...", "Profil 4..."],
+      "proofsToBuild": ["Preuve 1 — Format : [...] — Durée : [...]", "Preuve 2...", "Preuve 3...", "Preuve 4..."],
+      "recommendedTrainingTypes": ["Formation 1 — Plateforme : [...] — Durée : [...] — Objectif : [...]", "Formation 2...", "Formation 3..."],
+      "similarJobs": ["Métier proche 1", "Métier 2", "Métier 3", "Métier 4"],
+      "risksAndLimits": ["Risque [X] — Cause : [...] — Réduction : [...] — Erreur classique : [...]", "Risque [Y]...", "Risque [Z]...", "Risque [W]..."],
+      "firstConcreteStep": "Action ultra-précise — outil exact, plateforme, 30 minutes max, résultat attendu immédiat."
     }
   ],
   "comparison": {
@@ -802,12 +976,17 @@ JSON ATTENDU (réponds UNIQUEMENT avec ce JSON)
     "mostPassionAlignedPath": "Titre exact de la trajectoire la plus alignée avec les passions",
     "highestPotentialPath": "Titre exact de la trajectoire au plus fort potentiel",
     "recommendedFirstChoice": "Titre exact de la trajectoire recommandée en priorité",
-    "reason": "Explication personnalisée de 3 à 5 lignes expliquant pourquoi cette trajectoire est prioritaire pour ${firstName} en particulier."
+    "reason": "Explication personnalisée de 4 à 6 lignes : POURQUOI cette trajectoire est prioritaire pour ${firstName} — citant sa situation concrète, ses contraintes déclarées, ses forces réelles."
   },
-  "bestFirstStep48h": "Action ultra-concrète et personnalisée que ${firstName} peut faire dans les 48 prochaines heures pour commencer. Inclure des détails précis (outils, plateformes, personnes à contacter)."
+  "bestFirstStep48h": "Action ultra-concrète que ${firstName} peut faire dans les 48 prochaines heures — outil exact, plateforme, action précise en 30 minutes ou moins, résultat attendu immédiat."
 }
 
-RAPPEL : longDescription minimum 1200 caractères par trajectoire. Ton bienveillant, direct, tutoyant ${firstName}.`
+RAPPEL FINAL :
+- Tutoyer ${firstName} dans tous les textes
+- longDescription MINIMUM 1500 caractères avec au moins 5 citations du profil
+- Les 3 pathTypes DOIVENT être dans des secteurs clairement distincts
+- Aucune action vague, aucune phrase générique — chaque élément doit citer CE profil
+- Ton honnête, professionnel, rassurant — aucune promesse d'emploi garantie`
 
   const response = await client.chat.completions.create({
     model: 'gpt-4o',
