@@ -166,51 +166,51 @@ interface ExTimelinePeriodData {
 const EX_TIMELINE: ExTimelinePeriodData[] = [
   {
     period: '0 à 30 jours',
-    objective: 'Clarifier le positionnement et vérifier que le métier correspond vraiment au profil.',
-    actions: 'Analyser 10 offres de chargé de projet digital junior sur LinkedIn et Indeed, noter les compétences qui reviennent souvent, regarder 3 témoignages métier en ligne, identifier les outils les plus cités.',
-    deliverable: 'Une fiche de synthèse avec les missions du métier, les compétences demandées et les écarts à combler.',
-    kpi: 'Être capable d\'expliquer le métier en 5 phrases simples et de dire précisément pourquoi il correspond au profil.',
-    vigilance: 'Ne pas se lancer directement dans une formation sans avoir compris les attentes réelles du marché.',
+    objective: 'Comprendre précisément ce qu\'est le métier de Product Manager et valider l\'adéquation avec son profil.',
+    actions: 'Analyser 15 offres PM sur LinkedIn, Welcome to the Jungle et Otta, lire les fiches métier de Product School et de Reforge, regarder 5 témoignages de PMs en reconversion, identifier 3 entreprises cibles réalistes.',
+    deliverable: 'Une fiche de synthèse des compétences attendues, des outils incontournables et des écarts à combler — avec une décision claire : continuer ou pivoter.',
+    kpi: 'Pouvoir expliquer la différence entre PM, PO et chef de projet en 3 minutes, et nommer 5 outils produit courants avec leur usage.',
+    vigilance: 'Ne pas confondre le rôle de PM en startup early-stage et PM en grande entreprise — les attentes et la culture sont radicalement différentes.',
   },
   {
     period: '1 à 3 mois',
-    objective: 'Acquérir les bases opérationnelles du métier.',
-    actions: 'Apprendre les bases de la gestion de projet (Notion, Trello ou Asana), découvrir les outils collaboratifs, comprendre les notions de brief, planning, cahier des charges, suivi d\'avancement et reporting.',
-    deliverable: 'Un premier mini-projet structuré avec objectif, étapes, planning, livrables et indicateurs — même fictif.',
-    kpi: 'Pouvoir présenter un projet simple de façon claire et structurée, avec vocabulaire correct du métier.',
-    vigilance: 'Éviter d\'accumuler des contenus théoriques sans produire de preuve concrète.',
+    objective: 'Acquérir les fondamentaux du product management et une première certification reconnue.',
+    actions: 'Suivre le cursus CSPO (Certified Scrum Product Owner) ou Product School, apprendre les bases de la discovery produit (interviews utilisateurs, jobs-to-be-done), s\'initier à Jira, Linear et Figma basics.',
+    deliverable: 'Certification CSPO obtenue et 5 interviews utilisateurs documentées selon le framework Jobs-to-be-Done, avec insights actionnables.',
+    kpi: 'Maîtriser le vocabulaire produit (backlog, épic, sprint, KPI d\'activation), être capable de rédiger une user story complète et défendable.',
+    vigilance: 'La certification seule ne suffit pas — il faut l\'accompagner d\'une pratique terrain immédiate pour ne pas rester dans l\'abstraction.',
   },
   {
     period: '3 à 6 mois',
-    objective: 'Construire une crédibilité visible.',
-    actions: 'Créer un portfolio simple, documenter 1 ou 2 cas pratiques, refaire le CV autour des compétences transférables, améliorer le profil LinkedIn avec les bons mots-clés.',
-    deliverable: 'Une page portfolio ou un document PDF présentant les projets réalisés et les compétences démontrées.',
-    kpi: 'Obtenir des retours extérieurs positifs sur le positionnement et être capable de candidater sur des offres junior.',
-    vigilance: 'Ne pas cacher la reconversion — l\'expliquer comme une trajectoire logique et progressive.',
+    objective: 'Construire un portfolio produit crédible pour devenir candidatable.',
+    actions: 'Réaliser une étude de cas produit complète (product teardown d\'une app du secteur cible), produire une roadmap fictive avec priorisation RICE, créer un document de discovery structuré avec insights et recommandations.',
+    deliverable: 'Un case study produit de 10 à 15 slides présentant un problème utilisateur, une solution, une roadmap priorisée et des métriques de succès définies — validé par 2 PMs expérimentés.',
+    kpi: 'Recevoir des retours positifs sur le case study et être capable de défendre ses choix de priorisation sous pression en entretien simulé.',
+    vigilance: 'Un case study sur une app trop connue (Spotify, Airbnb) manque d\'originalité — choisir un secteur ou un problème moins traité pour se démarquer.',
   },
   {
-    period: '6 à 9 mois',
-    objective: 'Entrer dans une phase active d\'opportunités.',
-    actions: 'Cibler des postes junior, stages, alternances, missions courtes ou projets associatifs, contacter des professionnels du secteur, préparer des entretiens avec un pitch de reconversion clair.',
-    deliverable: 'Une liste de 30 opportunités qualifiées et un script d\'approche personnalisé.',
-    kpi: 'Obtenir des premiers échanges, entretiens ou retours sur candidature dans le secteur cible.',
-    vigilance: 'Ne pas viser uniquement les postes les plus compétitifs — chercher aussi les portes d\'entrée réalistes.',
+    period: '6 à 12 mois',
+    objective: 'Décrocher un premier rôle PM, Associate PM ou PO et livrer une première fonctionnalité en production.',
+    actions: 'Postuler à des offres d\'Associate PM ou PM en startup early-stage, préparer les entretiens produit (product sense, estimation, design sprint), activer son réseau LinkedIn et participer aux événements PM (Product At Heart, Lean Product Meetup).',
+    deliverable: 'Première offre signée, avec une fonctionnalité livrée en production et documentée avec son impact mesuré dans le portfolio.',
+    kpi: 'Avoir livré un feature en production avec un impact mesurable (taux d\'activation, NPS, temps sur tâche) et être capable de le présenter avec données.',
+    vigilance: 'Ne pas surestimer la cible : un poste d\'Associate PM dans une équipe structurée avec un mentor vaut mieux qu\'un PM solo sans cadre ni feedback.',
   },
   {
-    period: '9 à 12 mois',
-    objective: 'Sécuriser une première expérience crédible.',
-    actions: 'Accepter une première mission, un poste junior, un stage ou un projet concret permettant de démontrer les compétences en situation réelle.',
-    deliverable: 'Une expérience réelle ou simulée suffisamment solide pour être valorisée dans le CV.',
-    kpi: 'Être capable de raconter une première expérience projet avec résultats, difficultés et apprentissages concrets.',
-    vigilance: 'Ne pas attendre le poste parfait — commencer à construire de l\'expérience dès que possible.',
+    period: '12 à 18 mois',
+    objective: 'Prendre la responsabilité d\'une feature area et développer une posture stratégique.',
+    actions: 'Animer les cérémonies Agile en autonomie (sprint planning, rétro, refinement), conduire les cycles de discovery, commencer à influencer la roadmap produit trimestrielle et présenter les arbitrages à la direction.',
+    deliverable: 'Ownership reconnu d\'une feature area, roadmap trimestrielle présentée à la direction, et au moins 2 fonctionnalités majeures livrées avec impact mesuré sur des KPIs business.',
+    kpi: 'Être cité comme référent produit sur son périmètre par l\'équipe engineering et design, métriques d\'usage en amélioration continue sur 3 mois consécutifs.',
+    vigilance: 'Éviter de rester dans l\'exécution sans développer de vision — la différence entre un bon PO et un vrai PM tient à la capacité à formuler une stratégie.',
   },
   {
-    period: '12 à 24 mois',
-    objective: 'Consolider le positionnement et progresser vers plus d\'autonomie.',
-    actions: 'Approfondir les outils, prendre plus de responsabilités, se spécialiser dans un secteur ou une méthode, améliorer la capacité à piloter des projets plus complexes.',
-    deliverable: 'Un profil professionnel clair, avec expériences, projets, compétences et positionnement cohérent.',
-    kpi: 'Accéder à des postes plus stables ou mieux rémunérés, dans un secteur et un rôle clairement définis.',
-    vigilance: 'Ne pas rester dans un rôle trop junior si les compétences progressent rapidement — demander plus de responsabilités.',
+    period: '18 à 36 mois',
+    objective: 'Accéder à un rôle de PM Senior ou Lead PM avec impact business direct et responsabilité d\'équipe.',
+    actions: 'Piloter une squad produit complète, définir la vision et la stratégie produit à 12 mois, mentorer des profils juniors, contribuer au recrutement et à la culture produit de l\'organisation.',
+    deliverable: 'Une product strategy document validée par la direction, 3 fonctionnalités à fort impact livrées, et un profil reconnu dans la communauté PM avec au moins un article ou talk publié.',
+    kpi: 'Atteindre 65 000 à 82 000 €/an de rémunération, et être sollicité par des recruteurs de façon entrante — signal de réputation établie.',
+    vigilance: 'La montée en séniorité exige de savoir dire non avec méthode — prioriser avec rigueur et défendre ses arbitrages face à la pression commerciale ou technique.',
   },
 ]
 
@@ -529,19 +529,19 @@ export default function Landing() {
               <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
                 <div>
                   <span className="text-xs font-semibold text-brand-400/80 uppercase tracking-widest">
-                    {lang === 'fr' ? 'Trajectoire 1 / 3 — Proche du parcours' : 'Path 1 / 3 — Close to background'}
+                    {lang === 'fr' ? 'Trajectoire 2 / 3 — Fort potentiel' : 'Path 2 / 3 — High potential'}
                   </span>
                   <h3 className="text-xl font-bold mt-1.5 text-slate-100">
-                    {lang === 'fr' ? 'Chargé de projet digital junior' : 'Junior Digital Project Manager'}
+                    {lang === 'fr' ? 'Product Manager — Solutions SaaS B2B' : 'Product Manager — B2B SaaS Solutions'}
                   </h3>
                   <p className="text-slate-500 italic mt-1 text-sm">
                     {lang === 'fr'
-                      ? 'Coordination de projets numériques pour PME et structures intermédiaires'
-                      : 'Coordinating digital projects for SMEs and mid-sized organisations'}
+                      ? 'Pilotage produit numérique pour startups en croissance et entreprises en transformation'
+                      : 'Digital product management for growing startups and companies in transformation'}
                   </p>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <div className="text-3xl font-black text-brand-400">82%</div>
+                  <div className="text-3xl font-black text-brand-400">79%</div>
                   <div className="text-xs text-slate-600 mt-0.5">{lang === 'fr' ? 'Faisabilité' : 'Feasibility'}</div>
                 </div>
               </div>
@@ -549,11 +549,11 @@ export default function Landing() {
               {/* Stats grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
                 {[
-                  { label: lang === 'fr' ? 'Durée estimée' : 'Est. duration', value: lang === 'fr' ? '6 à 9 mois' : '6 to 9 months' },
-                  { label: lang === 'fr' ? 'Salaire cible' : 'Target salary', value: '30 000 – 38 000 €/an' },
+                  { label: lang === 'fr' ? 'Durée estimée' : 'Est. duration', value: lang === 'fr' ? '12 à 18 mois' : '12 to 18 months' },
+                  { label: lang === 'fr' ? 'Salaire cible' : 'Target salary', value: '55 000 – 80 000 €/an' },
                   { label: lang === 'fr' ? 'Niveau de risque' : 'Risk level', value: lang === 'fr' ? 'Modéré' : 'Moderate' },
-                  { label: lang === 'fr' ? 'Formation nécessaire' : 'Training needed', value: lang === 'fr' ? 'Courte / certifiante' : 'Short / certified' },
-                  { label: lang === 'fr' ? 'Télétravail' : 'Remote work', value: lang === 'fr' ? 'Élevé' : 'High' },
+                  { label: lang === 'fr' ? 'Formation nécessaire' : 'Training needed', value: lang === 'fr' ? 'Certifiante (CSPO)' : 'Certified (CSPO)' },
+                  { label: lang === 'fr' ? 'Télétravail' : 'Remote work', value: lang === 'fr' ? 'Très élevé' : 'Very high' },
                 ].map(item => (
                   <div key={item.label} className="bg-dark-900/60 border border-white/[0.05] rounded-xl p-3">
                     <div className="text-xs text-slate-600 mb-1">{item.label}</div>
@@ -571,33 +571,33 @@ export default function Landing() {
                 <div className="space-y-3 text-sm text-slate-300 leading-relaxed">
                   <p>
                     {lang === 'fr'
-                      ? 'Cette trajectoire s\'adresse à une personne qui souhaite évoluer vers un métier plus dynamique, plus transversal et plus proche des projets digitaux, sans forcément repartir dans plusieurs années d\'études. Le rôle de chargé de projet digital consiste à coordonner des actions, comprendre les besoins d\'une équipe ou d\'un client, suivre l\'avancement d\'un projet et faire le lien entre différents interlocuteurs.'
-                      : 'This path is for someone who wants to move towards a more dynamic, cross-functional role closer to digital projects, without necessarily returning to years of study. A digital project manager coordinates actions, understands team or client needs, tracks project progress and bridges different stakeholders.'}
+                      ? 'Le Product Manager est l\'un des métiers les plus recherchés et les mieux rémunérés du secteur tech. Il est responsable de la vision, de la stratégie et de l\'exécution d\'un produit numérique — de la compréhension des besoins utilisateurs jusqu\'à la livraison des fonctionnalités en production. Ce n\'est pas un métier technique : il ne code pas et ne design pas. Il comprend, priorise, aligne et décide.'
+                      : 'The Product Manager is one of the most sought-after and well-paid roles in the tech sector. They are responsible for the vision, strategy and execution of a digital product — from understanding user needs to delivering features in production. This is not a technical role: they don\'t code or design. They understand, prioritise, align and decide.'}
                   </p>
                   <p>
                     {lang === 'fr'
-                      ? 'C\'est une fonction particulièrement intéressante pour les profils organisés, curieux, capables de communiquer clairement et prêts à monter progressivement en compétence sur les outils numériques. Elle ne demande pas nécessairement de devenir développeur, designer ou expert technique.'
-                      : 'This is a particularly interesting role for organised, curious profiles able to communicate clearly and willing to progressively build digital tool skills. It doesn\'t require becoming a developer, designer or technical expert.'}
+                      ? 'Au quotidien, le PM fait le lien entre trois univers : les utilisateurs (dont il comprend les besoins réels grâce à des interviews structurées), l\'équipe engineering (avec qui il définit ce qui doit être construit et dans quel ordre), et le business (en s\'assurant que chaque décision produit contribue à des métriques clés : rétention, activation, revenu). C\'est un rôle transversal, stratégique et à forte responsabilité.'
+                      : 'Day-to-day, the PM bridges three worlds: users (whose real needs they understand through structured interviews), the engineering team (with whom they define what to build and in what order), and the business (ensuring every product decision contributes to key metrics: retention, activation, revenue). It\'s a cross-functional, strategic, high-responsibility role.'}
                   </p>
                   <p>
                     {lang === 'fr'
-                      ? 'Elle repose plutôt sur une capacité à comprendre les enjeux d\'un projet, à structurer les étapes, à suivre les priorités et à coordonner les bonnes personnes. Pour une personne qui possède déjà une expérience professionnelle, même dans un autre domaine, certaines compétences peuvent être directement valorisées : rigueur, gestion des délais, relation client, organisation, adaptation, communication écrite et orale.'
-                      : 'It relies on understanding project stakes, structuring steps, tracking priorities and coordinating the right people. For someone with professional experience, even in another field, certain skills transfer directly: rigour, deadline management, client relations, organisation, adaptability, written and oral communication.'}
+                      ? 'Ce qui rend cette trajectoire accessible à des profils en reconversion, c\'est que le PM n\'a pas besoin d\'être développeur. Il a besoin d\'être analytique, curieux, capable d\'écouter sans biais, et à l\'aise avec l\'ambiguïté. Des personnes venant du conseil, du commerce, du marketing ou même de secteurs non-tech réussissent fréquemment cette transition — parce qu\'elles apportent une compréhension terrain et une capacité de communication que les profils purement techniques n\'ont pas toujours.'
+                      : 'What makes this path accessible to career changers is that the PM doesn\'t need to be a developer. They need to be analytical, curious, able to listen without bias, and comfortable with ambiguity. People from consulting, sales, marketing or even non-tech sectors frequently succeed in this transition — because they bring a ground-level understanding and communication skills that purely technical profiles don\'t always have.'}
                   </p>
                   <p>
                     {lang === 'fr'
-                      ? 'La transition reste réaliste parce qu\'elle peut se construire par étapes. L\'objectif n\'est pas de tout maîtriser immédiatement, mais de comprendre progressivement les bases du web, les outils collaboratifs, la gestion de projet agile, le no-code, le suivi de budget et les méthodes de coordination. Une personne motivée peut commencer par analyser des offres d\'emploi, identifier les compétences récurrentes, suivre une formation courte ciblée, puis créer un mini-projet pour prouver sa compréhension du métier.'
-                      : 'The transition is realistic because it can be built step by step. The goal isn\'t to master everything immediately, but to progressively understand web basics, collaborative tools, agile project management, no-code, budget tracking and coordination methods.'}
+                      ? 'La transition vers le product management se structure en deux temps : d\'abord la crédibilisation par la certification et le portfolio (3 à 6 mois), puis l\'entrée sur le marché via des postes d\'Associate PM ou PO en startup (6 à 12 mois). Le premier rôle est décisif — c\'est lui qui détermine la vitesse de montée en séniorité. Un Associate PM dans une structure bien organisée, avec un lead PM pour le mentorer, progressera beaucoup plus vite qu\'un PM solo dans une startup sans process.'
+                      : 'The transition to product management is structured in two phases: first building credibility through certification and portfolio (3 to 6 months), then entering the market via Associate PM or PO roles in startups (6 to 12 months). The first role is decisive — it determines the speed of advancement. An Associate PM in a well-organised structure, with a lead PM to mentor them, will progress much faster than a solo PM in a startup without processes.'}
                   </p>
                   <p>
                     {lang === 'fr'
-                      ? 'Le principal risque est de rester trop théorique. Suivre une formation ne suffit pas si aucun livrable concret ne permet de prouver la compétence. Pour devenir crédible, il faut construire des preuves : un mini-portfolio, une étude de cas, une maquette de projet, un planning fictif, une documentation projet ou une démonstration d\'outil.'
-                      : 'The main risk is staying too theoretical. Completing training isn\'t enough if no concrete deliverable proves competence. To become credible, you must build proof: a mini-portfolio, case study, project mockup, fictitious schedule, project documentation or tool demonstration.'}
+                      ? 'La rémunération évolue vite dans ce métier. Un Associate PM démarre souvent entre 42 000 et 52 000 €/an. À 18 mois d\'expérience, un PM confirmé atteint 55 000 à 70 000 €. Un PM Senior dans une scale-up ou une grande tech company dépasse régulièrement les 80 000 à 100 000 €. C\'est l\'une des rares trajectoires où la progression salariale est directement liée à la progression de compétences — et non à l\'ancienneté.'
+                      : 'Compensation evolves quickly in this role. An Associate PM often starts at €42,000–52,000/year. After 18 months of experience, a confirmed PM reaches €55,000–70,000. A Senior PM at a scale-up or major tech company regularly exceeds €80,000–100,000. It\'s one of the rare career paths where salary progression is directly tied to skill progression — not seniority.'}
                   </p>
                   <p>
                     {lang === 'fr'
-                      ? 'Cette trajectoire est donc adaptée aux personnes qui veulent une transition progressive, concrète et orientée action. Elle est particulièrement cohérente pour des profils venant du service, de l\'administration, du commerce ou de secteurs non techniques, ayant besoin d\'une reconversion accessible et valorisante.'
-                      : 'This path suits people who want a progressive, concrete, action-oriented transition. It\'s particularly coherent for profiles from service, administration, commerce or non-technical sectors needing an accessible and rewarding career change.'}
+                      ? 'Cette trajectoire est particulièrement adaptée aux personnes qui aiment comprendre les problèmes en profondeur, qui sont à l\'aise avec les données, qui savent naviguer entre des interlocuteurs techniques et non-techniques, et qui veulent un impact visible et mesurable sur un produit concret. Elle exige en revanche une vraie tolérance à l\'ambiguïté et à la prise de décision sous incertitude.'
+                      : 'This path is particularly suited to people who enjoy understanding problems in depth, are comfortable with data, can navigate between technical and non-technical stakeholders, and want a visible, measurable impact on a concrete product. It does require a genuine tolerance for ambiguity and decision-making under uncertainty.'}
                   </p>
                 </div>
               </ExSection>
@@ -607,15 +607,15 @@ export default function Landing() {
                 <div className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-3">
                     {(lang === 'fr' ? [
-                      { label: 'Transition douce', desc: 'Cette voie ne demande pas de rupture totale. Elle s\'appuie sur des compétences déjà présentes tout en apportant une direction nouvelle.' },
-                      { label: 'Accessible progressivement', desc: 'Les premiers jalons peuvent être franchis en quelques semaines, sans attendre une formation complète ou un diplôme.' },
-                      { label: 'Marché actif', desc: 'Les entreprises cherchent des profils capables de piloter des projets numériques sans être développeurs. Le marché est peu saturé sur ce segment.' },
-                      { label: 'Compétences valorisables', desc: 'Organisation, communication, gestion des délais et rigueur sont directement transférables — pas besoin de tout repartir de zéro.' },
+                      { label: 'Profil transversal valorisé', desc: 'Le PM n\'est pas un expert technique. Il comprend les enjeux business, utilisateurs et techniques — accessible à des profils issus de trajectoires très variées.' },
+                      { label: 'Marché en tension structurelle', desc: 'Les entreprises tech, startups et directions innovation cherchent des PMs à tous niveaux. La demande dépasse largement l\'offre de profils formés.' },
+                      { label: 'Rémunération attractive dès le premier rôle', desc: 'Même en Associate PM, la rémunération dépasse rapidement les 45 000 €/an, avec un potentiel de 75 000 à 95 000 € à 4–5 ans d\'expérience.' },
+                      { label: 'Reconversion valorisée dans le secteur', desc: 'Les PMs issus d\'autres secteurs apportent une perspective terrain rare. Les startups le reconnaissent et le recherchent activement.' },
                     ] : [
-                      { label: 'Gentle transition', desc: 'This path doesn\'t require a total break. It builds on existing skills while providing a new and more stimulating direction.' },
-                      { label: 'Progressively accessible', desc: 'First milestones can be reached within weeks, without waiting for a complete training programme or degree.' },
-                      { label: 'Active market', desc: 'Companies are looking for profiles able to manage digital projects without being developers. The market is active on this segment.' },
-                      { label: 'Transferable skills', desc: 'Organisation, communication, deadline management and rigour transfer directly — no need to start from scratch.' },
+                      { label: 'Transversal profile valued', desc: 'The PM is not a technical expert. They understand business, user and technical stakes — accessible to profiles from very varied backgrounds.' },
+                      { label: 'Structurally tense market', desc: 'Tech companies, startups and innovation departments seek PMs at all levels. Demand far exceeds the supply of trained profiles.' },
+                      { label: 'Attractive compensation from the first role', desc: 'Even as an Associate PM, compensation quickly exceeds €45,000/year, with a potential of €75,000–95,000 at 4–5 years of experience.' },
+                      { label: 'Career change valued in the sector', desc: 'PMs from other sectors bring rare ground-level perspective. Startups recognise and actively seek this.' },
                     ]).map((item) => (
                       <div key={item.label} className="flex items-start gap-2.5">
                         <CheckCircle2 size={14} strokeWidth={1.5} className="text-green-400 flex-shrink-0 mt-0.5" />
@@ -631,16 +631,16 @@ export default function Landing() {
                       <p className="text-xs font-semibold text-green-400 mb-1">{lang === 'fr' ? 'Recommandé si…' : 'Recommended if…'}</p>
                       <p className="text-xs text-slate-400 leading-relaxed">
                         {lang === 'fr'
-                          ? 'Tu veux changer de secteur sans repartir de zéro, et tu es à l\'aise avec les outils digitaux au quotidien.'
-                          : 'You want to change sector without starting over, and you\'re comfortable with digital tools in daily life.'}
+                          ? 'Tu as un esprit analytique, tu aimes comprendre les besoins des utilisateurs et tu te projettes dans un environnement startup ou tech dynamique.'
+                          : 'You have an analytical mind, enjoy understanding user needs and see yourself in a dynamic startup or tech environment.'}
                       </p>
                     </div>
                     <div className="bg-red-900/10 border border-red-800/20 rounded-lg p-3">
                       <p className="text-xs font-semibold text-red-400 mb-1">{lang === 'fr' ? 'Déconseillé si…' : 'Not recommended if…'}</p>
                       <p className="text-xs text-slate-400 leading-relaxed">
                         {lang === 'fr'
-                          ? 'Tu cherches un métier très technique ou artistique. Cette voie est avant tout relationnelle et organisationnelle.'
-                          : 'You\'re seeking a highly technical or artistic role. This path is primarily relational and organisational.'}
+                          ? 'Tu préfères un rôle opérationnel avec des tâches répétitives et mesurables à court terme. Le PM vit dans l\'ambiguïté permanente.'
+                          : 'You prefer an operational role with repetitive, short-term measurable tasks. The PM lives in permanent ambiguity.'}
                       </p>
                     </div>
                   </div>
@@ -657,17 +657,17 @@ export default function Landing() {
                     </p>
                     <div className="space-y-2.5">
                       {(lang === 'fr' ? [
-                        { name: 'Organisation', desc: 'Utile pour suivre les étapes d\'un projet, tenir un planning et structurer les priorités.' },
-                        { name: 'Communication', desc: 'Essentielle pour faire le lien entre équipes, clients, prestataires et décideurs.' },
-                        { name: 'Rigueur', desc: 'Importante pour suivre les livrables, contrôler l\'avancement et éviter les oublis.' },
-                        { name: 'Capacité d\'analyse', desc: 'Utile pour comprendre un besoin, reformuler une demande et proposer une solution adaptée.' },
-                        { name: 'Adaptabilité', desc: 'Nécessaire pour évoluer dans des environnements digitaux qui changent vite.' },
+                        { name: 'Sens de l\'écoute active', desc: 'Indispensable pour conduire des interviews utilisateurs et comprendre les vrais problèmes — pas les fonctionnalités déclarées.' },
+                        { name: 'Communication structurée', desc: 'Permet d\'aligner équipe technique, designers, sales et direction sur une vision produit commune sans friction.' },
+                        { name: 'Rigueur analytique', desc: 'Utile pour lire des données, identifier des patterns comportementaux et justifier chaque arbitrage de priorisation.' },
+                        { name: 'Sens du business', desc: 'Permet de comprendre l\'impact de chaque décision produit sur les métriques clés : revenu, rétention, acquisition.' },
+                        { name: 'Gestion des parties prenantes', desc: 'Capacité à naviguer entre des demandes contradictoires et à défendre des arbitrages fondés sur les données.' },
                       ] : [
-                        { name: 'Organisation', desc: 'Useful for tracking project steps, maintaining schedules and structuring priorities.' },
-                        { name: 'Communication', desc: 'Essential for bridging teams, clients, contractors and decision-makers.' },
-                        { name: 'Rigour', desc: 'Important for tracking deliverables, monitoring progress and avoiding oversights.' },
-                        { name: 'Analytical thinking', desc: 'Useful for understanding needs, reformulating requests and proposing adapted solutions.' },
-                        { name: 'Adaptability', desc: 'Needed to evolve in fast-changing digital environments.' },
+                        { name: 'Active listening', desc: 'Essential for conducting user interviews and understanding real problems — not just stated feature requests.' },
+                        { name: 'Structured communication', desc: 'Allows aligning engineering, design, sales and leadership on a shared product vision without friction.' },
+                        { name: 'Analytical rigour', desc: 'Useful for reading data, identifying behavioural patterns and justifying every prioritisation decision.' },
+                        { name: 'Business sense', desc: 'Understanding the impact of each product decision on key metrics: revenue, retention, acquisition.' },
+                        { name: 'Stakeholder management', desc: 'Navigating contradictory demands and defending data-driven trade-offs.' },
                       ]).map(skill => (
                         <div key={skill.name} className="flex items-start gap-2.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 flex-shrink-0" />
@@ -686,17 +686,17 @@ export default function Landing() {
                     </p>
                     <div className="space-y-2.5">
                       {(lang === 'fr' ? [
-                        { name: 'Gestion de projet agile', desc: 'Comprendre les notions de sprint, backlog, priorisation et suivi d\'avancement.' },
-                        { name: 'Culture digitale', desc: 'Connaître les bases du web, du SEO, des outils collaboratifs et du no-code.' },
-                        { name: 'Outils de pilotage', desc: 'Apprendre à utiliser Notion, Trello, Airtable, Asana ou équivalents.' },
-                        { name: 'Suivi de budget', desc: 'Comprendre comment estimer, suivre et ajuster les ressources d\'un projet.' },
-                        { name: 'Portfolio projet', desc: 'Construire une preuve concrète de compétence pour rassurer un recruteur.' },
+                        { name: 'Discovery produit', desc: 'Maîtriser les interviews utilisateurs, le framework Jobs-to-be-Done et les tests d\'hypothèses pour construire des features utiles.' },
+                        { name: 'Priorisation et roadmap', desc: 'Apprendre les méthodes RICE, ICE, MoSCoW et construire une roadmap défendable face à la direction et aux équipes.' },
+                        { name: 'Outils produit', desc: 'Jira ou Linear (backlog), Figma (bases de lecture de maquettes), Amplitude ou Mixpanel (analytics comportemental).' },
+                        { name: 'Métriques SaaS', desc: 'Comprendre et piloter le NPS, le churn, le taux d\'activation, la LTV et le funnel d\'acquisition utilisateur.' },
+                        { name: 'Agile / Scrum', desc: 'Maîtriser les cérémonies (sprint planning, daily, rétro, review) et le rôle du Product Owner dans l\'équipe engineering.' },
                       ] : [
-                        { name: 'Agile project management', desc: 'Understanding sprints, backlogs, prioritisation and progress tracking.' },
-                        { name: 'Digital culture', desc: 'Knowing web basics, SEO, collaborative tools and no-code.' },
-                        { name: 'Tracking tools', desc: 'Learning to use Notion, Trello, Airtable, Asana or equivalents.' },
-                        { name: 'Budget tracking', desc: 'Understanding how to estimate, track and adjust project resources.' },
-                        { name: 'Project portfolio', desc: 'Building concrete proof of competence to reassure a recruiter.' },
+                        { name: 'Product discovery', desc: 'Mastering user interviews, Jobs-to-be-Done framework and hypothesis testing to build genuinely useful features.' },
+                        { name: 'Prioritisation and roadmap', desc: 'Learning RICE, ICE, MoSCoW methods and building a defensible roadmap for leadership and teams.' },
+                        { name: 'Product tools', desc: 'Jira or Linear (backlog), Figma (basic wireframe reading), Amplitude or Mixpanel (behavioural analytics).' },
+                        { name: 'SaaS metrics', desc: 'Understanding and tracking NPS, churn, activation rate, LTV and the user acquisition funnel.' },
+                        { name: 'Agile / Scrum', desc: 'Mastering ceremonies (sprint planning, daily, retro, review) and the Product Owner role within the engineering team.' },
                       ]).map(skill => (
                         <div key={skill.name} className="flex items-start gap-2.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 flex-shrink-0" />
@@ -724,15 +724,15 @@ export default function Landing() {
               <ExSection title={lang === 'fr' ? 'Plan d\'action 30 jours' : '30-day action plan'} icon={ListChecks}>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {(lang === 'fr' ? [
-                    { week: 1, title: 'Clarification', actions: 'Analyser 10 offres junior, noter les compétences récurrentes, regarder 3 témoignages métier en ligne.', deliverable: 'Fiche de synthèse des compétences attendues sur le marché.' },
-                    { week: 2, title: 'Formation ciblée', actions: 'Choisir une formation courte (Notion, gestion de projet, outils agiles), démarrer les bases avec un plan de 4 semaines.', deliverable: 'Plan de formation documenté et première ressource complétée.' },
-                    { week: 3, title: 'Preuve concrète', actions: 'Créer un mini-projet documenté : planifier un projet fictif avec objectifs, étapes, livrables et planning.', deliverable: 'Document projet de 2 à 3 pages présentable à un recruteur.' },
-                    { week: 4, title: 'Repositionnement', actions: 'Refaire le CV autour des compétences transférables, optimiser le profil LinkedIn avec les bons mots-clés.', deliverable: 'CV et profil LinkedIn repositionnés sur le métier cible.' },
+                    { week: 1, title: 'Benchmark marché', actions: 'Analyser 15 offres PM sur LinkedIn et Otta, noter les outils et compétences récurrents, lire les fiches métier de Reforge et de Product School.', deliverable: 'Tableau comparatif des 10 compétences les plus demandées sur le marché PM en France.' },
+                    { week: 2, title: 'Immersion produit', actions: 'Lire "Inspired" de Marty Cagan (ou résumé), regarder 5 talks de PMs sur YouTube, rejoindre 2 communautés PM (Slack PM France, Product Hunt).', deliverable: 'Note de 1 page sur ce qui t\'a le plus interpellé et les doutes à lever sur le métier.' },
+                    { week: 3, title: 'Première preuve', actions: 'Réaliser un product teardown de 30 minutes sur une app que tu utilises : identifier 3 problèmes utilisateurs et proposer 2 solutions documentées.', deliverable: 'Document de 1 à 2 pages publié sur LinkedIn avec le hashtag #productmanagement.' },
+                    { week: 4, title: 'Plan de formation', actions: 'Choisir une certification (CSPO ou Product School), définir un plan d\'apprentissage sur 3 mois, contacter 3 PMs pour des échanges de 20 minutes.', deliverable: 'Calendrier de formation documenté et 2 échanges réseau confirmés.' },
                   ] : [
-                    { week: 1, title: 'Clarification', actions: 'Analyse 10 junior job listings, note recurring skills, watch 3 career testimonials.', deliverable: 'Summary sheet of market-expected competencies.' },
-                    { week: 2, title: 'Targeted training', actions: 'Choose a short course (Notion, project management, agile tools), start with a 4-week plan.', deliverable: 'Documented training plan and first resource completed.' },
-                    { week: 3, title: 'Concrete proof', actions: 'Create a documented mini-project: plan a fictitious project with goals, steps, deliverables and timeline.', deliverable: '2-3 page project document presentable to a recruiter.' },
-                    { week: 4, title: 'Repositioning', actions: 'Rebuild CV around transferable skills, optimise LinkedIn profile with relevant keywords.', deliverable: 'CV and LinkedIn profile repositioned on the target role.' },
+                    { week: 1, title: 'Market benchmark', actions: 'Analyse 15 PM listings on LinkedIn and Otta, note recurring tools and skills, read role guides from Reforge and Product School.', deliverable: 'Comparative table of the 10 most requested skills in the French PM market.' },
+                    { week: 2, title: 'Product immersion', actions: 'Read "Inspired" by Marty Cagan (or summary), watch 5 PM talks on YouTube, join 2 PM communities (Slack PM France, Product Hunt).', deliverable: '1-page note on the most striking insights and open questions about the role.' },
+                    { week: 3, title: 'First proof', actions: 'Do a 30-minute product teardown of an app you use: identify 3 user problems and propose 2 documented solutions.', deliverable: '1-2 page document published on LinkedIn with #productmanagement hashtag.' },
+                    { week: 4, title: 'Training plan', actions: 'Choose a certification (CSPO or Product School), define a 3-month learning plan, contact 3 PMs for 20-minute conversations.', deliverable: 'Documented training calendar and 2 confirmed network conversations.' },
                   ]).map(w => (
                     <div key={w.week} className="bg-dark-800/50 border border-dark-700 rounded-xl p-4">
                       <p className="text-xs font-bold text-brand-400 mb-1">{lang === 'fr' ? `Semaine ${w.week}` : `Week ${w.week}`} — {w.title}</p>
@@ -750,15 +750,15 @@ export default function Landing() {
               <ExSection title={lang === 'fr' ? 'Risques et points de vigilance' : 'Risks and watchpoints'} icon={AlertTriangle}>
                 <div className="space-y-3">
                   {(lang === 'fr' ? [
-                    { title: 'Rester trop théorique', desc: 'Suivre des formations sans projet concret peut rendre la reconversion peu crédible auprès des recruteurs.', solution: 'Produire rapidement un cas pratique ou un mini-projet documenté.' },
-                    { title: 'Viser des postes trop seniors', desc: 'Certains intitulés de chef de projet demandent déjà plusieurs années d\'expérience dans le domaine.', solution: 'Cibler d\'abord des postes junior, assistant chef de projet ou coordinateur digital débutant.' },
-                    { title: 'Sous-estimer la culture digitale', desc: 'Même sans coder, il faut comprendre les outils, les méthodes et le vocabulaire du secteur.', solution: 'Apprendre les bases du web, du no-code, du SEO et des outils collaboratifs courants.' },
-                    { title: 'Mal expliquer la reconversion', desc: 'Un recruteur doit comprendre la cohérence du parcours pour ne pas percevoir le CV comme incohérent.', solution: 'Préparer un pitch clair reliant l\'expérience passée au métier cible de façon logique.' },
+                    { title: 'Marché compétitif sans portfolio', desc: 'Les offres PM sont très courtisées. Sans case study produit solide, il est difficile de sortir du lot face à des candidats avec de l\'expérience.', solution: 'Construire un case study original sur un secteur sous-représenté, et le faire valider par 2 PMs expérimentés avant de postuler.' },
+                    { title: 'Manque de légitimité initiale', desc: 'Les grandes entreprises restent souvent fermées aux profils sans expérience produit directe — même avec une certification.', solution: 'Cibler en priorité des startups early-stage (Seed à Série A) ou des scale-ups qui valorisent la diversité des parcours.' },
+                    { title: 'Rôle très dépendant du contexte', desc: 'Le PM en startup de 15 personnes n\'a rien à voir avec le PM dans un grand groupe. Le premier rôle détermine toute la suite de la trajectoire.', solution: 'Bien cibler dès le départ le type d\'entreprise (startup, scale-up, ETI, corporate) dans lequel on veut évoluer.' },
+                    { title: 'Glissement vers l\'exécution pure', desc: 'Sans vision claire et sans développer la posture stratégique, le PM risque de devenir un PO exécutant sans réelle influence sur la direction produit.', solution: 'Se former dès le début aux frameworks de discovery et de stratégie produit (Reforge, Shape Up, Continuous Discovery Habits).' },
                   ] : [
-                    { title: 'Staying too theoretical', desc: 'Completing courses without concrete projects can make the career change seem unconvincing to recruiters.', solution: 'Quickly produce a practical case study or documented mini-project.' },
-                    { title: 'Targeting too senior roles', desc: 'Some project manager titles already require years of experience in the field.', solution: 'First target junior, assistant project manager or beginner digital coordinator roles.' },
-                    { title: 'Underestimating digital culture', desc: 'Even without coding, you must understand tools, methods and sector vocabulary.', solution: 'Learn web basics, no-code, SEO and common collaborative tools.' },
-                    { title: 'Poor explanation of career change', desc: 'A recruiter must understand the logic of your background to not perceive the CV as incoherent.', solution: 'Prepare a clear pitch connecting past experience to the target role logically.' },
+                    { title: 'Competitive market without a portfolio', desc: 'PM roles are highly contested. Without a solid product case study, it\'s hard to stand out against candidates with direct experience.', solution: 'Build an original case study on an under-represented sector, validated by 2 experienced PMs before applying.' },
+                    { title: 'Initial legitimacy gap', desc: 'Large companies often remain closed to profiles without direct product experience — even with certifications.', solution: 'Prioritise early-stage startups (Seed to Series A) or scale-ups that value diverse backgrounds.' },
+                    { title: 'Role highly context-dependent', desc: 'A PM at a 15-person startup has nothing in common with a PM at a large corporation. The first role determines your entire trajectory.', solution: 'Define from the start which type of company (startup, scale-up, SME, corporate) you want to grow in.' },
+                    { title: 'Sliding into pure execution', desc: 'Without a clear vision and strategic posture, the PM risks becoming a PO executing without real influence on product direction.', solution: 'Learn discovery and product strategy frameworks from the start (Reforge, Shape Up, Continuous Discovery Habits).' },
                   ]).map((risk, i) => (
                     <div key={i} className="bg-dark-800/40 border border-dark-700 rounded-xl p-4">
                       <div className="flex items-start gap-2.5 mb-2">
@@ -779,19 +779,19 @@ export default function Landing() {
               <ExSection title={lang === 'fr' ? 'Preuves à construire pour devenir crédible' : 'Proofs to build credibility'} icon={FileText}>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {(lang === 'fr' ? [
-                    { title: 'Mini-projet documenté', desc: 'Planifier un projet fictif avec objectifs, étapes, planning et livrables — preuve directe de la compétence organisationnelle.' },
-                    { title: 'Portfolio simple', desc: 'Regrouper les cas pratiques et compétences démontrées dans un document clair ou une page Notion présentable.' },
-                    { title: 'Analyse de 10 offres d\'emploi', desc: 'Synthétiser les compétences récurrentes du marché — montre une compréhension réelle du métier et de ses attentes.' },
-                    { title: 'Refonte du CV', desc: 'Restructurer le CV autour des compétences transférables et des missions liées à la coordination ou la gestion de projet.' },
-                    { title: 'Profil LinkedIn repositionné', desc: 'Reformuler le titre et le résumé pour être visible des recruteurs cherchant des profils en transition vers ce métier.' },
-                    { title: 'Entretien réseau', desc: 'Contacter 3 professionnels du secteur pour obtenir des informations terrain — développe crédibilité et ancrage réel.' },
+                    { title: 'Case study produit (10–15 slides)', desc: 'Analyse d\'un problème utilisateur réel, proposition de solution, roadmap priorisée et métriques de succès définies. Preuve centrale de la capacité à raisonner en product management.' },
+                    { title: '5 user interviews documentées', desc: 'Interviews structurées selon le framework Jobs-to-be-Done, avec synthèse et insights actionnables. Prouve la capacité à conduire la discovery sans biais.' },
+                    { title: 'Roadmap fictive avec priorisation RICE', desc: 'Backlog de features priorisées avec justification claire de chaque arbitrage. Démontre la rigueur méthodologique et la capacité à décider sous contraintes.' },
+                    { title: 'Certification CSPO ou Product School', desc: 'Certification reconnue qui légitime le changement de posture vers le product management — attendue par la majorité des recruteurs.' },
+                    { title: 'Profil LinkedIn repositionné PM', desc: 'Titre, résumé et expériences reformulés avec les mots-clés produit (discovery, backlog, roadmap, Agile) pour apparaître dans les recherches recruteur.' },
+                    { title: '2–3 articles LinkedIn PM', desc: 'Publications courtes sur le product management (retour sur un teardown, analyse d\'un feature, insight discovery) — développe la visibilité et la crédibilité communautaire.' },
                   ] : [
-                    { title: 'Documented mini-project', desc: 'Plan a fictitious project with goals, steps, schedule and deliverables — direct proof of organisational competence.' },
-                    { title: 'Simple portfolio', desc: 'Gather case studies and demonstrated skills in a clear document or presentable Notion page.' },
-                    { title: 'Analysis of 10 job listings', desc: 'Synthesise recurring market skills — shows real understanding of the role and its expectations.' },
-                    { title: 'CV overhaul', desc: 'Restructure the CV around transferable skills and missions related to coordination or project management.' },
-                    { title: 'Repositioned LinkedIn', desc: 'Rewrite the title and summary to be visible to recruiters seeking transition profiles for this role.' },
-                    { title: 'Network interview', desc: 'Contact 3 professionals in the sector for ground-level insights — builds credibility and real anchoring.' },
+                    { title: 'Product case study (10–15 slides)', desc: 'Analysis of a real user problem, solution proposal, prioritised roadmap and defined success metrics. The central proof of product management thinking ability.' },
+                    { title: '5 documented user interviews', desc: 'Structured interviews using the Jobs-to-be-Done framework, with synthesis and actionable insights. Proves the ability to conduct unbiased discovery.' },
+                    { title: 'Fictitious roadmap with RICE prioritisation', desc: 'Feature backlog with clear justification for each trade-off. Demonstrates methodological rigour and ability to decide under constraints.' },
+                    { title: 'CSPO or Product School certification', desc: 'Recognised certification that legitimises the shift to product management — expected by the majority of recruiters.' },
+                    { title: 'Repositioned PM LinkedIn profile', desc: 'Title, summary and experiences reformulated with product keywords (discovery, backlog, roadmap, Agile) to appear in recruiter searches.' },
+                    { title: '2–3 PM LinkedIn articles', desc: 'Short posts on product management (teardown review, feature analysis, discovery insight) — builds community visibility and credibility.' },
                   ]).map(proof => (
                     <div key={proof.title} className="flex items-start gap-2.5">
                       <CheckCircle2 size={14} strokeWidth={1.5} className="text-brand-400 flex-shrink-0 mt-0.5" />
@@ -814,8 +814,8 @@ export default function Landing() {
                 </div>
                 <p className="text-sm text-slate-200 leading-relaxed">
                   {lang === 'fr'
-                    ? 'Cette semaine, commence par analyser 10 offres de chargé de projet digital junior sur LinkedIn ou Indeed. Note les compétences qui reviennent le plus souvent, les outils cités, les niveaux d\'expérience demandés et les missions principales. À la fin de cette analyse, tu dois être capable d\'identifier les 5 compétences prioritaires à travailler.'
-                    : 'This week, start by analysing 10 junior digital project manager listings on LinkedIn or Indeed. Note the most frequent skills, tools cited, experience levels required and main missions. At the end of this analysis, you should be able to identify the 5 priority skills to work on.'}
+                    ? 'Cette semaine, télécharge une application que tu utilises (ou qui t\'intéresse) et réalise un product teardown en 30 minutes : identifie 3 problèmes utilisateurs concrets, propose 2 solutions possibles et justifie tes choix en 5 bullet points. Publie ce travail sur LinkedIn avec le hashtag #productmanagement. C\'est ton premier signal de crédibilité — et la base de ton futur case study.'
+                    : 'This week, download an app you use (or that interests you) and do a 30-minute product teardown: identify 3 concrete user problems, propose 2 possible solutions and justify your choices in 5 bullet points. Post this work on LinkedIn with #productmanagement. It\'s your first credibility signal — and the foundation of your future case study.'}
                 </p>
               </div>
 
