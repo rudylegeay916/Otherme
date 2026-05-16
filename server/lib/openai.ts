@@ -56,7 +56,19 @@ INTERDITS ABSOLUS DE CONTENU — refus si présent :
 - "se former en ligne" → écrire : "[cours/certification + plateforme + durée estimée]"
 - "explorer les opportunités" → écrire : "[action précise dans [secteur cible]"
 - Toute phrase applicable à n'importe quel profil sans modification → interdit
-- Toute action sans outil nommé, durée estimée ou livrable attendu → interdit`
+- Toute action sans outil nommé, durée estimée ou livrable attendu → interdit
+
+CHAMPS DE POSITIONNEMENT — OBLIGATOIRES PAR TRAJECTOIRE :
+- positioningStatement : phrase de positionnement (30–50 mots) — "Je me positionne comme [profil concret] capable de [valeur ajoutée précise] pour [cible spécifique]." Doit citer CE profil, pas un générique.
+- linkedinHeadline : accroche LinkedIn max 120 caractères — format : "[Titre cible] | [Valeur différenciatrice] | [Signal de crédibilité]"
+- interviewPitch : 3 à 4 phrases pour expliquer la reconversion en entretien — structure : d'où on vient → pourquoi on change → ce qu'on apporte → ce qui différencie
+- cvKeywords : 5 à 7 mots-clés à utiliser dans le titre, l'accroche ou le résumé du CV cible
+- comparisonWithOtherPaths : 4 à 6 lignes — pourquoi CETTE trajectoire vs les deux autres, dans quel cas elle est le meilleur choix, dans quel cas elle est déconseillée, ce qu'elle apporte que les autres n'offrent pas
+- detailedActionPlan30Days : chaque semaine inclut 4 champs supplémentaires :
+  · objective : objectif précis de la semaine (1 phrase)
+  · deliverable : livrable tangible à produire en fin de semaine
+  · practicalTip : conseil pratique pour réussir cette semaine
+  · mistakeToAvoid : erreur fréquente à éviter cette semaine`
 
 // ── CV parser ─────────────────────────────────────────────────────
 
@@ -269,7 +281,7 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
       "feasibilityScore": 0-100,
       "marketOpportunityScore": 0-100,
       "transitionEffortScore": 0-100,
-      "longDescription": "MINIMUM 1500 caractères. Structurer en 5 blocs : (1) Pourquoi CE métier pour CE profil — cite au moins 3 éléments du parcours de ${fn}. (2) Réalité concrète du métier : ce qu'on fait vraiment, difficultés réelles, avantages tangibles. (3) État du marché : demande actuelle, secteurs qui recrutent, tendances à 3 ans. (4) Trajectoire financière réaliste : fourchettes années 1, 2-3, 5+ basées sur le marché réel. (5) Pourquoi c'est réaliste ou ambitieux pour ${fn} spécifiquement — pas pour n'importe qui.",
+      "longDescription": "MINIMUM 1800 caractères. Structurer en 5 blocs séparés par un saut de ligne : (1) Pourquoi CE métier pour CE profil — cite au moins 3 éléments du parcours de ${fn}. (2) Réalité concrète du métier : ce qu'on fait vraiment, difficultés réelles, avantages tangibles. (3) État du marché : demande actuelle, secteurs qui recrutent, tendances à 3 ans. (4) Trajectoire financière réaliste : fourchettes années 1, 2-3, 5+ basées sur le marché réel. (5) Pourquoi c'est réaliste ou ambitieux pour ${fn} spécifiquement — pas pour n'importe qui.",
       "keyInsight": "Insight clé, surprenant ou contre-intuitif, spécifique à ${fn} pour cette trajectoire — jamais applicable à n'importe qui.",
       "whyItFits": [
         "Raison 1 — cite [compétence/expérience précise du profil] + explique son lien direct avec [aspect concret du métier cible]",
@@ -315,17 +327,21 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
       "detailedActionPlan30Days": [
         {
           "week": 1,
-          "title": "Semaine 1 — [Thème] ([durée totale estimée, ex : 5h au total])",
+          "title": "Semaine 1 — [Thème] ([durée totale estimée])",
+          "objective": "Objectif précis de cette semaine en une phrase.",
           "actions": [
             "[Verbe d'action] [objet précis] ([durée estimée]) → livrable : [résultat concret et mesurable]",
             "[Verbe d'action] [objet précis] ([durée estimée]) → livrable : [résultat concret]",
             "[Verbe d'action] [objet précis] ([durée estimée]) → livrable : [résultat concret]",
             "[Verbe d'action] [objet précis] ([durée estimée]) → livrable : [résultat concret]"
-          ]
+          ],
+          "deliverable": "Livrable tangible à avoir produit en fin de semaine.",
+          "practicalTip": "Conseil pratique pour réussir cette semaine.",
+          "mistakeToAvoid": "Erreur fréquente à éviter cette semaine."
         },
-        {"week": 2, "title": "Semaine 2 — [Thème] ([durée totale])", "actions": ["[Verbe + objet + durée] → livrable : [résultat]", "...", "...", "..."]},
-        {"week": 3, "title": "Semaine 3 — [Thème] ([durée totale])", "actions": ["...", "...", "...", "..."]},
-        {"week": 4, "title": "Semaine 4 — [Thème] ([durée totale])", "actions": ["...", "...", "...", "..."]}
+        {"week": 2, "title": "Semaine 2 — [Thème] ([durée])", "objective": "...", "actions": ["[Verbe + objet + durée] → livrable : [résultat]", "...", "...", "..."], "deliverable": "...", "practicalTip": "...", "mistakeToAvoid": "..."},
+        {"week": 3, "title": "Semaine 3 — [Thème] ([durée])", "objective": "...", "actions": ["...", "...", "...", "..."], "deliverable": "...", "practicalTip": "...", "mistakeToAvoid": "..."},
+        {"week": 4, "title": "Semaine 4 — [Thème] ([durée])", "objective": "...", "actions": ["...", "...", "...", "..."], "deliverable": "...", "practicalTip": "...", "mistakeToAvoid": "..."}
       ],
       "firstWeekActions": [
         "Action concrète 1 — faisable cette semaine, avec outil nommé et durée estimée",
@@ -358,7 +374,12 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
         "Risque [Z] — Cause : [...] — Réduction : [...] — Erreur classique : [...] ",
         "Risque [W] — Cause : [...] — Réduction : [...] — Erreur classique : [...]"
       ],
-      "firstConcreteStep": "Action ultra-précise que ${fn} peut faire AUJOURD'HUI ou demain — nommer l'outil exact, la plateforme, l'action en moins de 30 minutes, et le résultat attendu immédiat."
+      "firstConcreteStep": "Action ultra-précise que ${fn} peut faire AUJOURD'HUI ou demain — nommer l'outil exact, la plateforme, l'action en moins de 30 minutes, et le résultat attendu immédiat.",
+      "positioningStatement": "Je me positionne comme [profil concret de ${fn}] capable de [valeur ajoutée précise] pour [cible spécifique du métier cible].",
+      "linkedinHeadline": "[Titre du métier cible] | [Valeur différenciatrice liée au profil de ${fn}] | [Signal de crédibilité concret]",
+      "interviewPitch": "3 à 4 phrases : d'où je viens (parcours de ${fn}) → pourquoi je change (motivation ancrée dans le profil) → ce que ça apporte au recruteur (valeur concrète) → ce qui me différencie (force spécifique de ${fn}).",
+      "cvKeywords": ["mot-clé 1 lié au métier cible", "mot-clé 2", "mot-clé 3", "mot-clé 4", "mot-clé 5"],
+      "comparisonWithOtherPaths": "Paragraphe de 4 à 6 lignes : pourquoi cette trajectoire current_aligned est le meilleur choix pour ${fn} vs les deux autres. Cas où elle est recommandée. Cas où elle est déconseillée. Ce qu'elle apporte (rapidité, sécurité, valorisation immédiate) que les autres trajectoires n'offrent pas."
     },
     {
       "pathType": "passion_based",
@@ -377,7 +398,7 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
       "feasibilityScore": 0-100,
       "marketOpportunityScore": 0-100,
       "transitionEffortScore": 0-100,
-      "longDescription": "MINIMUM 1500 caractères — même structure en 5 blocs que current_aligned, adaptée à passion_based",
+      "longDescription": "MINIMUM 1800 caractères — même structure en 5 blocs que current_aligned, adaptée à passion_based",
       "keyInsight": "Insight spécifique à ${fn} pour cette trajectoire passion",
       "whyItFits": ["Raison 1 — cite [élément profil] + lien avec métier", "Raison 2", "Raison 3", "Raison 4"],
       "dailyLife": "Journée type détaillée (MINIMUM 300 caractères)",
@@ -395,10 +416,10 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
         {"period": "3 à 5 ans", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"}
       ],
       "detailedActionPlan30Days": [
-        {"week": 1, "title": "Semaine 1 — [Thème] ([durée])", "actions": ["[Verbe + objet + durée] → livrable : [résultat]", "...", "...", "..."]},
-        {"week": 2, "title": "Semaine 2 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]},
-        {"week": 3, "title": "Semaine 3 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]},
-        {"week": 4, "title": "Semaine 4 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]}
+        {"week": 1, "title": "Semaine 1 — [Thème] ([durée])", "objective": "...", "actions": ["[Verbe + objet + durée] → livrable : [résultat]", "...", "...", "..."], "deliverable": "...", "practicalTip": "...", "mistakeToAvoid": "..."},
+        {"week": 2, "title": "Semaine 2 — [Thème] ([durée])", "objective": "...", "actions": ["...", "...", "...", "..."], "deliverable": "...", "practicalTip": "...", "mistakeToAvoid": "..."},
+        {"week": 3, "title": "Semaine 3 — [Thème] ([durée])", "objective": "...", "actions": ["...", "...", "...", "..."], "deliverable": "...", "practicalTip": "...", "mistakeToAvoid": "..."},
+        {"week": 4, "title": "Semaine 4 — [Thème] ([durée])", "objective": "...", "actions": ["...", "...", "...", "..."], "deliverable": "...", "practicalTip": "...", "mistakeToAvoid": "..."}
       ],
       "firstWeekActions": ["Action 1 — outil nommé + durée estimée", "Action 2", "Action 3", "Action 4"],
       "miniProjectToLaunch": "Mini-projet précis : ce qu'on fait, quel outil, quel livrable, comment ça teste la voie.",
@@ -407,7 +428,12 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
       "recommendedTrainingTypes": ["Formation 1 — Plateforme : [...] — Durée : [...] — Objectif : [...]", "Formation 2...", "Formation 3..."],
       "similarJobs": ["Métier proche 1", "Métier 2", "Métier 3", "Métier 4"],
       "risksAndLimits": ["Risque [X] — Cause : [...] — Réduction : [...] — Erreur classique : [...]", "Risque [Y]...", "Risque [Z]...", "Risque [W]..."],
-      "firstConcreteStep": "Action ultra-précise — outil exact, plateforme, moins de 30 minutes, résultat attendu immédiat."
+      "firstConcreteStep": "Action ultra-précise — outil exact, plateforme, moins de 30 minutes, résultat attendu immédiat.",
+      "positioningStatement": "Je me positionne comme [profil de ${fn}] capable de [valeur ajoutée] pour [cible du métier passion].",
+      "linkedinHeadline": "[Titre cible passion] | [Valeur différenciatrice] | [Signal de crédibilité]",
+      "interviewPitch": "3 à 4 phrases pour expliquer cette reconversion passion en entretien.",
+      "cvKeywords": ["mot-clé 1", "mot-clé 2", "mot-clé 3", "mot-clé 4", "mot-clé 5"],
+      "comparisonWithOtherPaths": "Paragraphe de 4 à 6 lignes : pourquoi cette trajectoire passion_based vs les deux autres. Cas où elle est recommandée. Cas où elle est déconseillée. Ce qu'elle apporte (alignement avec les envies, sens, épanouissement) que les autres ne donnent pas."
     },
     {
       "pathType": "high_potential",
@@ -426,7 +452,7 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
       "feasibilityScore": 0-100,
       "marketOpportunityScore": 0-100,
       "transitionEffortScore": 0-100,
-      "longDescription": "MINIMUM 1500 caractères — même structure en 5 blocs, adaptée à high_potential. Justifier EXPLICITEMENT pourquoi c'est ambitieux mais réaliste pour CE profil.",
+      "longDescription": "MINIMUM 1800 caractères — même structure en 5 blocs, adaptée à high_potential. Justifier EXPLICITEMENT pourquoi c'est ambitieux mais réaliste pour CE profil.",
       "keyInsight": "Insight spécifique à ${fn} pour cette trajectoire haute ambition",
       "whyItFits": ["Raison 1 — cite [élément profil] + lien avec métier", "Raison 2", "Raison 3", "Raison 4"],
       "dailyLife": "Journée type détaillée (MINIMUM 300 caractères)",
@@ -444,10 +470,10 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
         {"period": "3 à 5 ans", "objective": "...", "actions": ["..."], "skills": ["..."], "proofsToBuild": ["..."], "expectedResult": "[Résultat]. KPI : [...]. Vigilance : [...]"}
       ],
       "detailedActionPlan30Days": [
-        {"week": 1, "title": "Semaine 1 — [Thème] ([durée])", "actions": ["[Verbe + objet + durée] → livrable : [résultat]", "...", "...", "..."]},
-        {"week": 2, "title": "Semaine 2 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]},
-        {"week": 3, "title": "Semaine 3 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]},
-        {"week": 4, "title": "Semaine 4 — [Thème] ([durée])", "actions": ["...", "...", "...", "..."]}
+        {"week": 1, "title": "Semaine 1 — [Thème] ([durée])", "objective": "...", "actions": ["[Verbe + objet + durée] → livrable : [résultat]", "...", "...", "..."], "deliverable": "...", "practicalTip": "...", "mistakeToAvoid": "..."},
+        {"week": 2, "title": "Semaine 2 — [Thème] ([durée])", "objective": "...", "actions": ["...", "...", "...", "..."], "deliverable": "...", "practicalTip": "...", "mistakeToAvoid": "..."},
+        {"week": 3, "title": "Semaine 3 — [Thème] ([durée])", "objective": "...", "actions": ["...", "...", "...", "..."], "deliverable": "...", "practicalTip": "...", "mistakeToAvoid": "..."},
+        {"week": 4, "title": "Semaine 4 — [Thème] ([durée])", "objective": "...", "actions": ["...", "...", "...", "..."], "deliverable": "...", "practicalTip": "...", "mistakeToAvoid": "..."}
       ],
       "firstWeekActions": ["Action 1 — outil nommé + durée estimée", "Action 2", "Action 3", "Action 4"],
       "miniProjectToLaunch": "Mini-projet précis : ce qu'on fait, quel outil, quel livrable, comment ça teste la voie.",
@@ -456,7 +482,12 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
       "recommendedTrainingTypes": ["Formation 1 — Plateforme : [...] — Durée : [...] — Objectif : [...]", "Formation 2...", "Formation 3..."],
       "similarJobs": ["Métier proche 1", "Métier 2", "Métier 3", "Métier 4"],
       "risksAndLimits": ["Risque [X] — Cause : [...] — Réduction : [...] — Erreur classique : [...]", "Risque [Y]...", "Risque [Z]...", "Risque [W]..."],
-      "firstConcreteStep": "Action ultra-précise — outil exact, plateforme, moins de 30 minutes, résultat attendu immédiat."
+      "firstConcreteStep": "Action ultra-précise — outil exact, plateforme, moins de 30 minutes, résultat attendu immédiat.",
+      "positioningStatement": "Je me positionne comme [profil de ${fn}] capable de [valeur ajoutée ambitieuse] pour [cible du métier high_potential].",
+      "linkedinHeadline": "[Titre cible ambitieux] | [Valeur différenciatrice haute ambition] | [Signal de crédibilité]",
+      "interviewPitch": "3 à 4 phrases pour expliquer cette reconversion ambitieuse en entretien.",
+      "cvKeywords": ["mot-clé 1", "mot-clé 2", "mot-clé 3", "mot-clé 4", "mot-clé 5"],
+      "comparisonWithOtherPaths": "Paragraphe de 4 à 6 lignes : pourquoi cette trajectoire high_potential vs les deux autres. Cas où elle est recommandée. Cas où elle est déconseillée. Ce qu'elle apporte (potentiel, impact, différenciation) que les autres trajectoires ne permettent pas."
     }
   ],
 
@@ -473,10 +504,12 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
 
 RAPPEL FINAL :
 - Tutoyer ${fn} dans tous les textes
-- longDescription MINIMUM 1500 caractères avec au moins 5 citations du profil
+- longDescription MINIMUM 1800 caractères avec au moins 5 citations du profil
 - Les 3 pathTypes DOIVENT être dans des secteurs clairement distincts
 - Aucune action vague, aucune phrase générique — chaque élément doit citer CE profil
-- Ton honnête, professionnel, rassurant — aucune promesse d'emploi garantie`
+- Ton honnête, professionnel, rassurant — aucune promesse d'emploi garantie
+- positioningStatement, linkedinHeadline, interviewPitch, cvKeywords, comparisonWithOtherPaths : OBLIGATOIRES dans chaque trajectoire
+- detailedActionPlan30Days : chaque semaine DOIT inclure objective, deliverable, practicalTip, mistakeToAvoid`
 }
 
 // ── Main export ───────────────────────────────────────────────────
@@ -496,7 +529,7 @@ export async function generateTrajectories(data: OnboardingData): Promise<Genera
       { role: 'user',   content: buildUserPrompt(data, cvSection) },
     ],
     temperature:     0.72,
-    max_tokens:      8000,
+    max_tokens:      12000,
     response_format: { type: 'json_object' },
   })
 

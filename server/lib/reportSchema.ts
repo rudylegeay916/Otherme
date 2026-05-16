@@ -16,9 +16,13 @@ const RichTimelineStepSchema = z.object({
 }).passthrough()
 
 const ActionPlanWeekSchema = z.object({
-  week:    z.number().int().min(1).max(4),
-  title:   z.string().min(1),
-  actions: z.array(z.string()).min(1),
+  week:           z.number().int().min(1).max(4),
+  title:          z.string().min(1),
+  actions:        z.array(z.string()).min(1),
+  objective:      z.string().optional(),
+  deliverable:    z.string().optional(),
+  practicalTip:   z.string().optional(),
+  mistakeToAvoid: z.string().optional(),
 }).passthrough()
 
 // ── PathData ──────────────────────────────────────────────────────
@@ -45,8 +49,13 @@ const PathDataSchema = z.object({
   fiveYearTimeline:   z.array(RichTimelineStepSchema).length(7, {
     message: 'fiveYearTimeline doit contenir exactement 7 périodes',
   }),
-  whyItFits:          z.array(z.string()).min(1),
-  firstConcreteStep:  z.string().min(1),
+  whyItFits:                z.array(z.string()).min(1),
+  firstConcreteStep:        z.string().min(1),
+  positioningStatement:     z.string().optional(),
+  linkedinHeadline:         z.string().optional(),
+  interviewPitch:           z.string().optional(),
+  cvKeywords:               z.array(z.string()).optional(),
+  comparisonWithOtherPaths: z.string().optional(),
 }).passthrough() // conserve les champs extra (longDescription, dailyLife, etc.)
 
 // ── GeneratedReport ───────────────────────────────────────────────

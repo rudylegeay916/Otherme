@@ -76,6 +76,18 @@ function TimelineSection({ timeline }: { timeline: RichTimelineStep[] }) {
                 ))}
               </div>
             )}
+            {step.proofsToBuild?.length > 0 && (
+              <div className="mt-2">
+                <p className="text-[10px] font-semibold text-slate-500 mb-1">Preuves à construire :</p>
+                <ul className="space-y-0.5">
+                  {step.proofsToBuild.map((proof, k) => (
+                    <li key={k} className="text-[10px] text-slate-500 flex items-start gap-1.5">
+                      <span className="text-blue-500 flex-shrink-0">▸</span> {proof}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <p className="text-xs text-green-400 mt-2 bg-green-900/20 border border-green-800/30 rounded px-2 py-1">
               ✓ {step.expectedResult}
             </p>
@@ -93,14 +105,35 @@ function ActionPlan({ weeks }: { weeks: ActionPlanWeek[] }) {
     <div className="grid gap-3 sm:grid-cols-2">
       {weeks.map((week) => (
         <div key={week.week} className="bg-dark-800/50 border border-dark-700 rounded-xl p-4">
-          <p className="text-xs font-bold text-brand-400 mb-2">Semaine {week.week} — {week.title}</p>
-          <ul className="space-y-1.5">
+          <p className="text-xs font-bold text-brand-400 mb-1">Semaine {week.week} — {week.title}</p>
+          {week.objective && (
+            <p className="text-xs text-slate-400 italic mb-2">{week.objective}</p>
+          )}
+          <ul className="space-y-1.5 mb-3">
             {week.actions.map((a, i) => (
               <li key={i} className="flex items-start gap-2 text-xs text-slate-300">
                 <span className="text-brand-500 flex-shrink-0 mt-0.5">•</span> {a}
               </li>
             ))}
           </ul>
+          {week.deliverable && (
+            <div className="text-xs bg-green-900/20 border border-green-800/30 rounded px-2 py-1.5 mb-1.5">
+              <span className="font-semibold text-green-400">Livrable : </span>
+              <span className="text-slate-300">{week.deliverable}</span>
+            </div>
+          )}
+          {week.practicalTip && (
+            <div className="text-xs bg-blue-900/20 border border-blue-800/30 rounded px-2 py-1.5 mb-1.5">
+              <span className="font-semibold text-blue-400">Conseil : </span>
+              <span className="text-slate-300">{week.practicalTip}</span>
+            </div>
+          )}
+          {week.mistakeToAvoid && (
+            <div className="text-xs bg-red-900/10 border border-red-800/20 rounded px-2 py-1.5">
+              <span className="font-semibold text-red-400">Erreur à éviter : </span>
+              <span className="text-slate-300">{week.mistakeToAvoid}</span>
+            </div>
+          )}
         </div>
       ))}
     </div>
@@ -334,6 +367,51 @@ function PathCard({ path, index }: { path: PathData; index: number }) {
                   <span key={i} className="text-xs px-3 py-1.5 rounded-full bg-dark-700 border border-dark-600 text-slate-300">{j}</span>
                 ))}
               </div>
+            </Accordion>
+          </div>
+        )}
+
+        {/* Positioning */}
+        {(path.positioningStatement || path.linkedinHeadline || path.interviewPitch || path.cvKeywords?.length) && (
+          <div className="mt-3">
+            <Accordion title="Positionnement professionnel" icon="🎙️">
+              {path.positioningStatement && (
+                <div className="mb-4">
+                  <p className="text-xs font-semibold text-violet-400 mb-1.5">Phrase de positionnement</p>
+                  <p className="text-sm text-slate-300 italic bg-dark-800/60 border border-dark-600 rounded-lg px-3 py-2 leading-relaxed">{path.positioningStatement}</p>
+                </div>
+              )}
+              {path.linkedinHeadline && (
+                <div className="mb-4">
+                  <p className="text-xs font-semibold text-blue-400 mb-1.5">Accroche LinkedIn</p>
+                  <p className="text-sm text-slate-200 font-medium bg-dark-800/60 border border-dark-600 rounded-lg px-3 py-2">{path.linkedinHeadline}</p>
+                </div>
+              )}
+              {path.interviewPitch && (
+                <div className="mb-4">
+                  <p className="text-xs font-semibold text-green-400 mb-1.5">Pitch entretien</p>
+                  <p className="text-sm text-slate-300 leading-relaxed bg-dark-800/60 border border-dark-600 rounded-lg px-3 py-2">{path.interviewPitch}</p>
+                </div>
+              )}
+              {path.cvKeywords?.length && (
+                <div>
+                  <p className="text-xs font-semibold text-amber-400 mb-1.5">Mots-clés CV</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {path.cvKeywords.map((kw, i) => (
+                      <span key={i} className="text-xs px-2.5 py-1 rounded-full bg-amber-900/20 border border-amber-800/30 text-amber-300">{kw}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </Accordion>
+          </div>
+        )}
+
+        {/* Why this vs others */}
+        {path.comparisonWithOtherPaths && (
+          <div className="mt-3">
+            <Accordion title="Pourquoi cette voie plutôt qu'une autre ?" icon="⚖️">
+              <p className="text-sm text-slate-300 leading-relaxed">{path.comparisonWithOtherPaths}</p>
             </Accordion>
           </div>
         )}

@@ -53,6 +53,10 @@ export interface ActionPlanWeek {
   week: number
   title: string
   actions: string[]
+  objective?: string
+  deliverable?: string
+  practicalTip?: string
+  mistakeToAvoid?: string
 }
 
 export interface PathData {
@@ -90,6 +94,12 @@ export interface PathData {
   similarJobs: string[]
   risksAndLimits: string[]
   firstConcreteStep: string
+  // ── Positionnement professionnel (nouveaux champs) ────────────────
+  positioningStatement?: string
+  linkedinHeadline?: string
+  interviewPitch?: string
+  cvKeywords?: string[]
+  comparisonWithOtherPaths?: string
 }
 
 export interface ReportComparison {
