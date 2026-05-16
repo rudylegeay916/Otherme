@@ -274,7 +274,9 @@ export default function Onboarding() {
   const isFirstRender = useRef(true)
   useEffect(() => {
     if (isFirstRender.current) { isFirstRender.current = false; return }
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    // 'instant' overrides CSS scroll-behavior: smooth which would otherwise
+    // start an animation that React's DOM re-render immediately cancels
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }, [step, showingCheckpoint])
 
   const answers = data.answers ?? {}
