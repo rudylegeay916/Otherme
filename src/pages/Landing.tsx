@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import {
+  Route, BriefcaseBusiness, BadgeEuro, ShieldCheck, CalendarRange, ListChecks,
+  ArrowRightLeft, Brain, GraduationCap, ClipboardList, ScanSearch,
+  RefreshCcw, Compass, Lightbulb, TrendingUp,
+  type LucideProps,
+} from 'lucide-react'
 import Logo from '../components/Logo'
 import LanguageToggle from '../components/LanguageToggle'
 import { hasStartedTest, clearProgress } from '../lib/onboardingStorage'
@@ -8,83 +14,85 @@ import { useTr } from '../lib/i18n/translations'
 
 // ── Données statiques bilingues ───────────────────────────────────────────────
 
-const DELIVERABLES = [
+type IconComponent = React.ComponentType<LucideProps>
+
+const DELIVERABLES: Array<{ Icon: IconComponent; fr: { title: string; desc: string }; en: { title: string; desc: string } }> = [
   {
-    icon: '🛤️',
+    Icon: Route,
     fr: { title: '3 trajectoires personnalisées', desc: 'Chaque voie explore un scénario différent adapté à ton profil, tes envies et ta réalité.' },
     en: { title: '3 personalised paths', desc: 'Each path explores a different scenario tailored to your profile, desires and reality.' },
   },
   {
-    icon: '💼',
+    Icon: BriefcaseBusiness,
     fr: { title: 'Métier cible identifié', desc: 'Un poste précis avec description, environnement de travail et secteur de débouché.' },
     en: { title: 'Target job identified', desc: 'A specific role with job description, work environment and industry outlook.' },
   },
   {
-    icon: '💰',
+    Icon: BadgeEuro,
     fr: { title: 'Revenu estimé réaliste', desc: 'Fourchette salariale basée sur le marché actuel — pas sur des promesses.' },
     en: { title: 'Realistic salary estimate', desc: 'Salary range based on current market data — not wishful thinking.' },
   },
   {
-    icon: '⚡',
+    Icon: ShieldCheck,
     fr: { title: 'Niveau de risque évalué', desc: 'Pour choisir en connaissance de cause, sans te lancer à l\'aveugle.' },
     en: { title: 'Risk level assessed', desc: 'Make informed decisions without leaping blindly into the unknown.' },
   },
   {
-    icon: '📅',
+    Icon: CalendarRange,
     fr: { title: 'Timeline 6 à 24 mois', desc: 'Jalons clairs pour visualiser concrètement chaque étape de ta transition.' },
     en: { title: 'Timeline 6 to 24 months', desc: 'Clear milestones to concretely visualise each step of your transition.' },
   },
   {
-    icon: '🎯',
+    Icon: ListChecks,
     fr: { title: 'Plan d\'action 30 jours', desc: 'Les premières actions concrètes à lancer dès cette semaine pour amorcer le changement.' },
     en: { title: '30-day action plan', desc: 'Concrete first actions to launch this week to kick off the change.' },
   },
   {
-    icon: '🔁',
+    Icon: ArrowRightLeft,
     fr: { title: 'Compétences transférables', desc: 'Ce que tu as déjà et que tu peux valoriser immédiatement dans une nouvelle voie.' },
     en: { title: 'Transferable skills', desc: 'What you already have and can leverage immediately in a new direction.' },
   },
   {
-    icon: '🧠',
+    Icon: Brain,
     fr: { title: 'Compétences à développer', desc: 'Ce que tu dois acquérir — et comment — pour réussir chaque trajectoire.' },
     en: { title: 'Skills to develop', desc: 'What you need to acquire — and how — to succeed in each path.' },
   },
   {
-    icon: '🎓',
+    Icon: GraduationCap,
     fr: { title: 'Ressources & formations', desc: 'Des pistes concrètes pour te former sans repartir de zéro inutilement.' },
     en: { title: 'Resources & training', desc: 'Concrete leads to upskill without unnecessarily starting from scratch.' },
   },
 ]
 
-const FOR_WHO = [
+const FOR_WHO: Array<{ Icon: IconComponent; featured?: boolean; fr: { title: string; desc: string }; en: { title: string; desc: string } }> = [
   {
-    icon: '💼',
+    Icon: BriefcaseBusiness,
     featured: true,
     fr: { title: 'Jeunes actifs (25–35 ans)', desc: 'Tu travailles, mais tu te demandes si tu es vraiment au bon endroit — et tu veux changer sans repartir de zéro.' },
     en: { title: 'Young professionals (25–35)', desc: 'You\'re working but wondering if you\'re in the right place — and want to change without starting over.' },
   },
   {
-    icon: '🔄',
+    Icon: RefreshCcw,
     fr: { title: 'Profils en reconversion', desc: 'Tu sais que tu veux changer, mais tu ne sais pas encore vers quoi te diriger ni par où commencer.' },
     en: { title: 'Career changers', desc: 'You know you want to change, but haven\'t found your direction or where to start.' },
   },
   {
-    icon: '😔',
+    Icon: Compass,
     fr: { title: 'Salariés en perte de sens', desc: 'Tu fais bien ton travail, mais il ne te nourrit plus. Tu cherches à te réaligner avec ce qui compte vraiment.' },
     en: { title: 'Employees losing meaning', desc: 'You do your job well, but it no longer fulfils you. You\'re seeking realignment with what truly matters.' },
   },
   {
-    icon: '🎓',
+    Icon: GraduationCap,
     fr: { title: 'Étudiants en questionnement', desc: 'Tu hésites entre plusieurs orientations et tu veux voir plus loin que les débouchés classiques.' },
     en: { title: 'Students at a crossroads', desc: 'Unsure between directions and want to see beyond conventional career paths.' },
   },
   {
-    icon: '🎨',
+    Icon: Lightbulb,
     fr: { title: 'Profils créatifs', desc: 'Tes projets perso méritent peut-être d\'être ton vrai métier — OtherMe l\'explore sérieusement.' },
     en: { title: 'Creative profiles', desc: 'Your personal projects might deserve to become your real job — OtherMe explores it seriously.' },
   },
   {
-    icon: '📈',
+    Icon: TrendingUp,
     fr: { title: 'Ambitieux discrets', desc: 'Tu as plus de potentiel que ce que ton CV laisse paraître. Il est temps de le voir clairement.' },
     en: { title: 'Quiet ambitious', desc: 'You have more potential than your CV reveals. It\'s time to see it clearly.' },
   },
@@ -139,6 +147,9 @@ const WHY_DIFFERENT = [
     en: { title: 'No magic promises', desc: 'OtherMe doesn\'t replace a career coach. It helps you clarify your options and move forward with a structured roadmap.' },
   },
 ]
+
+// Step icons for "Comment ça fonctionne ?" (indexed 0-2, matches t.steps order)
+const STEP_ICONS: IconComponent[] = [ClipboardList, ScanSearch, Route]
 
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -289,14 +300,19 @@ export default function Landing() {
             <p className="text-slate-500 text-base max-w-md mx-auto">{t.howSub}</p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
-            {t.steps.map((step, i) => (
-              <div key={i} className="card p-7 relative group hover:border-white/[0.12] transition-colors duration-300">
-                <div className="absolute top-5 right-5 text-5xl font-black text-dark-700 select-none group-hover:text-dark-600 transition-colors tabular-nums">{i + 1}</div>
-                <div className="text-3xl mb-5">{step.icon}</div>
-                <h3 className="text-base font-semibold mb-2.5 text-slate-100">{step.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
+            {t.steps.map((step, i) => {
+              const StepIcon = STEP_ICONS[i]
+              return (
+                <div key={i} className="card p-7 relative group hover:border-white/[0.12] transition-colors duration-300">
+                  <div className="absolute top-5 right-5 text-5xl font-black text-dark-700 select-none group-hover:text-dark-600 transition-colors tabular-nums">{i + 1}</div>
+                  <div className="w-10 h-10 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-5 flex-shrink-0">
+                    <StepIcon size={20} strokeWidth={1.5} className="text-violet-300" />
+                  </div>
+                  <h3 className="text-base font-semibold mb-2.5 text-slate-100">{step.title}</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed">{step.desc}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -320,7 +336,9 @@ export default function Landing() {
           <div className="grid sm:grid-cols-3 gap-4">
             {DELIVERABLES.map((d) => (
               <div key={d.fr.title} className="card p-5 flex flex-col gap-3 hover:border-white/[0.12] transition-colors duration-300">
-                <span className="text-2xl">{d.icon}</span>
+                <div className="w-9 h-9 rounded-lg bg-violet-600/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
+                  <d.Icon size={18} strokeWidth={1.5} className="text-violet-300" />
+                </div>
                 <div>
                   <h4 className="text-slate-100 font-semibold text-sm mb-1">{lang === 'fr' ? d.fr.title : d.en.title}</h4>
                   <p className="text-slate-500 text-xs leading-relaxed">{lang === 'fr' ? d.fr.desc : d.en.desc}</p>
@@ -565,7 +583,9 @@ export default function Landing() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {FOR_WHO.map((p) => (
               <div key={p.fr.title} className={`card p-5 flex items-start gap-4 hover:border-white/[0.12] transition-colors duration-300 ${p.featured ? 'border-brand-600/25 bg-brand-600/[0.04]' : ''}`}>
-                <span className="text-2xl flex-shrink-0 mt-0.5">{p.icon}</span>
+                <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${p.featured ? 'bg-brand-600/15 border border-brand-500/25' : 'bg-violet-600/10 border border-violet-500/20'}`}>
+                  <p.Icon size={18} strokeWidth={1.5} className={p.featured ? 'text-brand-300' : 'text-violet-300'} />
+                </div>
                 <div>
                   <h4 className={`font-semibold text-sm mb-1 ${p.featured ? 'text-brand-300' : 'text-slate-100'}`}>{lang === 'fr' ? p.fr.title : p.en.title}</h4>
                   <p className="text-slate-500 text-xs leading-relaxed">{lang === 'fr' ? p.fr.desc : p.en.desc}</p>
