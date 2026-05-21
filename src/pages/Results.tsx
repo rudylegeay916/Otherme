@@ -416,6 +416,73 @@ function PathCard({ path, index }: { path: PathData; index: number }) {
           </div>
         )}
 
+        {/* Company types to target */}
+        {path.companyTypesToTarget && path.companyTypesToTarget.length > 0 && (
+          <div className="mt-3">
+            <Accordion title="Types d'entreprises à cibler" icon="🏢">
+              <div className="space-y-2">
+                {path.companyTypesToTarget.map((c, i) => (
+                  <div key={i} className="flex items-start gap-2.5 bg-dark-800/50 border border-dark-700 rounded-lg px-3 py-2.5">
+                    <span className="text-brand-400 font-bold text-xs flex-shrink-0 mt-0.5">{i + 1}.</span>
+                    <p className="text-sm text-slate-300 leading-relaxed">{c}</p>
+                  </div>
+                ))}
+              </div>
+            </Accordion>
+          </div>
+        )}
+
+        {/* Questions to ask professionals */}
+        {path.questionsToAskProfessionals && path.questionsToAskProfessionals.length > 0 && (
+          <div className="mt-3">
+            <Accordion title="Questions à poser à un professionnel" icon="💬">
+              <p className="text-xs text-slate-500 mb-3 italic">Ces questions t'aideront à valider la trajectoire lors d'un échange réseau.</p>
+              <div className="space-y-2">
+                {path.questionsToAskProfessionals.map((q, i) => (
+                  <div key={i} className="flex items-start gap-2.5 bg-dark-800/50 border border-dark-700 rounded-lg px-3 py-2.5">
+                    <span className="text-purple-400 font-bold text-xs flex-shrink-0 mt-0.5">?</span>
+                    <p className="text-sm text-slate-300 leading-relaxed">{q}</p>
+                  </div>
+                ))}
+              </div>
+            </Accordion>
+          </div>
+        )}
+
+        {/* Choose or avoid */}
+        {(path.choosePath?.length || path.avoidPath?.length) && (
+          <div className="mt-3">
+            <Accordion title="Choisissez cette voie si… / Évitez si…" icon="🔀">
+              <div className="grid sm:grid-cols-2 gap-4">
+                {path.choosePath && path.choosePath.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-green-400 mb-2">✅ Choisissez cette voie si…</p>
+                    <ul className="space-y-1.5">
+                      {path.choosePath.map((c, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-green-900/10 border border-green-800/20 rounded-lg px-3 py-2">
+                          <span className="text-green-500 flex-shrink-0 mt-0.5">→</span> {c}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {path.avoidPath && path.avoidPath.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-red-400 mb-2">🚫 Évitez cette voie si…</p>
+                    <ul className="space-y-1.5">
+                      {path.avoidPath.map((a, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-red-900/10 border border-red-800/20 rounded-lg px-3 py-2">
+                          <span className="text-red-400 flex-shrink-0 mt-0.5">✕</span> {a}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </Accordion>
+          </div>
+        )}
+
         {/* First concrete step */}
         <div className="mt-6 bg-gradient-to-r from-brand-900/40 to-purple-900/40 border border-brand-700/40 rounded-2xl p-5">
           <p className="text-xs font-bold text-brand-400 mb-2">🎯 Ton premier pas concret</p>
@@ -429,12 +496,14 @@ function PathCard({ path, index }: { path: PathData; index: number }) {
 // ── Comparison table ──────────────────────────────────────────────
 
 function ComparisonTable({ paths }: { paths: PathData[] }) {
-  const cols = [
-    { key: 'securityScore', label: 'Sécurité', icon: '🛡️' },
-    { key: 'freedomScore', label: 'Liberté', icon: '🕊️' },
-    { key: 'incomePotentialScore', label: 'Revenu potentiel', icon: '💰' },
-    { key: 'alignmentScore', label: 'Alignement', icon: '❤️' },
-    { key: 'fitScore', label: 'Adéquation', icon: '🎯' },
+  const scoreCols = [
+    { key: 'fitScore',               label: 'Adéquation',     icon: '🎯', desc: 'Score global de compatibilité' },
+    { key: 'securityScore',          label: 'Sécurité',        icon: '🛡️', desc: 'Stabilité et sécurité du revenu' },
+    { key: 'freedomScore',           label: 'Liberté',         icon: '🕊️', desc: 'Autonomie et flexibilité' },
+    { key: 'incomePotentialScore',   label: 'Revenu potentiel', icon: '💰', desc: 'Potentiel de revenu à terme' },
+    { key: 'alignmentScore',         label: 'Alignement',      icon: '❤️', desc: 'Alignement valeurs/motivation' },
+    { key: 'marketOpportunityScore', label: 'Opportunité marché', icon: '📈', desc: 'Demande actuelle & tendance' },
+    { key: 'transitionEffortScore',  label: 'Effort transition', icon: '⚙️', desc: 'Effort requis (0 = facile, 100 = exigeant)' },
   ] as const
 
   return (
@@ -443,14 +512,15 @@ function ComparisonTable({ paths }: { paths: PathData[] }) {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-dark-700">
-              <th className="text-left p-4 text-xs font-semibold text-slate-500 uppercase tracking-wide">Trajectoire</th>
-              {cols.map((c) => (
-                <th key={c.key} className="text-center p-4 text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+              <th className="text-left p-4 text-xs font-semibold text-slate-500 uppercase tracking-wide sticky left-0 bg-dark-800/80 backdrop-blur-sm z-10">Trajectoire</th>
+              {scoreCols.map((c) => (
+                <th key={c.key} className="text-center p-3 text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap" title={c.desc}>
                   {c.icon} {c.label}
                 </th>
               ))}
-              <th className="text-center p-4 text-xs font-semibold text-slate-500 uppercase tracking-wide">Revenu estimé</th>
-              <th className="text-center p-4 text-xs font-semibold text-slate-500 uppercase tracking-wide">Risque</th>
+              <th className="text-center p-3 text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Revenu estimé</th>
+              <th className="text-center p-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Risque</th>
+              <th className="text-center p-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Difficulté</th>
             </tr>
           </thead>
           <tbody>
@@ -458,7 +528,7 @@ function ComparisonTable({ paths }: { paths: PathData[] }) {
               const meta = PATH_META[path.pathType] ?? PATH_META.current_aligned
               return (
                 <tr key={i} className="border-b border-dark-800 last:border-0 hover:bg-dark-800/30 transition-colors">
-                  <td className="p-4">
+                  <td className="p-4 sticky left-0 bg-dark-900/80 backdrop-blur-sm z-10">
                     <div className="flex items-center gap-2">
                       <span>{meta.icon}</span>
                       <div>
@@ -467,29 +537,44 @@ function ComparisonTable({ paths }: { paths: PathData[] }) {
                       </div>
                     </div>
                   </td>
-                  {cols.map((c) => {
+                  {scoreCols.map((c) => {
                     const score = path[c.key] as number
+                    const isEffort = c.key === 'transitionEffortScore'
+                    const color = isEffort
+                      ? (score >= 75 ? 'text-red-400' : score >= 45 ? 'text-amber-400' : 'text-green-400')
+                      : (score >= 75 ? 'text-green-400' : score >= 55 ? 'text-amber-400' : 'text-red-400')
                     return (
-                      <td key={c.key} className="p-4 text-center">
-                        <span className={`font-bold text-sm ${
-                          score >= 75 ? 'text-green-400' : score >= 55 ? 'text-amber-400' : 'text-red-400'
-                        }`}>{score}</span>
+                      <td key={c.key} className="p-3 text-center">
+                        <span className={`font-bold text-sm ${color}`}>{score}</span>
                       </td>
                     )
                   })}
-                  <td className="p-4 text-center text-xs text-slate-400 whitespace-nowrap">{path.revenueEstimate}</td>
-                  <td className="p-4 text-center">
+                  <td className="p-3 text-center text-xs text-slate-400 whitespace-nowrap">{path.revenueEstimate}</td>
+                  <td className="p-3 text-center">
                     <span className={`text-xs px-2 py-0.5 rounded-full ${
                       path.riskLevel.includes('Élevé') ? 'bg-red-900/30 text-red-300' :
                       path.riskLevel.includes('Faible') ? 'bg-green-900/30 text-green-300' :
                       'bg-amber-900/30 text-amber-300'
                     }`}>{path.riskLevel}</span>
                   </td>
+                  <td className="p-3 text-center">
+                    {path.difficultyLevel && (
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        path.difficultyLevel === 'Exigeante' ? 'bg-red-900/30 text-red-300' :
+                        path.difficultyLevel === 'Progressive' ? 'bg-amber-900/30 text-amber-300' :
+                        'bg-green-900/30 text-green-300'
+                      }`}>{path.difficultyLevel}</span>
+                    )}
+                  </td>
                 </tr>
               )
             })}
           </tbody>
         </table>
+      </div>
+      <div className="px-4 pb-3 flex flex-wrap gap-4 border-t border-dark-800 pt-3">
+        <p className="text-[10px] text-slate-600">⚙️ Effort transition : 0 = très facile, 100 = exigeant — score inversé par rapport aux autres</p>
+        <p className="text-[10px] text-slate-600">📈 Opportunité marché : demande actuelle + tendance du secteur</p>
       </div>
     </div>
   )
@@ -664,23 +749,50 @@ export default function Results() {
         {report.comparison && (
           <section>
             <h2 className="text-lg font-bold text-slate-100 mb-4">🧭 Synthèse finale</h2>
+
+            {/* Comparison trio */}
             <div className="grid sm:grid-cols-3 gap-4 mb-6">
               {[
-                { icon: '🛡️', label: 'La plus sûre', value: report.comparison.safestPath, color: 'border-blue-700/30 bg-blue-900/10' },
-                { icon: '❤️', label: 'La plus passion', value: report.comparison.mostPassionAlignedPath, color: 'border-purple-700/30 bg-purple-900/10' },
-                { icon: '🚀', label: 'Le plus de potentiel', value: report.comparison.highestPotentialPath, color: 'border-amber-700/30 bg-amber-900/10' },
+                {
+                  icon: '🛡️', label: 'La plus sûre', value: report.comparison.safestPath,
+                  color: 'border-blue-700/30 bg-blue-900/10', badge: 'bg-blue-900/30 text-blue-300',
+                  tag: 'Sécurité maximale',
+                },
+                {
+                  icon: '❤️', label: 'La plus alignée', value: report.comparison.mostPassionAlignedPath,
+                  color: 'border-purple-700/30 bg-purple-900/10', badge: 'bg-purple-900/30 text-purple-300',
+                  tag: 'Passion & sens',
+                },
+                {
+                  icon: '🚀', label: 'Le plus haut potentiel', value: report.comparison.highestPotentialPath,
+                  color: 'border-amber-700/30 bg-amber-900/10', badge: 'bg-amber-900/30 text-amber-300',
+                  tag: 'Impact & ambition',
+                },
               ].map((item) => (
-                <div key={item.label} className={`border ${item.color} rounded-xl p-4`}>
-                  <p className="text-xs text-slate-500 mb-1">{item.icon} {item.label}</p>
-                  <p className="text-sm font-semibold text-slate-200 leading-tight">{item.value}</p>
+                <div key={item.label} className={`border ${item.color} rounded-xl p-4 flex flex-col gap-2`}>
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg">{item.icon}</span>
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${item.badge}`}>{item.tag}</span>
+                  </div>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-wider">{item.label}</p>
+                  <p className="text-xs font-semibold text-slate-200 leading-tight">{item.value}</p>
                 </div>
               ))}
             </div>
 
-            <div className="bg-dark-800/50 border border-dark-700 rounded-2xl p-6">
-              <p className="text-xs font-semibold text-brand-400 mb-2">💡 Recommandation prioritaire</p>
-              <p className="text-base font-bold text-slate-100 mb-3">{report.comparison.recommendedFirstChoice}</p>
-              <p className="text-sm text-slate-400 leading-relaxed">{report.comparison.reason}</p>
+            {/* Recommended choice — highlighted */}
+            <div className="relative bg-gradient-to-br from-brand-900/50 to-purple-900/30 border border-brand-700/40 rounded-2xl p-6 overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-500/40 to-transparent" />
+              <div className="flex items-start gap-3 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-brand-600/20 border border-brand-600/30 flex items-center justify-center flex-shrink-0">
+                  <span className="text-brand-400 text-sm">💡</span>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-brand-400 uppercase tracking-wider mb-0.5">Recommandation prioritaire</p>
+                  <p className="text-base font-bold text-slate-100 leading-snug">{report.comparison.recommendedFirstChoice}</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-300 leading-relaxed pl-11">{report.comparison.reason}</p>
             </div>
           </section>
         )}

@@ -804,6 +804,145 @@ export default function Landing() {
                 </div>
               </ExSection>
 
+              {/* Formations recommandées */}
+              <ExSection title={lang === 'fr' ? 'Formations recommandées' : 'Recommended training'} icon={GraduationCap}>
+                <div className="space-y-2.5">
+                  {(lang === 'fr' ? [
+                    { name: 'CSPO — Certified Scrum Product Owner', detail: 'Certification Scrum Alliance — 2 jours en présentiel ou distanciel — 1 000 à 1 800 €. Attendue par la majorité des entreprises qui recrutent des PMs en environnement Agile.', tag: 'Certifiante' },
+                    { name: 'Product School — Product Manager Certificate', detail: 'Formation intensive de 8 semaines en ligne — reconnu internationalement. Couvre la discovery, la roadmap et les métriques SaaS. Accès à une communauté de 1M+ de PMs.', tag: 'En ligne' },
+                    { name: 'Reforge — Product Management Fundamentals', detail: 'Plateforme de référence utilisée par les PMs de Airbnb, Stripe et Intercom. Parcours asynchrones sur la growth, la discovery et la stratégie produit — abonnement annuel ~2 000 $.', tag: 'Expert' },
+                    { name: 'OpenClassrooms — Devenez Product Owner', detail: 'Parcours accessible et complet pour les débutants — 6 mois, éligible CPF. Idéal pour acquérir les bases du product management et du backlog management avant une certification.', tag: 'CPF éligible' },
+                  ] : [
+                    { name: 'CSPO — Certified Scrum Product Owner', detail: 'Scrum Alliance certification — 2 days in-person or remote — €1,000 to €1,800. Expected by most companies hiring PMs in Agile environments.', tag: 'Certified' },
+                    { name: 'Product School — Product Manager Certificate', detail: '8-week intensive online training — internationally recognised. Covers discovery, roadmapping and SaaS metrics. Access to a 1M+ PM community.', tag: 'Online' },
+                    { name: 'Reforge — Product Management Fundamentals', detail: 'Reference platform used by PMs at Airbnb, Stripe and Intercom. Asynchronous courses on growth, discovery and product strategy — annual subscription ~$2,000.', tag: 'Expert' },
+                    { name: 'OpenClassrooms — Become a Product Owner', detail: 'Accessible and comprehensive course for beginners — 6 months, CPF-eligible. Ideal for acquiring PM and backlog management basics before a certification.', tag: 'CPF eligible' },
+                  ]).map(f => (
+                    <div key={f.name} className="flex items-start gap-3 bg-dark-800/50 border border-dark-700 rounded-xl p-3.5">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <p className="text-xs font-semibold text-slate-200">{f.name}</p>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-brand-900/40 border border-brand-800/30 text-brand-400">{f.tag}</span>
+                        </div>
+                        <p className="text-xs text-slate-500 leading-relaxed">{f.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ExSection>
+
+              {/* Types d'entreprises à cibler */}
+              <ExSection title={lang === 'fr' ? 'Types d\'entreprises à cibler' : 'Company types to target'} icon={BriefcaseBusiness}>
+                <div className="space-y-2.5">
+                  {(lang === 'fr' ? [
+                    { type: 'Startups early-stage (Seed à Série A)', desc: 'Le meilleur terrain d\'entrée pour un premier rôle PM. La culture est ouverte aux reconversions, les responsabilités sont larges et la courbe d\'apprentissage est maximale. Vérifier : présence d\'un lead PM pour être mentoré.', tag: 'Recommandé pour débuter' },
+                    { type: 'Scale-ups tech (Série B à C)', desc: 'Structure intermédiaire avec des équipes produit organisées et des processus de discovery en place. Permet d\'apprendre dans un environnement structuré tout en ayant un impact réel. Vérifier : taille de la squad et accès direct aux utilisateurs.', tag: 'Idéal à 6-12 mois d\'exp.' },
+                    { type: 'ETI en transformation digitale', desc: 'Entreprises de taille intermédiaire qui créent leurs premières équipes produit. Moins compétitif que les pure players, avec un fort besoin de profils capables de structurer une approche produit from scratch.', tag: 'Moins compétitif' },
+                    { type: 'Agences produit / cabinets conseil produit', desc: 'Permettent de toucher plusieurs produits, secteurs et problématiques en peu de temps. Utile pour accélérer l\'acquisition de compétences, même si le salaire est légèrement inférieur aux startups tech.', tag: 'Montée en compétences rapide' },
+                  ] : [
+                    { type: 'Early-stage startups (Seed to Series A)', desc: 'Best entry point for a first PM role. Culture is open to career changers, responsibilities are broad and the learning curve is steep. Check: presence of a lead PM for mentoring.', tag: 'Recommended for starters' },
+                    { type: 'Tech scale-ups (Series B to C)', desc: 'Mid-size structure with organised product teams and established discovery processes. Allows learning in a structured environment while having real impact. Check: squad size and direct user access.', tag: 'Ideal at 6-12 months exp.' },
+                    { type: 'SMEs in digital transformation', desc: 'Mid-sized companies creating their first product teams. Less competitive than pure players, with strong demand for profiles able to build a product approach from scratch.', tag: 'Less competitive' },
+                    { type: 'Product agencies / product consulting firms', desc: 'Allows exposure to multiple products, sectors and challenges quickly. Useful for accelerating skill acquisition, even if salaries are slightly lower than tech startups.', tag: 'Fast skill acquisition' },
+                  ]).map(item => (
+                    <div key={item.type} className="flex items-start gap-2.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brand-500 mt-2 flex-shrink-0" />
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                          <p className="text-xs font-semibold text-slate-200">{item.type}</p>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-dark-700 border border-dark-600 text-slate-500">{item.tag}</span>
+                        </div>
+                        <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ExSection>
+
+              {/* Questions à poser à un professionnel */}
+              <ExSection title={lang === 'fr' ? 'Questions à poser à un PM lors d\'un échange réseau' : 'Questions to ask a PM during a networking call'} icon={Lightbulb}>
+                <p className="text-xs text-slate-500 mb-3 italic">
+                  {lang === 'fr'
+                    ? 'Ces questions t\'aideront à valider la trajectoire et à dépasser le discours officiel sur le métier.'
+                    : 'These questions will help you validate the path and go beyond the official narrative about the role.'}
+                </p>
+                <div className="space-y-2">
+                  {(lang === 'fr' ? [
+                    { q: 'Comment se passe réellement une semaine type ? Qu\'est-ce qui prend le plus de temps — et que tu n\'aurais pas anticipé ?', why: 'Permet de détecter si le quotidien correspond à ce que l\'on imagine ou s\'il est dominé par des réunions et de la politique interne.' },
+                    { q: 'Si tu devais reconseiller ton entrée dans le métier, qu\'est-ce que tu ferais différemment ?', why: 'Révèle les vraies erreurs des débutants — pas celles des livres, celles du terrain.' },
+                    { q: 'Quel est le profil de PM qui réussit le mieux dans ton entreprise — et celui qui échoue ?', why: 'Permet d\'identifier les softs skills réellement valorisés vs ceux mis en avant dans les JDs.' },
+                    { q: 'Comment as-tu décroché ton premier poste PM, et qu\'est-ce qui t\'a fait sortir du lot ?', why: 'Renseigne sur les vraies stratégies d\'accès au marché — réseau, portfolio, certification — avec les nuances du terrain.' },
+                    { q: 'À quel moment as-tu senti que tu devenais vraiment PM — et pas juste PO exécutant ?', why: 'Aide à comprendre la distinction réelle entre Product Owner et Product Manager, et les étapes de maturité du rôle.' },
+                  ] : [
+                    { q: 'What does a typical week actually look like? What takes the most time — and what didn\'t you anticipate?', why: 'Helps detect if day-to-day reality matches expectations or is dominated by meetings and internal politics.' },
+                    { q: 'If you could advise yourself at the start, what would you do differently?', why: 'Reveals real beginner mistakes — not from books, but from the field.' },
+                    { q: 'What type of PM succeeds most in your company — and who fails?', why: 'Identifies the soft skills that are actually valued vs. those highlighted in job descriptions.' },
+                    { q: 'How did you land your first PM role, and what made you stand out?', why: 'Informs on real market entry strategies — network, portfolio, certification — with real-world nuance.' },
+                    { q: 'When did you feel you were really becoming a PM — and not just an executing PO?', why: 'Helps understand the real distinction between Product Owner and Product Manager, and the maturity stages of the role.' },
+                  ]).map((item, i) => (
+                    <div key={i} className="bg-dark-800/40 border border-dark-700 rounded-xl p-3.5">
+                      <div className="flex items-start gap-2.5 mb-1.5">
+                        <span className="text-purple-400 font-bold text-xs flex-shrink-0 mt-0.5">{i + 1}.</span>
+                        <p className="text-sm text-slate-200 font-medium leading-snug">{item.q}</p>
+                      </div>
+                      <p className="text-xs text-slate-500 leading-relaxed ml-[18px] italic">{lang === 'fr' ? '→ ' : '→ '}{item.why}</p>
+                    </div>
+                  ))}
+                </div>
+              </ExSection>
+
+              {/* Choisissez cette voie si / Évitez si */}
+              <ExSection title={lang === 'fr' ? 'Choisissez cette voie si… / Évitez si…' : 'Choose this path if… / Avoid if…'} icon={Compass}>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs font-semibold text-green-400 mb-2.5 flex items-center gap-1.5">
+                      <CheckCircle2 size={13} strokeWidth={1.5} />
+                      {lang === 'fr' ? 'Choisissez cette voie si…' : 'Choose this path if…'}
+                    </p>
+                    <div className="space-y-1.5">
+                      {(lang === 'fr' ? [
+                        'Tu aimes comprendre les problèmes en profondeur avant d\'agir — et pas seulement exécuter des tâches',
+                        'Tu te sens à l\'aise avec les chiffres et les données pour justifier tes décisions',
+                        'Tu veux un impact visible sur un produit concret utilisé par des vrais utilisateurs',
+                        'Tu tolères l\'ambiguïté et tu es capable de décider avec des informations incomplètes',
+                      ] : [
+                        'You enjoy understanding problems in depth before acting — not just executing tasks',
+                        'You\'re comfortable with data and numbers to justify your decisions',
+                        'You want visible impact on a concrete product used by real users',
+                        'You tolerate ambiguity and can decide with incomplete information',
+                      ]).map((c, i) => (
+                        <div key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-green-900/10 border border-green-800/20 rounded-lg px-3 py-2">
+                          <span className="text-green-500 flex-shrink-0 mt-0.5">→</span> {c}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-red-400 mb-2.5 flex items-center gap-1.5">
+                      <AlertTriangle size={13} strokeWidth={1.5} />
+                      {lang === 'fr' ? 'Évitez cette voie si…' : 'Avoid this path if…'}
+                    </p>
+                    <div className="space-y-1.5">
+                      {(lang === 'fr' ? [
+                        'Tu préfères un rôle avec des tâches répétitives et des résultats mesurables à court terme',
+                        'Tu as du mal à naviguer entre des interlocuteurs techniques et non-techniques sans frustration',
+                        'Tu veux coder ou designer toi-même — le PM ne fait ni l\'un ni l\'autre',
+                        'Tu as besoin de directives claires et d\'un cadre très défini pour être efficace',
+                      ] : [
+                        'You prefer a role with repetitive tasks and short-term measurable results',
+                        'You struggle to navigate between technical and non-technical stakeholders without frustration',
+                        'You want to code or design yourself — the PM does neither',
+                        'You need clear directives and a very defined framework to be effective',
+                      ]).map((a, i) => (
+                        <div key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-red-900/10 border border-red-800/20 rounded-lg px-3 py-2">
+                          <span className="text-red-400 flex-shrink-0 mt-0.5">✕</span> {a}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </ExSection>
+
               {/* Première action */}
               <div className="bg-gradient-to-r from-brand-900/40 to-purple-900/40 border border-brand-700/40 rounded-2xl p-5">
                 <div className="flex items-center gap-2 mb-2">

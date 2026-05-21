@@ -41,6 +41,8 @@ interface PathData {
   positioningStatement?: string; linkedinHeadline?: string
   interviewPitch?: string; cvKeywords?: string[]
   comparisonWithOtherPaths?: string
+  companyTypesToTarget?: string[]; questionsToAskProfessionals?: string[]
+  choosePath?: string[]; avoidPath?: string[]
 }
 
 interface ReportComparison {
@@ -660,7 +662,13 @@ CHAMPS DE POSITIONNEMENT — OBLIGATOIRES PAR TRAJECTOIRE :
   · objective : objectif précis de la semaine (1 phrase)
   · deliverable : livrable tangible à produire en fin de semaine
   · practicalTip : conseil pratique pour réussir cette semaine
-  · mistakeToAvoid : erreur fréquente à éviter cette semaine`
+  · mistakeToAvoid : erreur fréquente à éviter cette semaine
+
+NOUVEAUX CHAMPS OBLIGATOIRES PAR TRAJECTOIRE :
+- companyTypesToTarget : 4 types d'entreprises où postuler en priorité — format : "[Type précis] — [Pourquoi c'est un terrain d'entrée adapté pour CE profil + critères à vérifier]". Adapter selon pathType.
+- questionsToAskProfessionals : 5 questions clés à poser lors d'un échange réseau — format : "[Question directe et ouverte] — [Pourquoi cette question est utile pour valider la trajectoire]".
+- choosePath : 3 à 4 critères pour CHOISIR cette trajectoire — format : "Si [condition concrète liée au profil ou au mode de vie souhaité]".
+- avoidPath : 3 à 4 critères pour ÉVITER cette trajectoire — format : "Si [incompatibilité concrète avec le métier ou les contraintes]".`
 
 async function generateAIReport(
   data: Record<string, unknown>,
@@ -897,7 +905,30 @@ JSON ATTENDU (réponds UNIQUEMENT avec ce JSON)
       "linkedinHeadline": "[Titre cible] | [Valeur différenciatrice] | [Signal de crédibilité]",
       "interviewPitch": "3 à 4 phrases pour expliquer cette reconversion en entretien.",
       "cvKeywords": ["mot-clé 1", "mot-clé 2", "mot-clé 3", "mot-clé 4", "mot-clé 5"],
-      "comparisonWithOtherPaths": "Paragraphe de 4 à 6 lignes : pourquoi cette trajectoire current_aligned vs les deux autres. Cas où elle est recommandée. Cas où elle est déconseillée. Ce qu'elle apporte que les autres ne donnent pas."
+      "comparisonWithOtherPaths": "Paragraphe de 4 à 6 lignes : pourquoi cette trajectoire current_aligned vs les deux autres. Cas où elle est recommandée. Cas où elle est déconseillée. Ce qu'elle apporte que les autres ne donnent pas.",
+      "companyTypesToTarget": [
+        "Type d'entreprise 1 — terrain d'entrée adapté pour ${firstName} + critères à vérifier",
+        "Type d'entreprise 2 — culture adaptée et taille de structure recommandée",
+        "Type d'entreprise 3 — contexte et réalisme pour ce profil current_aligned",
+        "Type d'entreprise 4 — opportunité spécifique au secteur"
+      ],
+      "questionsToAskProfessionals": [
+        "Question 1 sur la réalité du quotidien — pourquoi utile pour valider cette trajectoire",
+        "Question 2 sur les conditions réelles d'entrée dans le métier",
+        "Question 3 sur les erreurs fréquentes des nouveaux entrants",
+        "Question 4 sur l'évolution salariale et les étapes de progression",
+        "Question 5 sur ce qui différencie les profils qui réussissent"
+      ],
+      "choosePath": [
+        "Si tu veux [aspect concret de ce métier] — lien avec les réponses de ${firstName}",
+        "Si ta priorité est [valeur ou besoin déclaré]",
+        "Si tu cherches [ce que ce métier offre concrètement]"
+      ],
+      "avoidPath": [
+        "Si tu ne supportes pas [contrainte réelle de ce métier]",
+        "Si tu cherches [ce que ce métier ne peut structurellement pas offrir]",
+        "Si [incompatibilité concrète avec le profil ou mode de vie]"
+      ]
     },
     {
       "pathType": "passion_based",
@@ -951,7 +982,30 @@ JSON ATTENDU (réponds UNIQUEMENT avec ce JSON)
       "linkedinHeadline": "[Titre cible] | [Valeur différenciatrice] | [Signal de crédibilité]",
       "interviewPitch": "3 à 4 phrases pour expliquer cette reconversion passion en entretien.",
       "cvKeywords": ["mot-clé 1", "mot-clé 2", "mot-clé 3", "mot-clé 4", "mot-clé 5"],
-      "comparisonWithOtherPaths": "Paragraphe de 4 à 6 lignes : pourquoi cette trajectoire passion_based vs les deux autres. Cas où elle est recommandée. Cas où elle est déconseillée. Ce qu'elle apporte que les autres ne donnent pas."
+      "comparisonWithOtherPaths": "Paragraphe de 4 à 6 lignes : pourquoi cette trajectoire passion_based vs les deux autres. Cas où elle est recommandée. Cas où elle est déconseillée. Ce qu'elle apporte que les autres ne donnent pas.",
+      "companyTypesToTarget": [
+        "Type d'entreprise 1 — secteur passion avec culture adaptée aux reconversions",
+        "Type d'entreprise 2 — structure qui valorise les parcours atypiques",
+        "Type d'entreprise 3 — environnement favorable pour un premier rôle passion_based",
+        "Type d'entreprise 4 — opportunité d'entrée réaliste pour ce profil"
+      ],
+      "questionsToAskProfessionals": [
+        "Question 1 sur la réalité du métier passion au quotidien",
+        "Question 2 sur les conditions d'entrée pour un profil en reconversion",
+        "Question 3 sur ce que personne ne dit vraiment sur ce secteur",
+        "Question 4 sur la progression financière et les paliers réalistes",
+        "Question 5 sur les profils qui réussissent vraiment cette transition"
+      ],
+      "choosePath": [
+        "Si l'alignement avec tes valeurs prime sur la rapidité de transition",
+        "Si tu es prêt à accepter [contrainte spécifique de cette trajectoire passion]",
+        "Si [élément déclaré par ${firstName}] est un moteur de décision fort"
+      ],
+      "avoidPath": [
+        "Si tu as besoin de revenus stables rapidement — la phase de transition passion est plus longue",
+        "Si tu cherches [ce que ce métier passion ne peut pas offrir structurellement]",
+        "Si [incompatibilité avec les exigences réelles de ce secteur]"
+      ]
     },
     {
       "pathType": "high_potential",
@@ -1005,7 +1059,30 @@ JSON ATTENDU (réponds UNIQUEMENT avec ce JSON)
       "linkedinHeadline": "[Titre cible ambitieux] | [Valeur différenciatrice] | [Signal de crédibilité]",
       "interviewPitch": "3 à 4 phrases pour expliquer cette reconversion ambitieuse en entretien.",
       "cvKeywords": ["mot-clé 1", "mot-clé 2", "mot-clé 3", "mot-clé 4", "mot-clé 5"],
-      "comparisonWithOtherPaths": "Paragraphe de 4 à 6 lignes : pourquoi cette trajectoire high_potential vs les deux autres. Cas où elle est recommandée. Cas où elle est déconseillée. Ce qu'elle apporte que les autres ne donnent pas."
+      "comparisonWithOtherPaths": "Paragraphe de 4 à 6 lignes : pourquoi cette trajectoire high_potential vs les deux autres. Cas où elle est recommandée. Cas où elle est déconseillée. Ce qu'elle apporte que les autres ne donnent pas.",
+      "companyTypesToTarget": [
+        "Type d'entreprise 1 — structure haute ambition adaptée à ce profil high_potential",
+        "Type d'entreprise 2 — environnement qui récompense l'initiative et l'impact",
+        "Type d'entreprise 3 — terrain d'entrée réaliste avec forte courbe d'apprentissage",
+        "Type d'entreprise 4 — structure avec potentiel de croissance et responsabilités rapides"
+      ],
+      "questionsToAskProfessionals": [
+        "Question 1 sur ce qu'il faut vraiment pour réussir dans ce métier ambitieux",
+        "Question 2 sur les conditions à réunir avant de se lancer",
+        "Question 3 sur les signaux qui indiquent qu'on est sur la bonne trajectoire",
+        "Question 4 sur la réalité de la rémunération les 2 premières années",
+        "Question 5 sur ce qu'on ne peut pas apprendre seul et qui fait la différence"
+      ],
+      "choosePath": [
+        "Si tu as une forte tolérance à l'ambiguïté et à l'incertitude",
+        "Si tu cherches [impact ou potentiel que seule cette trajectoire high_potential offre]",
+        "Si [force spécifique de ${firstName}] est un avantage différenciateur dans ce secteur"
+      ],
+      "avoidPath": [
+        "Si tu as besoin de résultats rapides et de sécurité financière à court terme",
+        "Si tu ne supportes pas [contrainte exigeante de cette trajectoire ambitieuse]",
+        "Si [incompatibilité de profil ou de style de vie avec les exigences réelles]"
+      ]
     }
   ],
   "comparison": {
@@ -1024,8 +1101,10 @@ RAPPEL FINAL :
 - Les 3 pathTypes DOIVENT être dans des secteurs clairement distincts
 - Aucune action vague, aucune phrase générique — chaque élément doit citer CE profil
 - Ton honnête, professionnel, rassurant — aucune promesse d'emploi garantie
-- Chaque trajectoire DOIT inclure : positioningStatement, linkedinHeadline, interviewPitch, cvKeywords, comparisonWithOtherPaths
-- Chaque semaine du detailedActionPlan30Days DOIT inclure : objective, deliverable, practicalTip, mistakeToAvoid`
+- OBLIGATOIRES dans chaque trajectoire : positioningStatement, linkedinHeadline, interviewPitch, cvKeywords, comparisonWithOtherPaths, companyTypesToTarget, questionsToAskProfessionals, choosePath, avoidPath
+- Chaque semaine du detailedActionPlan30Days DOIT inclure : objective, deliverable, practicalTip, mistakeToAvoid
+- companyTypesToTarget : adapter au pathType (startup/PME/grande entreprise selon risk_level)
+- choosePath / avoidPath : honnêtes, concrets, personnalisés au profil — pas génériques`
 
   const response = await client.chat.completions.create({
     model: 'gpt-4o',

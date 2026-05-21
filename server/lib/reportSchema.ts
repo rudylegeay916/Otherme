@@ -55,7 +55,11 @@ const PathDataSchema = z.object({
   linkedinHeadline:         z.string().optional(),
   interviewPitch:           z.string().optional(),
   cvKeywords:               z.array(z.string()).optional(),
-  comparisonWithOtherPaths: z.string().optional(),
+  comparisonWithOtherPaths:         z.string().optional(),
+  companyTypesToTarget:             z.array(z.string()).optional(),
+  questionsToAskProfessionals:      z.array(z.string()).optional(),
+  choosePath:                       z.array(z.string()).optional(),
+  avoidPath:                        z.array(z.string()).optional(),
 }).passthrough() // conserve les champs extra (longDescription, dailyLife, etc.)
 
 // ── GeneratedReport ───────────────────────────────────────────────

@@ -100,6 +100,11 @@ export interface PathData {
   interviewPitch?: string
   cvKeywords?: string[]
   comparisonWithOtherPaths?: string
+  // ── Ciblage & questionnement ──────────────────────────────────────
+  companyTypesToTarget?: string[]
+  questionsToAskProfessionals?: string[]
+  choosePath?: string[]
+  avoidPath?: string[]
 }
 
 export interface ReportComparison {
