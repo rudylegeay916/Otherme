@@ -247,18 +247,23 @@ function PathCard({ path, index }: { path: PathData; index: number }) {
                 </ul>
               </div>
             </div>
-            {path.recommendedTrainingTypes.length > 0 && (
-              <div className="mt-4 border-t border-dark-700 pt-3">
-                <p className="text-xs font-semibold text-blue-400 mb-2">🎓 Formations recommandées</p>
-                <ul className="space-y-1">
-                  {path.recommendedTrainingTypes.map((r, i) => (
-                    <li key={i} className="text-xs text-slate-400">• {r}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </Accordion>
         </div>
+
+        {/* Training */}
+        {path.recommendedTrainingTypes.length > 0 && (
+          <div className="mt-3">
+            <Accordion title="Formations recommandées" icon="🎓">
+              <ul className="space-y-1.5">
+                {path.recommendedTrainingTypes.map((r, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs text-slate-300">
+                    <span className="text-blue-400 flex-shrink-0 mt-0.5">•</span> {r}
+                  </li>
+                ))}
+              </ul>
+            </Accordion>
+          </div>
+        )}
 
         {/* 5-year timeline */}
         <div className="mt-3">

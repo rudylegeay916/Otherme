@@ -165,7 +165,7 @@ interface ExTimelinePeriodData {
 
 const EX_TIMELINE: ExTimelinePeriodData[] = [
   {
-    period: '0 à 30 jours',
+    period: '30 jours',
     objective: 'Comprendre précisément ce qu\'est le métier de Product Manager et valider l\'adéquation avec son profil.',
     actions: 'Analyser 15 offres PM sur LinkedIn, Welcome to the Jungle et Otta, lire les fiches métier de Product School et de Reforge, regarder 5 témoignages de PMs en reconversion, identifier 3 entreprises cibles réalistes.',
     deliverable: 'Une fiche de synthèse des compétences attendues, des outils incontournables et des écarts à combler — avec une décision claire : continuer ou pivoter.',
@@ -197,7 +197,7 @@ const EX_TIMELINE: ExTimelinePeriodData[] = [
     vigilance: 'Ne pas surestimer la cible : un poste d\'Associate PM dans une équipe structurée avec un mentor vaut mieux qu\'un PM solo sans cadre ni feedback.',
   },
   {
-    period: '12 à 18 mois',
+    period: '12 à 24 mois',
     objective: 'Prendre la responsabilité d\'une feature area et développer une posture stratégique.',
     actions: 'Animer les cérémonies Agile en autonomie (sprint planning, rétro, refinement), conduire les cycles de discovery, commencer à influencer la roadmap produit trimestrielle et présenter les arbitrages à la direction.',
     deliverable: 'Ownership reconnu d\'une feature area, roadmap trimestrielle présentée à la direction, et au moins 2 fonctionnalités majeures livrées avec impact mesuré sur des KPIs business.',
@@ -205,7 +205,15 @@ const EX_TIMELINE: ExTimelinePeriodData[] = [
     vigilance: 'Éviter de rester dans l\'exécution sans développer de vision — la différence entre un bon PO et un vrai PM tient à la capacité à formuler une stratégie.',
   },
   {
-    period: '18 à 36 mois',
+    period: '2 à 3 ans',
+    objective: 'Prendre la responsabilité d\'une feature area complète et développer une posture stratégique.',
+    actions: 'Animer les cérémonies Agile en pleine autonomie (sprint planning, rétro, refinement), conduire les cycles de discovery de manière indépendante, présenter les arbitrages de roadmap à la direction et influencer la stratégie produit.',
+    deliverable: 'Ownership reconnu d\'une feature area avec roadmap trimestrielle validée par la direction et 2 fonctionnalités majeures livrées avec impact mesuré.',
+    kpi: 'Être cité comme référent produit sur son périmètre par l\'équipe engineering, métriques d\'usage en amélioration continue sur 3 mois.',
+    vigilance: 'Éviter de rester dans l\'exécution sans développer de vision — la différence entre un bon PO et un vrai PM tient à la capacité à formuler une stratégie.',
+  },
+  {
+    period: '3 à 5 ans',
     objective: 'Accéder à un rôle de PM Senior ou Lead PM avec impact business direct et responsabilité d\'équipe.',
     actions: 'Piloter une squad produit complète, définir la vision et la stratégie produit à 12 mois, mentorer des profils juniors, contribuer au recrutement et à la culture produit de l\'organisation.',
     deliverable: 'Une product strategy document validée par la direction, 3 fonctionnalités à fort impact livrées, et un profil reconnu dans la communauté PM avec au moins un article ou talk publié.',
@@ -251,7 +259,7 @@ function ExSection({ title, icon: Icon, children, defaultOpen = false }: {
 
 function TimelinePeriod({ period, index }: { period: ExTimelinePeriodData; index: number }) {
   const [open, setOpen] = useState(false)
-  const dotColors = ['bg-violet-500', 'bg-blue-500', 'bg-indigo-500', 'bg-teal-500', 'bg-green-500', 'bg-emerald-500']
+  const dotColors = ['bg-violet-500', 'bg-blue-500', 'bg-indigo-500', 'bg-teal-500', 'bg-green-500', 'bg-emerald-500', 'bg-cyan-500']
   return (
     <div className="border border-dark-700 rounded-xl overflow-hidden">
       <button
@@ -563,6 +571,37 @@ export default function Landing() {
               </div>
             </div>
 
+            {/* Score bars */}
+            <div className="px-6 md:px-8 pt-4">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-3 p-4 bg-dark-800/50 rounded-xl border border-dark-700 mb-4">
+                {([
+                  { label: lang === 'fr' ? 'Sécurité' : 'Security',                score: 62, color: 'bg-blue-500' },
+                  { label: lang === 'fr' ? 'Liberté' : 'Freedom',                  score: 78, color: 'bg-purple-500' },
+                  { label: lang === 'fr' ? 'Revenu potentiel' : 'Income potential', score: 82, color: 'bg-green-500' },
+                  { label: lang === 'fr' ? 'Alignement perso.' : 'Personal fit',   score: 71, color: 'bg-amber-500' },
+                ] as { label: string; score: number; color: string }[]).map(s => (
+                  <div key={s.label} className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-400">{s.label}</span>
+                      <span className="text-slate-200 font-semibold">{s.score}/100</span>
+                    </div>
+                    <div className="h-1.5 bg-dark-700 rounded-full overflow-hidden">
+                      <div className={`h-full ${s.color} rounded-full`} style={{ width: `${s.score}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Key insight */}
+              <div className="bg-blue-900/20 border border-blue-700/30 rounded-xl p-4 mb-4">
+                <p className="text-xs font-semibold text-blue-300 mb-1">💡 {lang === 'fr' ? 'Insight clé' : 'Key insight'}</p>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  {lang === 'fr'
+                    ? 'Le PM n\'a pas besoin d\'être développeur — il a besoin de comprendre les problèmes mieux que quiconque. Les profils issus de secteurs non-tech apportent souvent une perspective terrain unique, et dans les startups B2B, c\'est précisément ce que les ingénieurs qui deviennent PM n\'ont pas.'
+                    : 'The PM doesn\'t need to be a developer — they need to understand problems better than anyone. Profiles from non-tech sectors often bring unique ground-level insight, and in B2B startups, that\'s precisely what engineers-turned-PMs often lack.'}
+                </p>
+              </div>
+            </div>
+
             {/* Accordions */}
             <div className="px-6 md:px-8 pb-6 md:pb-8 space-y-3">
 
@@ -599,11 +638,19 @@ export default function Landing() {
                       ? 'Cette trajectoire est particulièrement adaptée aux personnes qui aiment comprendre les problèmes en profondeur, qui sont à l\'aise avec les données, qui savent naviguer entre des interlocuteurs techniques et non-techniques, et qui veulent un impact visible et mesurable sur un produit concret. Elle exige en revanche une vraie tolérance à l\'ambiguïté et à la prise de décision sous incertitude.'
                       : 'This path is particularly suited to people who enjoy understanding problems in depth, are comfortable with data, can navigate between technical and non-technical stakeholders, and want a visible, measurable impact on a concrete product. It does require a genuine tolerance for ambiguity and decision-making under uncertainty.'}
                   </p>
+                  <div className="mt-4 bg-dark-800/60 border border-dark-600 rounded-xl p-4">
+                    <p className="text-xs font-semibold text-slate-400 mb-1.5">🗓️ {lang === 'fr' ? 'Journée type réaliste' : 'Realistic typical day'}</p>
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      {lang === 'fr'
+                        ? '9h : daily standup de 15 min avec l\'équipe engineering et design. 9h30 : session discovery — review des interviews utilisateurs, identification des patterns comportementaux. 11h : co-rédaction des user stories pour le sprint suivant avec le lead dev. 14h : sync avec les sales sur les retours terrain des dernières démos. 15h30 : analyse des métriques d\'activation sur Amplitude — identification des points de friction dans l\'onboarding. 17h : rédaction du weekly update produit pour la direction. Rythme type sur la semaine : 2 à 3 sessions de discovery, 1 sprint planning, 1 rétro, 2 à 3 syncs cross-fonctionnels.'
+                        : '9am: 15-min daily standup with engineering and design. 9:30am: discovery session — user interview review, identify behavioural patterns. 11am: co-write user stories for next sprint with lead dev. 2pm: sync with sales on field feedback from last demos. 3:30pm: analyse activation metrics on Amplitude — identify onboarding friction points. 5pm: write weekly product update for leadership. Typical week rhythm: 2–3 discovery sessions, 1 sprint planning, 1 retro, 2–3 cross-functional syncs.'}
+                    </p>
+                  </div>
                 </div>
               </ExSection>
 
-              {/* Pourquoi c'est cohérent */}
-              <ExSection title={lang === 'fr' ? 'Pourquoi cette trajectoire est cohérente' : 'Why this path is coherent'} icon={Target}>
+              {/* Pourquoi ça correspond */}
+              <ExSection title={lang === 'fr' ? 'Pourquoi cette trajectoire te correspond' : 'Why this path suits you'} icon={Target}>
                 <div className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-3">
                     {(lang === 'fr' ? [
