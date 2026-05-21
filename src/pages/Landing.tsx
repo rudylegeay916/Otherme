@@ -529,8 +529,8 @@ export default function Landing() {
                 <FileText size={13} strokeWidth={1.5} className="flex-shrink-0" />
                 <span>
                   {lang === 'fr'
-                    ? 'Exemple indicatif. Le rapport complet est généré selon tes réponses, ton profil et ton CV.'
-                    : 'Indicative example. The full report is generated from your answers, profile and CV.'}
+                    ? 'Exemple illustratif. Les résultats réels sont générés selon vos réponses, votre profil et votre CV.'
+                    : 'Illustrative example. Real results are generated from your answers, profile and CV.'}
                 </span>
               </div>
 
@@ -605,8 +605,8 @@ export default function Landing() {
             {/* Accordions */}
             <div className="px-6 md:px-8 pb-6 md:pb-8 space-y-3">
 
-              {/* Description */}
-              <ExSection title={lang === 'fr' ? 'Description du métier' : 'Job description'} icon={BriefcaseBusiness} defaultOpen>
+              {/* 1. Description complète */}
+              <ExSection title={lang === 'fr' ? 'Description complète' : 'Full description'} icon={BriefcaseBusiness} defaultOpen>
                 <div className="space-y-3 text-sm text-slate-300 leading-relaxed">
                   <p>
                     {lang === 'fr'
@@ -649,7 +649,7 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* Pourquoi ça correspond */}
+              {/* 2. Pourquoi cette trajectoire te correspond */}
               <ExSection title={lang === 'fr' ? 'Pourquoi cette trajectoire te correspond' : 'Why this path suits you'} icon={Target}>
                 <div className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-3">
@@ -694,7 +694,7 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* Compétences */}
+              {/* 3. Compétences */}
               <ExSection title={lang === 'fr' ? 'Compétences valorisables et à développer' : 'Transferable and new skills'} icon={Brain}>
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
@@ -758,8 +758,35 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* Timeline */}
-              <ExSection title={lang === 'fr' ? 'Timeline de transition — 6 à 24 mois' : 'Transition timeline — 6 to 24 months'} icon={CalendarRange}>
+              {/* 4. Formations recommandées */}
+              <ExSection title={lang === 'fr' ? 'Formations recommandées' : 'Recommended training'} icon={GraduationCap}>
+                <div className="space-y-2.5">
+                  {(lang === 'fr' ? [
+                    { name: 'CSPO — Certified Scrum Product Owner', detail: 'Certification Scrum Alliance — 2 jours en présentiel ou distanciel — 1 000 à 1 800 €. Attendue par la majorité des entreprises qui recrutent des PMs en environnement Agile.', tag: 'Certifiante' },
+                    { name: 'Product School — Product Manager Certificate', detail: 'Formation intensive de 8 semaines en ligne — reconnu internationalement. Couvre la discovery, la roadmap et les métriques SaaS. Accès à une communauté de 1M+ de PMs.', tag: 'En ligne' },
+                    { name: 'Reforge — Product Management Fundamentals', detail: 'Plateforme de référence utilisée par les PMs de Airbnb, Stripe et Intercom. Parcours asynchrones sur la growth, la discovery et la stratégie produit — abonnement annuel ~2 000 $.', tag: 'Expert' },
+                    { name: 'OpenClassrooms — Devenez Product Owner', detail: 'Parcours accessible et complet pour les débutants — 6 mois, éligible CPF. Idéal pour acquérir les bases du product management et du backlog management avant une certification.', tag: 'CPF éligible' },
+                  ] : [
+                    { name: 'CSPO — Certified Scrum Product Owner', detail: 'Scrum Alliance certification — 2 days in-person or remote — €1,000 to €1,800. Expected by most companies hiring PMs in Agile environments.', tag: 'Certified' },
+                    { name: 'Product School — Product Manager Certificate', detail: '8-week intensive online training — internationally recognised. Covers discovery, roadmapping and SaaS metrics. Access to a 1M+ PM community.', tag: 'Online' },
+                    { name: 'Reforge — Product Management Fundamentals', detail: 'Reference platform used by PMs at Airbnb, Stripe and Intercom. Asynchronous courses on growth, discovery and product strategy — annual subscription ~$2,000.', tag: 'Expert' },
+                    { name: 'OpenClassrooms — Become a Product Owner', detail: 'Accessible and comprehensive course for beginners — 6 months, CPF-eligible. Ideal for acquiring PM and backlog management basics before a certification.', tag: 'CPF eligible' },
+                  ]).map(f => (
+                    <div key={f.name} className="flex items-start gap-3 bg-dark-800/50 border border-dark-700 rounded-xl p-3.5">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <p className="text-xs font-semibold text-slate-200">{f.name}</p>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-brand-900/40 border border-brand-800/30 text-brand-400">{f.tag}</span>
+                        </div>
+                        <p className="text-xs text-slate-500 leading-relaxed">{f.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ExSection>
+
+              {/* 5. Timeline sur 5 ans */}
+              <ExSection title={lang === 'fr' ? 'Timeline sur 5 ans' : '5-year timeline'} icon={CalendarRange}>
                 <div className="space-y-2">
                   {EX_TIMELINE.map((period, i) => (
                     <TimelinePeriod key={i} period={period} index={i} />
@@ -767,7 +794,7 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* Plan 30 jours */}
+              {/* 6. Plan 30 jours */}
               <ExSection title={lang === 'fr' ? 'Plan d\'action 30 jours' : '30-day action plan'} icon={ListChecks}>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {(lang === 'fr' ? [
@@ -793,8 +820,93 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* Risques */}
-              <ExSection title={lang === 'fr' ? 'Risques et points de vigilance' : 'Risks and watchpoints'} icon={AlertTriangle}>
+              {/* 7. Cette semaine — actions concrètes */}
+              <ExSection title={lang === 'fr' ? 'Cette semaine — actions concrètes' : 'This week — concrete actions'} icon={Zap}>
+                <ul className="space-y-2 mb-4">
+                  {(lang === 'fr' ? [
+                    'Analyser 10 offres PM sur LinkedIn et Otta (2h) — noter les 5 compétences et outils les plus demandés dans les JDs',
+                    'Faire un product teardown de 30 minutes sur une app mobile que tu utilises quotidiennement — identifier 3 problèmes et 2 solutions possibles',
+                    'Rejoindre Slack PM France et Product Hunt — se présenter dans les channels dédiés aux reconversions en 3 phrases',
+                    'Contacter 2 PMs sur LinkedIn pour un échange de 20 minutes — les trouver via le hashtag #productmanager en reconversion',
+                  ] : [
+                    'Analyse 10 PM listings on LinkedIn and Otta (2h) — note the 5 most requested skills and tools in JDs',
+                    'Do a 30-minute product teardown of a mobile app you use daily — identify 3 problems and 2 possible solutions',
+                    'Join Slack PM France and Product Hunt — introduce yourself in career-change channels in 3 sentences',
+                    'Contact 2 PMs on LinkedIn for a 20-minute chat — find them via the #productmanager career change hashtag',
+                  ]).map((a, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm text-slate-300 bg-dark-800/50 border border-dark-700 rounded-lg px-3 py-2">
+                      <span className="text-brand-400 font-bold flex-shrink-0">{i + 1}.</span> {a}
+                    </li>
+                  ))}
+                </ul>
+                <div className="bg-green-900/20 border border-green-700/30 rounded-xl p-4">
+                  <p className="text-xs font-semibold text-green-400 mb-1">🎯 {lang === 'fr' ? 'Mini-projet à lancer cette semaine' : 'Mini-project to launch this week'}</p>
+                  <p className="text-sm text-slate-300 leading-relaxed">
+                    {lang === 'fr'
+                      ? 'Réaliser un product teardown complet sur une app de ton secteur actuel : identifier 3 problèmes utilisateurs concrets avec leurs impacts mesurables, proposer 2 solutions avec des wireframes sur papier ou Figma basics. Publier le résultat en 5 slides sur LinkedIn avec le hashtag #productmanagement. C\'est simultanément ta première preuve de portfolio et ton signal d\'entrée dans la communauté PM.'
+                      : 'Complete a product teardown on an app from your current sector: identify 3 concrete user problems with measurable impacts, propose 2 solutions with paper or Figma wireframes. Post the result as 5 slides on LinkedIn with #productmanagement. It\'s simultaneously your first portfolio proof and your entry signal into the PM community.'}
+                  </p>
+                </div>
+              </ExSection>
+
+              {/* 8. Personnes à contacter & preuves à construire */}
+              <ExSection title={lang === 'fr' ? 'Personnes à contacter & preuves à construire' : 'People to contact & proofs to build'} icon={ListChecks}>
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <p className="text-xs font-semibold text-purple-400 mb-2">👥 {lang === 'fr' ? 'Personnes à contacter' : 'People to contact'}</p>
+                    <div className="space-y-2">
+                      {(lang === 'fr' ? [
+                        { who: 'PMs en startup B2B SaaS', where: 'LinkedIn (chercher "Product Manager SaaS B2B") ou Slack PM France', why: 'Comprendre la réalité du premier poste PM' },
+                        { who: 'Associate PMs en reconversion', where: 'Twitter/X (#productmanager) ou Product Hunt', why: 'Décrypter leur parcours d\'entrée sur le marché' },
+                        { who: 'Leads PM ou CPOs (Seed–Série A)', where: 'Product At Heart ou Lean Product Meetup', why: 'Valider ton approche de candidature' },
+                        { who: 'Recruteurs spécialisés tech/produit', where: 'LinkedIn (chercher "Tech Recruiter Product Manager")', why: 'Comprendre les critères réels de sélection' },
+                      ] : [
+                        { who: 'PMs at B2B SaaS startups', where: 'LinkedIn ("Product Manager SaaS B2B") or Slack PM France', why: 'Understand the reality of the first PM role' },
+                        { who: 'Associate PMs who changed careers', where: 'Twitter/X (#productmanager) or Product Hunt', why: 'Understand how they broke into the market' },
+                        { who: 'Lead PMs or CPOs (Seed–Series A)', where: 'Product At Heart or Lean Product Meetup', why: 'Validate your application approach' },
+                        { who: 'Specialist tech/product recruiters', where: 'LinkedIn ("Tech Recruiter Product Manager")', why: 'Understand real selection criteria' },
+                      ]).map((item, i) => (
+                        <div key={i} className="text-xs text-slate-400 bg-dark-800/40 border border-dark-700 rounded-lg px-3 py-2">
+                          <p className="font-semibold text-slate-300 mb-0.5">{item.who}</p>
+                          <p className="text-slate-500">{lang === 'fr' ? 'Où : ' : 'Where: '}{item.where}</p>
+                          <p className="text-brand-400 mt-0.5">→ {item.why}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-blue-400 mb-2">📁 {lang === 'fr' ? 'Preuves à construire' : 'Proofs to build'}</p>
+                    <div className="space-y-2">
+                      {(lang === 'fr' ? [
+                        { title: 'Case study produit (10–15 slides)', desc: 'Analyse d\'un problème utilisateur réel, proposition de solution, roadmap priorisée et métriques de succès définies.' },
+                        { title: '5 user interviews documentées', desc: 'Interviews structurées selon le framework Jobs-to-be-Done, avec synthèse et insights actionnables.' },
+                        { title: 'Roadmap fictive avec priorisation RICE', desc: 'Backlog de features priorisées avec justification claire de chaque arbitrage.' },
+                        { title: 'Certification CSPO ou Product School', desc: 'Certification reconnue qui légitime le changement de posture vers le product management.' },
+                        { title: 'Profil LinkedIn repositionné PM', desc: 'Titre, résumé et expériences reformulés avec les mots-clés produit pour apparaître dans les recherches recruteur.' },
+                        { title: '2–3 articles LinkedIn PM', desc: 'Publications courtes sur le product management — développe la visibilité et la crédibilité communautaire.' },
+                      ] : [
+                        { title: 'Product case study (10–15 slides)', desc: 'Analysis of a real user problem, solution proposal, prioritised roadmap and defined success metrics.' },
+                        { title: '5 documented user interviews', desc: 'Structured interviews using the Jobs-to-be-Done framework, with synthesis and actionable insights.' },
+                        { title: 'Fictitious roadmap with RICE prioritisation', desc: 'Feature backlog with clear justification for each trade-off.' },
+                        { title: 'CSPO or Product School certification', desc: 'Recognised certification that legitimises the shift to product management.' },
+                        { title: 'Repositioned PM LinkedIn profile', desc: 'Title, summary and experiences reformulated with product keywords to appear in recruiter searches.' },
+                        { title: '2–3 PM LinkedIn articles', desc: 'Short posts on product management — builds community visibility and credibility.' },
+                      ]).map(proof => (
+                        <div key={proof.title} className="flex items-start gap-2.5">
+                          <CheckCircle2 size={14} strokeWidth={1.5} className="text-brand-400 flex-shrink-0 mt-0.5" />
+                          <div>
+                            <p className="text-xs font-semibold text-slate-200 mb-0.5">{proof.title}</p>
+                            <p className="text-xs text-slate-500 leading-relaxed">{proof.desc}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </ExSection>
+
+              {/* 9. Risques et limites */}
+              <ExSection title={lang === 'fr' ? 'Risques et limites à connaître' : 'Risks and limits to know'} icon={AlertTriangle}>
                 <div className="space-y-3">
                   {(lang === 'fr' ? [
                     { title: 'Marché compétitif sans portfolio', desc: 'Les offres PM sont très courtisées. Sans case study produit solide, il est difficile de sortir du lot face à des candidats avec de l\'expérience.', solution: 'Construire un case study original sur un secteur sous-représenté, et le faire valider par 2 PMs expérimentés avant de postuler.' },
@@ -822,63 +934,75 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* Preuves à construire */}
-              <ExSection title={lang === 'fr' ? 'Preuves à construire pour devenir crédible' : 'Proofs to build credibility'} icon={FileText}>
-                <div className="grid sm:grid-cols-2 gap-3">
+              {/* 10. Métiers proches à explorer */}
+              <ExSection title={lang === 'fr' ? 'Métiers proches à explorer' : 'Related careers to explore'} icon={Route}>
+                <div className="flex flex-wrap gap-2">
                   {(lang === 'fr' ? [
-                    { title: 'Case study produit (10–15 slides)', desc: 'Analyse d\'un problème utilisateur réel, proposition de solution, roadmap priorisée et métriques de succès définies. Preuve centrale de la capacité à raisonner en product management.' },
-                    { title: '5 user interviews documentées', desc: 'Interviews structurées selon le framework Jobs-to-be-Done, avec synthèse et insights actionnables. Prouve la capacité à conduire la discovery sans biais.' },
-                    { title: 'Roadmap fictive avec priorisation RICE', desc: 'Backlog de features priorisées avec justification claire de chaque arbitrage. Démontre la rigueur méthodologique et la capacité à décider sous contraintes.' },
-                    { title: 'Certification CSPO ou Product School', desc: 'Certification reconnue qui légitime le changement de posture vers le product management — attendue par la majorité des recruteurs.' },
-                    { title: 'Profil LinkedIn repositionné PM', desc: 'Titre, résumé et expériences reformulés avec les mots-clés produit (discovery, backlog, roadmap, Agile) pour apparaître dans les recherches recruteur.' },
-                    { title: '2–3 articles LinkedIn PM', desc: 'Publications courtes sur le product management (retour sur un teardown, analyse d\'un feature, insight discovery) — développe la visibilité et la crédibilité communautaire.' },
+                    'Product Owner en équipe Agile — rôle très proche, centré sur l\'exécution et le backlog',
+                    'Associate PM — poste d\'entrée conçu pour les reconversions PM',
+                    'Growth Product Manager — variante orientée acquisition et activation',
+                    'Product Analyst — tremplin pour profils très analytics vers le PM',
+                    'UX Researcher → PM — transition naturelle pour profils compréhension utilisateur',
                   ] : [
-                    { title: 'Product case study (10–15 slides)', desc: 'Analysis of a real user problem, solution proposal, prioritised roadmap and defined success metrics. The central proof of product management thinking ability.' },
-                    { title: '5 documented user interviews', desc: 'Structured interviews using the Jobs-to-be-Done framework, with synthesis and actionable insights. Proves the ability to conduct unbiased discovery.' },
-                    { title: 'Fictitious roadmap with RICE prioritisation', desc: 'Feature backlog with clear justification for each trade-off. Demonstrates methodological rigour and ability to decide under constraints.' },
-                    { title: 'CSPO or Product School certification', desc: 'Recognised certification that legitimises the shift to product management — expected by the majority of recruiters.' },
-                    { title: 'Repositioned PM LinkedIn profile', desc: 'Title, summary and experiences reformulated with product keywords (discovery, backlog, roadmap, Agile) to appear in recruiter searches.' },
-                    { title: '2–3 PM LinkedIn articles', desc: 'Short posts on product management (teardown review, feature analysis, discovery insight) — builds community visibility and credibility.' },
-                  ]).map(proof => (
-                    <div key={proof.title} className="flex items-start gap-2.5">
-                      <CheckCircle2 size={14} strokeWidth={1.5} className="text-brand-400 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-xs font-semibold text-slate-200 mb-0.5">{proof.title}</p>
-                        <p className="text-xs text-slate-500 leading-relaxed">{proof.desc}</p>
-                      </div>
-                    </div>
+                    'Product Owner in Agile team — very similar role, execution and backlog focused',
+                    'Associate PM — entry-level role designed for PM career changers',
+                    'Growth Product Manager — acquisition and activation-oriented variant',
+                    'Product Analyst — stepping stone for highly analytical profiles to PM',
+                    'UX Researcher → PM — natural transition for user-understanding profiles',
+                  ]).map((j, i) => (
+                    <span key={i} className="text-xs px-3 py-1.5 rounded-full bg-dark-700 border border-dark-600 text-slate-300">{j}</span>
                   ))}
                 </div>
               </ExSection>
 
-              {/* Formations recommandées */}
-              <ExSection title={lang === 'fr' ? 'Formations recommandées' : 'Recommended training'} icon={GraduationCap}>
-                <div className="space-y-2.5">
-                  {(lang === 'fr' ? [
-                    { name: 'CSPO — Certified Scrum Product Owner', detail: 'Certification Scrum Alliance — 2 jours en présentiel ou distanciel — 1 000 à 1 800 €. Attendue par la majorité des entreprises qui recrutent des PMs en environnement Agile.', tag: 'Certifiante' },
-                    { name: 'Product School — Product Manager Certificate', detail: 'Formation intensive de 8 semaines en ligne — reconnu internationalement. Couvre la discovery, la roadmap et les métriques SaaS. Accès à une communauté de 1M+ de PMs.', tag: 'En ligne' },
-                    { name: 'Reforge — Product Management Fundamentals', detail: 'Plateforme de référence utilisée par les PMs de Airbnb, Stripe et Intercom. Parcours asynchrones sur la growth, la discovery et la stratégie produit — abonnement annuel ~2 000 $.', tag: 'Expert' },
-                    { name: 'OpenClassrooms — Devenez Product Owner', detail: 'Parcours accessible et complet pour les débutants — 6 mois, éligible CPF. Idéal pour acquérir les bases du product management et du backlog management avant une certification.', tag: 'CPF éligible' },
-                  ] : [
-                    { name: 'CSPO — Certified Scrum Product Owner', detail: 'Scrum Alliance certification — 2 days in-person or remote — €1,000 to €1,800. Expected by most companies hiring PMs in Agile environments.', tag: 'Certified' },
-                    { name: 'Product School — Product Manager Certificate', detail: '8-week intensive online training — internationally recognised. Covers discovery, roadmapping and SaaS metrics. Access to a 1M+ PM community.', tag: 'Online' },
-                    { name: 'Reforge — Product Management Fundamentals', detail: 'Reference platform used by PMs at Airbnb, Stripe and Intercom. Asynchronous courses on growth, discovery and product strategy — annual subscription ~$2,000.', tag: 'Expert' },
-                    { name: 'OpenClassrooms — Become a Product Owner', detail: 'Accessible and comprehensive course for beginners — 6 months, CPF-eligible. Ideal for acquiring PM and backlog management basics before a certification.', tag: 'CPF eligible' },
-                  ]).map(f => (
-                    <div key={f.name} className="flex items-start gap-3 bg-dark-800/50 border border-dark-700 rounded-xl p-3.5">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <p className="text-xs font-semibold text-slate-200">{f.name}</p>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-brand-900/40 border border-brand-800/30 text-brand-400">{f.tag}</span>
-                        </div>
-                        <p className="text-xs text-slate-500 leading-relaxed">{f.detail}</p>
-                      </div>
+              {/* 11. Positionnement professionnel — CV & LinkedIn */}
+              <ExSection title={lang === 'fr' ? 'Positionnement professionnel — CV & LinkedIn' : 'Professional positioning — CV & LinkedIn'} icon={FileText}>
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-xs font-semibold text-violet-400 mb-1.5">{lang === 'fr' ? 'Phrase de positionnement' : 'Positioning statement'}</p>
+                    <p className="text-sm text-slate-300 italic bg-dark-800/60 border border-dark-600 rounded-lg px-3 py-2 leading-relaxed">
+                      {lang === 'fr'
+                        ? 'Je me positionne comme un profil en reconversion vers le product management, capable d\'apporter une compréhension terrain des contraintes métier et une rigueur analytique pour des équipes produit en startup SaaS B2B.'
+                        : 'I position myself as a career changer moving into product management, able to bring ground-level business constraint understanding and analytical rigour to B2B SaaS startup product teams.'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-blue-400 mb-1.5">{lang === 'fr' ? 'Accroche LinkedIn (120 caractères max)' : 'LinkedIn headline (120 chars max)'}</p>
+                    <p className="text-sm text-slate-200 font-medium bg-dark-800/60 border border-dark-600 rounded-lg px-3 py-2">
+                      {lang === 'fr'
+                        ? 'En reconversion Product Manager | Background [secteur] → SaaS B2B | Certification CSPO en cours'
+                        : 'Transitioning to Product Manager | [Sector] Background → B2B SaaS | CSPO Certification in Progress'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-green-400 mb-1.5">{lang === 'fr' ? 'Pitch entretien' : 'Interview pitch'}</p>
+                    <p className="text-sm text-slate-300 leading-relaxed bg-dark-800/60 border border-dark-600 rounded-lg px-3 py-2">
+                      {lang === 'fr'
+                        ? 'Mon parcours en [secteur actuel] m\'a appris à comprendre les contraintes opérationnelles des utilisateurs finaux — une perspective que peu de PMs issus de cursus purement tech ont. Je me reconvertis vers le product management parce que c\'est là que je peux avoir le plus d\'impact. Je construis activement mon portfolio avec un case study B2B et 5 interviews utilisateurs structurées.'
+                        : 'My background in [current sector] taught me to understand the operational constraints of end users — a perspective few PMs from purely technical backgrounds have. I\'m transitioning to product management because that\'s where I can have the most impact. I\'m actively building my portfolio with a B2B case study and 5 structured user interviews.'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-amber-400 mb-1.5">{lang === 'fr' ? 'Mots-clés CV' : 'CV keywords'}</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {['Product Management', 'Discovery produit', 'Backlog management', 'Roadmap priorisation', 'User interviews', 'Agile / Scrum', 'SaaS B2B'].map((kw, i) => (
+                        <span key={i} className="text-xs px-2.5 py-1 rounded-full bg-amber-900/20 border border-amber-800/30 text-amber-300">{kw}</span>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
               </ExSection>
 
-              {/* Types d'entreprises à cibler */}
+              {/* 12. Pourquoi cette voie plutôt qu'une autre ? */}
+              <ExSection title={lang === 'fr' ? 'Pourquoi cette voie plutôt qu\'une autre ?' : 'Why this path over others?'} icon={ArrowRightLeft}>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  {lang === 'fr'
+                    ? 'Le Product Manager — Solutions SaaS B2B est le meilleur choix pour un profil cherchant un rôle à fort potentiel d\'impact et une rémunération attractive dans un marché en tension structurelle. Cette trajectoire est recommandée si tu as un sens analytique développé et si tu te projettes dans des environnements tech dynamiques avec une vision à 12–18 mois minimum. Elle est déconseillée si tu as besoin de revenus stables dans les 3 prochains mois — la transition vers le premier rôle PM nécessite 6 à 12 mois de préparation active. Par rapport à une trajectoire plus proche du parcours actuel, elle offre un potentiel de progression salariale beaucoup plus fort à 3–5 ans. Par rapport à une trajectoire indépendante ou entrepreneuriale, elle offre une structure d\'apprentissage et un encadrement plus lisible sur le marché du travail.'
+                    : 'Product Manager — B2B SaaS Solutions is the best choice for a profile seeking a high-impact role with attractive compensation in a structurally tense market. This path is recommended if you have a developed analytical sense and can project yourself into dynamic tech environments with a minimum 12–18 month horizon. It\'s not recommended if you need stable income in the next 3 months — transitioning to the first PM role requires 6 to 12 months of active preparation. Compared to a path closer to your current background, it offers much stronger salary growth potential at 3–5 years. Compared to an independent or entrepreneurial path, it offers a clearer learning structure and more legible market progression.'}
+                </p>
+              </ExSection>
+
+              {/* 13. Types d'entreprises à cibler */}
               <ExSection title={lang === 'fr' ? 'Types d\'entreprises à cibler' : 'Company types to target'} icon={BriefcaseBusiness}>
                 <div className="space-y-2.5">
                   {(lang === 'fr' ? [
@@ -906,7 +1030,7 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* Questions à poser à un professionnel */}
+              {/* 14. Questions à poser à un PM */}
               <ExSection title={lang === 'fr' ? 'Questions à poser à un PM lors d\'un échange réseau' : 'Questions to ask a PM during a networking call'} icon={Lightbulb}>
                 <p className="text-xs text-slate-500 mb-3 italic">
                   {lang === 'fr'
@@ -932,13 +1056,13 @@ export default function Landing() {
                         <span className="text-purple-400 font-bold text-xs flex-shrink-0 mt-0.5">{i + 1}.</span>
                         <p className="text-sm text-slate-200 font-medium leading-snug">{item.q}</p>
                       </div>
-                      <p className="text-xs text-slate-500 leading-relaxed ml-[18px] italic">{lang === 'fr' ? '→ ' : '→ '}{item.why}</p>
+                      <p className="text-xs text-slate-500 leading-relaxed ml-[18px] italic">→ {item.why}</p>
                     </div>
                   ))}
                 </div>
               </ExSection>
 
-              {/* Choisissez cette voie si / Évitez si */}
+              {/* 15. Choisissez cette voie si / Évitez si */}
               <ExSection title={lang === 'fr' ? 'Choisissez cette voie si… / Évitez si…' : 'Choose this path if… / Avoid if…'} icon={Compass}>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
@@ -990,18 +1114,18 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* Première action */}
+              {/* 16. Première action — dans les 48h */}
               <div className="bg-gradient-to-r from-brand-900/40 to-purple-900/40 border border-brand-700/40 rounded-2xl p-5">
                 <div className="flex items-center gap-2 mb-2">
                   <Zap size={15} strokeWidth={1.5} className="text-brand-400" />
                   <p className="text-xs font-bold text-brand-400">
-                    {lang === 'fr' ? 'Première action cette semaine' : 'First action this week'}
+                    {lang === 'fr' ? 'Première action — dans les 48 prochaines heures' : 'First action — in the next 48 hours'}
                   </p>
                 </div>
                 <p className="text-sm text-slate-200 leading-relaxed">
                   {lang === 'fr'
-                    ? 'Cette semaine, télécharge une application que tu utilises (ou qui t\'intéresse) et réalise un product teardown en 30 minutes : identifie 3 problèmes utilisateurs concrets, propose 2 solutions possibles et justifie tes choix en 5 bullet points. Publie ce travail sur LinkedIn avec le hashtag #productmanagement. C\'est ton premier signal de crédibilité — et la base de ton futur case study.'
-                    : 'This week, download an app you use (or that interests you) and do a 30-minute product teardown: identify 3 concrete user problems, propose 2 possible solutions and justify your choices in 5 bullet points. Post this work on LinkedIn with #productmanagement. It\'s your first credibility signal — and the foundation of your future case study.'}
+                    ? 'Dans les 48 prochaines heures, télécharge une application que tu utilises (ou qui t\'intéresse) et réalise un product teardown en 30 minutes : identifie 3 problèmes utilisateurs concrets, propose 2 solutions possibles et justifie tes choix en 5 bullet points. Publie ce travail sur LinkedIn avec le hashtag #productmanagement. C\'est ton premier signal de crédibilité — et la base de ton futur case study.'
+                    : 'In the next 48 hours, download an app you use (or that interests you) and do a 30-minute product teardown: identify 3 concrete user problems, propose 2 possible solutions and justify your choices in 5 bullet points. Post this work on LinkedIn with #productmanagement. It\'s your first credibility signal — and the foundation of your future case study.'}
                 </p>
               </div>
 
