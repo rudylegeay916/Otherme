@@ -105,6 +105,15 @@ export interface PathData {
   questionsToAskProfessionals?: string[]
   choosePath?: string[]
   avoidPath?: string[]
+  howToReachRole?: HowToReachRole
+}
+
+export interface HowToReachRole {
+  startingPoint: string[]
+  gapToFill: string[]
+  recommendedPath: string[]
+  priorityActions: string[]
+  mistakesToAvoid: string[]
 }
 
 export interface ReportComparison {

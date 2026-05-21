@@ -694,7 +694,127 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* 3. Compétences */}
+              {/* 3. Comment atteindre ce métier */}
+              <ExSection title={lang === 'fr' ? 'Comment atteindre ce métier concrètement' : 'How to reach this role concretely'} icon={Compass}>
+                <div className="space-y-5">
+                  {/* Starting point */}
+                  <div>
+                    <p className="text-xs font-semibold text-green-400 mb-2">
+                      {lang === 'fr' ? '✅ Point de départ — ce que tu as déjà' : '✅ Starting point — what you already have'}
+                    </p>
+                    <ul className="space-y-1.5">
+                      {(lang === 'fr' ? [
+                        'Expérience professionnelle transférable — tu comprends les organisations, les décideurs et les enjeux business : c\'est exactement ce que les recruteurs PM cherchent chez les reconversions',
+                        'Sens analytique et structuré — ta capacité à structurer un problème complexe et à synthétiser des données est directement utilisable dans le rôle de PM',
+                        'Réseau professionnel existant — tes contacts actuels (collègues, clients, partenaires) sont tes premiers ambassadeurs dans la communauté product',
+                      ] : [
+                        'Transferable professional experience — you understand organisations, decision-makers and business stakes: exactly what PM recruiters look for in career changers',
+                        'Analytical and structured thinking — your ability to structure complex problems and synthesise data is directly applicable in a PM role',
+                        'Existing professional network — your current contacts (colleagues, clients, partners) are your first ambassadors in the product community',
+                      ]).map((s, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-green-900/10 border border-green-800/20 rounded-lg px-3 py-2">
+                          <span className="text-green-500 flex-shrink-0 mt-0.5">+</span> {s}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  {/* Gap to fill */}
+                  <div>
+                    <p className="text-xs font-semibold text-amber-400 mb-2">
+                      {lang === 'fr' ? '⚡ Écart à combler' : '⚡ Gap to fill'}
+                    </p>
+                    <ul className="space-y-1.5">
+                      {(lang === 'fr' ? [
+                        'Vocabulaire et pratiques produit — maîtriser user stories, sprint planning, backlog, métriques SaaS (2 à 4 semaines via Formation Product Management sur Reforge ou PM School)',
+                        'Portfolio de cas produit — construire 2 à 3 études de cas concrètes montrant ta capacité à prioriser et décider (4 à 6 semaines de travail)',
+                        'Réseau product spécifique — rejoindre des communautés PM (Product Alliance, CTO Craft, La Communauté PM) pour sortir de ton réseau actuel',
+                      ] : [
+                        'Product vocabulary and practices — master user stories, sprint planning, backlog, SaaS metrics (2 to 4 weeks via Reforge or PM School)',
+                        'Product case portfolio — build 2 to 3 concrete case studies showing your ability to prioritise and decide (4 to 6 weeks of work)',
+                        'Specific product network — join PM communities (Product Alliance, La Communauté PM) to expand beyond your current network',
+                      ]).map((g, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-amber-900/10 border border-amber-800/20 rounded-lg px-3 py-2">
+                          <span className="text-amber-400 flex-shrink-0 mt-0.5">→</span> {g}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  {/* Recommended path */}
+                  <div>
+                    <p className="text-xs font-semibold text-blue-400 mb-2">
+                      {lang === 'fr' ? '🛤️ Chemin recommandé' : '🛤️ Recommended path'}
+                    </p>
+                    <ol className="space-y-1.5">
+                      {(lang === 'fr' ? [
+                        'Semaine 1 à 3 — Suivre une formation certifiante PM (Reforge, PM School ou formation RNCP Bac+5) et compléter le vocabulaire de base',
+                        'Semaine 3 à 8 — Construire 2 études de cas produit à partir de ta propre expérience et les publier sur LinkedIn',
+                        'Mois 2 à 4 — Candidater à des postes d\'Associate PM ou PO dans des startups Series A ou B',
+                        'Mois 4 à 9 — Décrocher le premier rôle PM et se faire mentorer par un lead PM expérimenté',
+                        'Mois 9 à 24 — Monter en séniorité, prendre en charge une squad complète et viser PM confirmé',
+                      ] : [
+                        'Week 1 to 3 — Complete a PM certification course (Reforge, PM School) and build core vocabulary',
+                        'Week 3 to 8 — Build 2 product case studies from your own experience and publish on LinkedIn',
+                        'Month 2 to 4 — Apply for Associate PM or PO roles at Series A or B startups',
+                        'Month 4 to 9 — Land the first PM role and get mentored by an experienced lead PM',
+                        'Month 9 to 24 — Advance in seniority, own a full squad and aim for confirmed PM title',
+                      ]).map((r, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-xs text-slate-300">
+                          <span className="w-5 h-5 rounded-full bg-blue-900/40 border border-blue-800/50 text-blue-300 text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                          {r}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                  {/* Priority actions */}
+                  <div className="bg-brand-900/20 border border-brand-800/40 rounded-xl p-4">
+                    <p className="text-xs font-semibold text-brand-300 mb-3">
+                      {lang === 'fr' ? '🎯 5 actions prioritaires' : '🎯 5 priority actions'}
+                    </p>
+                    <ul className="space-y-2">
+                      {(lang === 'fr' ? [
+                        '1. Créer un compte sur Reforge ou PM School et commencer le module d\'introduction PM (1h) → impact attendu : maîtrise des concepts de base et crédibilité immédiate',
+                        '2. Analyser 3 apps que tu utilises quotidiennement comme un PM (30 min chacune) → impact attendu : développer le réflexe de pensée produit',
+                        '3. Rejoindre la communauté Slack "La Communauté PM" et se présenter dans le canal #introductions (15 min) → impact attendu : premier réseau PM actif',
+                        '4. Rédiger le résumé d\'un cas produit basé sur ton expérience passée (2h) → impact attendu : première preuve de compétence PM publiable',
+                        '5. Contacter 3 PMs sur LinkedIn pour un échange de 20 min sur leur quotidien (1h) → impact attendu : vision réaliste du métier et premières recommandations',
+                      ] : [
+                        '1. Create an account on Reforge or PM School and start the PM intro module (1h) → expected impact: master core concepts and immediate credibility',
+                        '2. Analyse 3 apps you use daily from a PM perspective (30 min each) → expected impact: develop the product thinking reflex',
+                        '3. Join the "La Communauté PM" Slack and introduce yourself in #introductions (15 min) → expected impact: first active PM network',
+                        '4. Write a product case study summary based on your past experience (2h) → expected impact: first publishable PM competency proof',
+                        '5. Contact 3 PMs on LinkedIn for a 20-min chat about their daily work (1h) → expected impact: realistic view of the role and first recommendations',
+                      ]).map((a, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-200">
+                          <span className="text-brand-400 font-bold flex-shrink-0">{i + 1}.</span> {a}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  {/* Mistakes to avoid */}
+                  <div>
+                    <p className="text-xs font-semibold text-red-400 mb-2">
+                      {lang === 'fr' ? '🚫 Erreurs à éviter' : '🚫 Mistakes to avoid'}
+                    </p>
+                    <ul className="space-y-1.5">
+                      {(lang === 'fr' ? [
+                        'Erreur 1 : Postuler comme PM sans portfolio ni cas produit — Pourquoi ça bloque : sans preuve concrète, le CV est rejeté au premier filtre — Alternative : construire 2 cas produit avant de postuler',
+                        'Erreur 2 : Viser directement des postes de PM Senior en grande entreprise — Pourquoi ça bloque : sans expérience PM, ces postes sont inaccessibles — Alternative : cibler des postes Associate PM ou PO en startup où la courbe d\'apprentissage est plus rapide',
+                        'Erreur 3 : Sous-estimer la dimension technique du rôle — Pourquoi ça bloque : les PMs qui ne comprennent pas les contraintes techniques perdent la confiance de leur équipe engineering — Alternative : apprendre les bases du cycle de développement (sprints, API, dette technique)',
+                      ] : [
+                        'Mistake 1: Applying as a PM without portfolio or product cases — Why it blocks: without concrete proof, the CV is rejected at the first filter — Alternative: build 2 product case studies before applying',
+                        'Mistake 2: Directly targeting Senior PM roles at large companies — Why it blocks: without PM experience, these roles are inaccessible — Alternative: target Associate PM or PO roles at startups where the learning curve is faster',
+                        'Mistake 3: Underestimating the technical dimension of the role — Why it blocks: PMs who don\'t understand technical constraints lose their engineering team\'s trust — Alternative: learn the basics of the development cycle (sprints, API, technical debt)',
+                      ]).map((m, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-red-900/10 border border-red-800/20 rounded-lg px-3 py-2">
+                          <span className="text-red-400 flex-shrink-0 mt-0.5">✕</span> {m}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </ExSection>
+
+              {/* 4. Compétences */}
               <ExSection title={lang === 'fr' ? 'Compétences valorisables et à développer' : 'Transferable and new skills'} icon={Brain}>
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>

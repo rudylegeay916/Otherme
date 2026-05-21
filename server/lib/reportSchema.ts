@@ -2,6 +2,14 @@ import { z } from 'zod'
 
 // ── Sous-schémas ──────────────────────────────────────────────────
 
+const HowToReachRoleSchema = z.object({
+  startingPoint:    z.array(z.string()).min(1),
+  gapToFill:        z.array(z.string()).min(1),
+  recommendedPath:  z.array(z.string()).min(1),
+  priorityActions:  z.array(z.string()).min(1),
+  mistakesToAvoid:  z.array(z.string()).min(1),
+}).passthrough()
+
 const score = z.number().int().min(0).max(100, {
   message: 'Le score doit être un entier entre 0 et 100',
 })
@@ -60,6 +68,7 @@ const PathDataSchema = z.object({
   questionsToAskProfessionals:      z.array(z.string()).optional(),
   choosePath:                       z.array(z.string()).optional(),
   avoidPath:                        z.array(z.string()).optional(),
+  howToReachRole:                   HowToReachRoleSchema.optional(),
 }).passthrough() // conserve les champs extra (longDescription, dailyLife, etc.)
 
 // ── GeneratedReport ───────────────────────────────────────────────

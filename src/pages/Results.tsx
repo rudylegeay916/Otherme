@@ -222,6 +222,82 @@ function PathCard({ path, index }: { path: PathData; index: number }) {
           </Accordion>
         </div>
 
+        {/* How to reach this role */}
+        {path.howToReachRole && (
+          <div className="mt-3">
+            <Accordion title="Comment atteindre ce métier concrètement" icon="🗺️">
+              <div className="space-y-5">
+                {/* Starting point */}
+                {path.howToReachRole.startingPoint.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-green-400 mb-2">✅ Point de départ — ce que tu as déjà</p>
+                    <ul className="space-y-1.5">
+                      {path.howToReachRole.startingPoint.map((s, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-green-900/10 border border-green-800/20 rounded-lg px-3 py-2">
+                          <span className="text-green-500 flex-shrink-0 mt-0.5">+</span> {s}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {/* Gap to fill */}
+                {path.howToReachRole.gapToFill.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-amber-400 mb-2">⚡ Écart à combler</p>
+                    <ul className="space-y-1.5">
+                      {path.howToReachRole.gapToFill.map((g, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-amber-900/10 border border-amber-800/20 rounded-lg px-3 py-2">
+                          <span className="text-amber-400 flex-shrink-0 mt-0.5">→</span> {g}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {/* Recommended path */}
+                {path.howToReachRole.recommendedPath.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-blue-400 mb-2">🛤️ Chemin recommandé</p>
+                    <ol className="space-y-1.5">
+                      {path.howToReachRole.recommendedPath.map((r, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-xs text-slate-300">
+                          <span className="w-5 h-5 rounded-full bg-blue-900/40 border border-blue-800/50 text-blue-300 text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                          {r}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
+                {/* Priority actions */}
+                {path.howToReachRole.priorityActions.length > 0 && (
+                  <div className="bg-brand-900/20 border border-brand-800/40 rounded-xl p-4">
+                    <p className="text-xs font-semibold text-brand-300 mb-3">🎯 5 actions prioritaires</p>
+                    <ul className="space-y-2">
+                      {path.howToReachRole.priorityActions.map((a, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-200">
+                          <span className="text-brand-400 font-bold flex-shrink-0">{i + 1}.</span> {a}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {/* Mistakes to avoid */}
+                {path.howToReachRole.mistakesToAvoid.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-red-400 mb-2">🚫 Erreurs à éviter</p>
+                    <ul className="space-y-1.5">
+                      {path.howToReachRole.mistakesToAvoid.map((m, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-red-900/10 border border-red-800/20 rounded-lg px-3 py-2">
+                          <span className="text-red-400 flex-shrink-0 mt-0.5">✕</span> {m}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </Accordion>
+          </div>
+        )}
+
         {/* Skills */}
         <div className="mt-3">
           <Accordion title="Compétences : acquises vs à développer" icon="🧠">

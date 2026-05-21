@@ -43,6 +43,11 @@ interface PathData {
   comparisonWithOtherPaths?: string
   companyTypesToTarget?: string[]; questionsToAskProfessionals?: string[]
   choosePath?: string[]; avoidPath?: string[]
+  howToReachRole?: {
+    startingPoint: string[]; gapToFill: string[]
+    recommendedPath: string[]; priorityActions: string[]
+    mistakesToAvoid: string[]
+  }
 }
 
 interface ReportComparison {
@@ -279,6 +284,37 @@ function generateMockReport(firstName: string): ReportData {
         similarJobs: ["Chef de projet digital indépendant", "Directeur digital à temps partagé", "Business analyst freelance", "Coach en organisation digitale"],
         risksAndLimits: ["Revenus irréguliers les 6 premiers mois", "Isolement si travail 100 % solo", "Concurrence croissante sur les marchés non niché"],
         firstConcreteStep: "Aujourd'hui, ouvre LinkedIn et reformule ton titre en 'Consultant [ta niche] pour [ton public cible]'. Puis liste 10 personnes dans ton réseau qui pourraient te recommander ou avoir besoin de tes services.",
+        howToReachRole: {
+          startingPoint: [
+            "Expérience professionnelle existante — ton parcours actuel te donne une crédibilité immédiate auprès des PME de ton secteur",
+            "Réseau professionnel — tes anciens collègues, clients et partenaires sont tes premiers prescripteurs potentiels",
+            "Compétences transférables — tu maîtrises déjà les problèmes que les PME cherchent à résoudre : organisation, outils, process",
+          ],
+          gapToFill: [
+            "Posture commerciale — tu dois apprendre à prospecter, pitcher et closer une mission (3 à 4 semaines via formation prospection B2B)",
+            "Structure juridique — créer une micro-entreprise ou SASU (1 semaine de démarches URSSAF/CFE)",
+            "Portfolio et preuves — construire 1 à 2 études de cas concrètes avant de prospecter (2 à 3 semaines)",
+          ],
+          recommendedPath: [
+            "Semaine 1 — Reformuler ton positionnement LinkedIn et identifier ta niche PME cible",
+            "Semaine 2 à 4 — Construire une étude de cas fictive ou réelle et réaliser les démarches de création de structure",
+            "Mois 2 — Lancer la prospection : 20 messages personnalisés, 3 appels de découverte",
+            "Mois 3 — Décrocher et réaliser la première mission (même courte ou partielle)",
+            "Mois 4 à 6 — Capitaliser sur la première mission pour obtenir des recommandations et signer 2 nouveaux clients",
+          ],
+          priorityActions: [
+            "1. Reformuler ton titre LinkedIn en mode consultant (30 min) → impact attendu : visibilité immédiate auprès des décideurs PME",
+            "2. Lister 20 entreprises PME cibles dans ton réseau existant (1h) → impact attendu : pipeline de prospection qualifié",
+            "3. Rédiger une proposition de valeur en 2 phrases claires (1h) → impact attendu : discours commercial prêt pour les premières conversations",
+            "4. Créer une micro-entreprise sur autoentrepreneur.urssaf.fr (2h) → impact attendu : structure légale opérationnelle",
+            "5. Envoyer 10 messages personnalisés à d'anciens contacts (1h) → impact attendu : 2 à 3 premiers appels de découverte programmés",
+          ],
+          mistakesToAvoid: [
+            "Erreur 1 : Attendre d'avoir tout préparé avant de prospecter — Pourquoi ça bloque : tu perds 2 à 3 mois sans revenus — Alternative : prospecter dès la semaine 2 avec une offre simple",
+            "Erreur 2 : Viser un public trop large (toutes les PME) — Pourquoi ça bloque : aucun différenciateur, concurrence frontale — Alternative : choisir 1 secteur ou 1 problème précis",
+            "Erreur 3 : Baisser ses tarifs par peur du refus — Pourquoi ça bloque : clients qui négocient encore plus et dévalorisation du travail — Alternative : proposer une mission pilote plus courte plutôt que réduire le taux",
+          ],
+        },
       },
       {
         pathType: 'passion_based',
@@ -387,6 +423,37 @@ function generateMockReport(firstName: string): ReportData {
         similarJobs: ["Coach professionnel certifié", "Facilitateur ateliers", "Responsable formation en entreprise", "Créateur de cours en ligne"],
         risksAndLimits: ["Marché de la formation CPF en saturation progressive sur certaines niches", "Revenus instables les 12 premiers mois", "Administrative lourde pour la certification Qualiopi"],
         firstConcreteStep: "Cette semaine, ouvre Mon Compte Formation et recherche les 5 premières formations dans votre domaine. Analysez leur description, leur prix, leurs avis. Identifiez CE QUI MANQUE. C'est là votre ouverture.",
+        howToReachRole: {
+          startingPoint: [
+            "Expertise métier — tu maîtrises un sujet que d'autres cherchent à apprendre : c'est ta matière première pédagogique",
+            "Capacité à expliquer — si tu sais déjà présenter des idées complexes clairement, tu as la compétence centrale du formateur",
+            "Réseau sectoriel — tes contacts professionnels actuels sont tes premiers apprenants potentiels et prescripteurs",
+          ],
+          gapToFill: [
+            "Ingénierie pédagogique — structurer un programme d'apprentissage (1 formation de 2 jours, à trouver via Fifpl ou sur Udemy)",
+            "Outils e-learning — maîtriser Teachable, Thinkific ou Notion pour diffuser sa formation (2 à 3 semaines d'auto-formation)",
+            "Certification Qualiopi — nécessaire pour accéder au CPF : processus de 6 à 12 mois à anticiper dès le début",
+          ],
+          recommendedPath: [
+            "Semaine 1 à 3 — Définir ta niche de formation et tester l'intérêt auprès de 5 personnes cibles",
+            "Mois 1 à 2 — Créer un module pilote de 3h et l'animer gratuitement pour obtenir des retours",
+            "Mois 2 à 4 — Contacter 3 organismes de formation partenaires pour proposer tes premières interventions rémunérées",
+            "Mois 4 à 8 — Lancer une version en ligne et constituer un catalogue de 2 à 3 formations",
+            "Mois 8 à 18 — Créer ton propre organisme de formation et entamer le processus Qualiopi",
+          ],
+          priorityActions: [
+            "1. Ouvrir Mon Compte Formation et analyser les 5 premières formations concurrentes dans ta niche (1h) → impact attendu : identifier le manque à combler",
+            "2. Interroger 5 personnes de ton réseau sur leurs besoins de formation dans ton domaine (3h) → impact attendu : valider la demande terrain",
+            "3. Rédiger le plan détaillé d'un module de 3h sur ton sujet principal (2h) → impact attendu : avoir un programme testable",
+            "4. Proposer une session pilote gratuite à 5 à 8 personnes de ton réseau (sur Zoom) → impact attendu : premiers retours + témoignages",
+            "5. Contacter 3 organismes de formation sur LinkedIn pour proposer une collaboration (1h) → impact attendu : premières missions rémunérées sans avoir à tout créer seul",
+          ],
+          mistakesToAvoid: [
+            "Erreur 1 : Créer une formation complète avant de valider la demande — Pourquoi ça bloque : des semaines de travail sans personne pour l'acheter — Alternative : tester avec un module pilote de 3h d'abord",
+            "Erreur 2 : Viser un public trop large (tout le monde) — Pourquoi ça bloque : message dilué, impossible à marketer — Alternative : choisir un public précis (ex : responsables RH de PME, ou indépendants qui démarrent)",
+            "Erreur 3 : Négliger les partenariats avec des organismes de formation existants — Pourquoi ça bloque : tu perds des mois à construire seul ce qu'un OF peut déjà t'offrir — Alternative : devenir formateur associé en attendant d'être autonome",
+          ],
+        },
       },
       {
         pathType: 'high_potential',
@@ -495,6 +562,37 @@ function generateMockReport(firstName: string): ReportData {
         similarJobs: ["Product manager indépendant", "Entrepreneur en résidence", "Intrapreneur en startup", "Business developer tech"],
         risksAndLimits: ["Revenus nuls ou très faibles pendant 12 à 24 mois", "Risque d'épuisement si seul", "Probabilité d'échec élevée (environ 70% des startups)", "Besoin de capital ou d'épargne personnelle"],
         firstConcreteStep: "Dans les 48 prochaines heures, identifiez UN problème précis que vous observez dans votre secteur actuel et que les outils existants ne résolvent pas bien. Écrivez-le en une seule phrase claire. Partagez-la à 3 personnes concernées et demandez si elles reconnaissent ce problème.",
+        howToReachRole: {
+          startingPoint: [
+            "Connaissance sectorielle profonde — tu connais de l'intérieur les problèmes que les outils existants ne résolvent pas : c'est ton avantage concurrentiel n°1",
+            "Réseau dans un domaine — tes contacts sectoriels sont tes premiers bêta-testeurs et early adopters potentiels",
+            "Compréhension des douleurs métier — tu sais ce qui frustre les gens dans ton secteur, une donnée que les fondateurs techno n'ont pas",
+          ],
+          gapToFill: [
+            "Compétences no-code ou partenaire technique — apprendre Bubble ou trouver un cofondateur CTO (1 à 3 mois selon l'option)",
+            "Méthode customer discovery — apprendre à interviewer sans biais (Ycombinator Startup School, gratuit, 2 semaines)",
+            "Trésorerie de sécurité — avoir 6 mois d'épargne avant de se lancer à plein temps (à constituer en amont)",
+          ],
+          recommendedPath: [
+            "Mois 1 à 2 — Réaliser 20 interviews de customer discovery pour valider l'existence et l'intensité du problème",
+            "Mois 2 à 4 — Construire un MVP minimal (no-code ou landing page) et trouver 5 bêta-testeurs willing to pay",
+            "Mois 4 à 8 — Itérer selon les retours, atteindre 20 clients payants et 1 000 € MRR",
+            "Mois 8 à 18 — Scaler le canal d'acquisition qui fonctionne, viser 5 000 € MRR et la rentabilité",
+            "Mois 18 à 36 — Consolider la position de leader sur la niche ou pivoter selon les apprentissages",
+          ],
+          priorityActions: [
+            "1. Écrire en une phrase le problème précis que tu veux résoudre (30 min) → impact attendu : hypothèse claire et partageable",
+            "2. Réaliser 5 interviews de 20 min avec des cibles potentielles cette semaine (5h) → impact attendu : validation ou invalidation de l'hypothèse",
+            "3. Créer une landing page sur Carrd.co en 48h décrivant la solution et un formulaire d'intérêt → impact attendu : premier signal de marché mesurable",
+            "4. Suivre le cours Ycombinator Startup School en ligne (gratuit, 2 semaines) → impact attendu : méthode de validation solide pour éviter les erreurs classiques",
+            "5. Identifier 3 cofondateurs techniques potentiels sur IndieHackers ou Bubble Community (1h/jour pendant 2 semaines) → impact attendu : partenaire technique pour accélérer le développement",
+          ],
+          mistakesToAvoid: [
+            "Erreur 1 : Construire un produit complet avant d'avoir 10 clients engagés — Pourquoi ça bloque : tu dépenses temps et argent sur quelque chose que personne ne veut — Alternative : vendre avant de construire (presell ou liste d'attente)",
+            "Erreur 2 : Vouloir servir tout le monde dès le début — Pourquoi ça bloque : message trop large, taux de conversion proche de zéro — Alternative : choisir un segment hyper-précis pour commencer (niche down, scale up)",
+            "Erreur 3 : Lever des fonds trop tôt — Pourquoi ça bloque : pression des investisseurs avant d'avoir trouvé le product-market fit — Alternative : bootstrapper jusqu'à 5 000 € MRR avant d'envisager une levée",
+          ],
+        },
       },
     ],
     comparison: {
@@ -668,7 +766,13 @@ NOUVEAUX CHAMPS OBLIGATOIRES PAR TRAJECTOIRE :
 - companyTypesToTarget : 4 types d'entreprises où postuler en priorité — format : "[Type précis] — [Pourquoi c'est un terrain d'entrée adapté pour CE profil + critères à vérifier]". Adapter selon pathType.
 - questionsToAskProfessionals : 5 questions clés à poser lors d'un échange réseau — format : "[Question directe et ouverte] — [Pourquoi cette question est utile pour valider la trajectoire]".
 - choosePath : 3 à 4 critères pour CHOISIR cette trajectoire — format : "Si [condition concrète liée au profil ou au mode de vie souhaité]".
-- avoidPath : 3 à 4 critères pour ÉVITER cette trajectoire — format : "Si [incompatibilité concrète avec le métier ou les contraintes]".`
+- avoidPath : 3 à 4 critères pour ÉVITER cette trajectoire — format : "Si [incompatibilité concrète avec le métier ou les contraintes]".
+- howToReachRole : feuille de route ultra-concrète pour passer de la situation actuelle au métier cible. OBLIGATOIRE par trajectoire. 5 sous-champs :
+  · startingPoint : 3 à 5 éléments déjà acquis (expériences, compétences, contacts) utilisables dans cette transition
+  · gapToFill : 3 à 5 manques précis (compétences absentes, portfolio vide, certification manquante) avec temps estimé
+  · recommendedPath : 4 à 6 étapes ordonnées du chemin recommandé (formation → mini-projet → candidature → premier rôle)
+  · priorityActions : EXACTEMENT 5 actions — format : "[N°]. [Verbe] [objet précis] ([durée]) → impact attendu : [résultat concret]"
+  · mistakesToAvoid : 3 à 5 erreurs classiques — format : "Erreur [X] : [ce que les gens font] — Pourquoi ça bloque : [conséquence] — Alternative : [ce qu'il faut faire]"`
 
 async function generateAIReport(
   data: Record<string, unknown>,
@@ -928,7 +1032,38 @@ JSON ATTENDU (réponds UNIQUEMENT avec ce JSON)
         "Si tu ne supportes pas [contrainte réelle de ce métier]",
         "Si tu cherches [ce que ce métier ne peut structurellement pas offrir]",
         "Si [incompatibilité concrète avec le profil ou mode de vie]"
-      ]
+      ],
+      "howToReachRole": {
+        "startingPoint": [
+          "Élément déjà acquis 1 — [expérience ou compétence concrète de ${firstName}] directement utilisable dans cette transition",
+          "Élément déjà acquis 2 — [contact, crédibilité ou réalisation]",
+          "Élément déjà acquis 3 — [outil ou secteur maîtrisé]"
+        ],
+        "gapToFill": [
+          "Manque 1 — [compétence absente] — temps estimé pour combler : [N semaines/mois]",
+          "Manque 2 — [portfolio ou réseau inexistant] — temps estimé : [N semaines/mois]",
+          "Manque 3 — [connaissance spécifique au métier cible] — temps estimé : [N semaines/mois]"
+        ],
+        "recommendedPath": [
+          "Étape 1 — [action initiale concrète] (semaine 1 à 2)",
+          "Étape 2 — [formation ou mini-projet de validation] (semaine 2 à 6)",
+          "Étape 3 — [construction de preuves concrètes] (mois 2 à 4)",
+          "Étape 4 — [candidature ou premier client] (mois 3 à 6)",
+          "Étape 5 — [consolidation et montée en compétences] (mois 6 à 12)"
+        ],
+        "priorityActions": [
+          "1. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "2. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "3. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "4. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "5. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]"
+        ],
+        "mistakesToAvoid": [
+          "Erreur 1 : [ce que les gens font classiquement] — Pourquoi ça bloque : [conséquence] — Alternative : [ce qu'il faut faire]",
+          "Erreur 2 : [erreur fréquente pour ce type de transition] — Pourquoi ça bloque : [...] — Alternative : [...]",
+          "Erreur 3 : [autre erreur] — Pourquoi ça bloque : [...] — Alternative : [...]"
+        ]
+      }
     },
     {
       "pathType": "passion_based",
@@ -1005,7 +1140,38 @@ JSON ATTENDU (réponds UNIQUEMENT avec ce JSON)
         "Si tu as besoin de revenus stables rapidement — la phase de transition passion est plus longue",
         "Si tu cherches [ce que ce métier passion ne peut pas offrir structurellement]",
         "Si [incompatibilité avec les exigences réelles de ce secteur]"
-      ]
+      ],
+      "howToReachRole": {
+        "startingPoint": [
+          "Élément déjà acquis 1 — [passion, compétence ou expérience de ${firstName}] transférable dans cette voie",
+          "Élément déjà acquis 2 — [réseau ou crédibilité existante dans le domaine passion]",
+          "Élément déjà acquis 3 — [outil, secteur ou réalisation utilisable]"
+        ],
+        "gapToFill": [
+          "Manque 1 — [compétence ou certification manquante pour la voie passion] — temps estimé : [N semaines/mois]",
+          "Manque 2 — [portfolio ou preuve de légitimité absent] — temps estimé : [N semaines/mois]",
+          "Manque 3 — [réseau spécifique au secteur passion] — temps estimé : [N semaines/mois]"
+        ],
+        "recommendedPath": [
+          "Étape 1 — [validation de la passion via un test concret] (semaine 1 à 3)",
+          "Étape 2 — [formation ou montée en compétences] (mois 1 à 4)",
+          "Étape 3 — [construction de preuves dans le domaine passion] (mois 2 à 5)",
+          "Étape 4 — [premier rôle ou première mission] (mois 4 à 9)",
+          "Étape 5 — [consolidation et spécialisation] (mois 9 à 18)"
+        ],
+        "priorityActions": [
+          "1. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "2. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "3. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "4. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "5. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]"
+        ],
+        "mistakesToAvoid": [
+          "Erreur 1 : [erreur classique dans une reconversion passion] — Pourquoi ça bloque : [...] — Alternative : [...]",
+          "Erreur 2 : [erreur fréquente dans ce secteur passion] — Pourquoi ça bloque : [...] — Alternative : [...]",
+          "Erreur 3 : [autre erreur] — Pourquoi ça bloque : [...] — Alternative : [...]"
+        ]
+      }
     },
     {
       "pathType": "high_potential",
@@ -1082,7 +1248,38 @@ JSON ATTENDU (réponds UNIQUEMENT avec ce JSON)
         "Si tu as besoin de résultats rapides et de sécurité financière à court terme",
         "Si tu ne supportes pas [contrainte exigeante de cette trajectoire ambitieuse]",
         "Si [incompatibilité de profil ou de style de vie avec les exigences réelles]"
-      ]
+      ],
+      "howToReachRole": {
+        "startingPoint": [
+          "Élément déjà acquis 1 — [force ou avantage différenciateur de ${firstName}] utilisable dans cette voie ambitieuse",
+          "Élément déjà acquis 2 — [connaissance sectorielle ou réseau existant]",
+          "Élément déjà acquis 3 — [compétence rare ou réalisation notable]"
+        ],
+        "gapToFill": [
+          "Manque 1 — [compétence ou ressource critique pour cette voie high_potential] — temps estimé : [N mois]",
+          "Manque 2 — [réseau spécifique ou investissement initial] — temps estimé : [N mois]",
+          "Manque 3 — [validation du concept ou traction initiale] — temps estimé : [N mois]"
+        ],
+        "recommendedPath": [
+          "Étape 1 — [validation de l'hypothèse et test marché] (mois 1 à 2)",
+          "Étape 2 — [acquisition des compétences critiques manquantes] (mois 2 à 6)",
+          "Étape 3 — [construction de la crédibilité et premières preuves] (mois 4 à 9)",
+          "Étape 4 — [premier rôle ou lancement] (mois 6 à 18)",
+          "Étape 5 — [développement et consolidation] (mois 18 à 36)"
+        ],
+        "priorityActions": [
+          "1. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "2. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "3. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "4. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "5. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]"
+        ],
+        "mistakesToAvoid": [
+          "Erreur 1 : [erreur classique dans une voie ambitieuse] — Pourquoi ça bloque : [...] — Alternative : [...]",
+          "Erreur 2 : [erreur fréquente pour cette transition high_potential] — Pourquoi ça bloque : [...] — Alternative : [...]",
+          "Erreur 3 : [autre erreur] — Pourquoi ça bloque : [...] — Alternative : [...]"
+        ]
+      }
     }
   ],
   "comparison": {
@@ -1104,7 +1301,8 @@ RAPPEL FINAL :
 - OBLIGATOIRES dans chaque trajectoire : positioningStatement, linkedinHeadline, interviewPitch, cvKeywords, comparisonWithOtherPaths, companyTypesToTarget, questionsToAskProfessionals, choosePath, avoidPath
 - Chaque semaine du detailedActionPlan30Days DOIT inclure : objective, deliverable, practicalTip, mistakeToAvoid
 - companyTypesToTarget : adapter au pathType (startup/PME/grande entreprise selon risk_level)
-- choosePath / avoidPath : honnêtes, concrets, personnalisés au profil — pas génériques`
+- choosePath / avoidPath : honnêtes, concrets, personnalisés au profil — pas génériques
+- howToReachRole : OBLIGATOIRE dans chaque trajectoire — priorityActions doit contenir EXACTEMENT 5 actions numérotées avec durée et impact attendu`
 
   const response = await client.chat.completions.create({
     model: 'gpt-4o',

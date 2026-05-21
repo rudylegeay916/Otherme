@@ -74,7 +74,13 @@ NOUVEAUX CHAMPS OBLIGATOIRES PAR TRAJECTOIRE :
 - companyTypesToTarget : 4 types d'entreprises où postuler en priorité — format : "[Type précis] — [Pourquoi c'est un terrain d'entrée adapté pour CE profil + critères à vérifier]". Adapter selon pathType (startup early-stage pour high_potential, grandes entreprises pour current_aligned, etc.)
 - questionsToAskProfessionals : 5 questions clés à poser lors d'un échange réseau avec un professionnel du métier cible — format : "[Question directe et ouverte] — [Pourquoi cette question est utile pour valider la trajectoire]". Questions ciblées sur la réalité du quotidien, les erreurs fréquentes, les conditions d'entrée réelles.
 - choosePath : 3 à 4 critères pour lesquels CHOISIR cette trajectoire — format : "Si [condition concrète liée au profil ou au mode de vie souhaité]". Chaque critère doit citer un élément du profil ou une contrainte déclarée.
-- avoidPath : 3 à 4 critères pour lesquels ÉVITER cette trajectoire — format : "Si [incompatibilité concrète avec le métier ou les contraintes non déclarées]". Honnête, sans condescendance — aide à détecter les profils mal alignés.`
+- avoidPath : 3 à 4 critères pour lesquels ÉVITER cette trajectoire — format : "Si [incompatibilité concrète avec le métier ou les contraintes non déclarées]". Honnête, sans condescendance — aide à détecter les profils mal alignés.
+- howToReachRole : feuille de route ultra-concrète pour passer de la situation actuelle au métier cible. OBLIGATOIRE par trajectoire. Contient 5 sous-champs :
+  · startingPoint : 3 à 5 éléments que la personne possède déjà (expériences, compétences, contacts, crédibilité) utilisables directement dans cette transition
+  · gapToFill : 3 à 5 manques précis à combler (compétences absentes, portfolio vide, réseau inexistant, certification manquante) — chacun avec une estimation de temps pour le combler
+  · recommendedPath : 4 à 6 étapes ordonnées du chemin recommandé (formation → mini-projet → candidature → premier rôle → montée en compétences) — réaliste, sans sauts irréalistes
+  · priorityActions : EXACTEMENT 5 actions prioritaires à faire en premier — format : "[Numéro]. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]"
+  · mistakesToAvoid : 3 à 5 erreurs classiques faites par les personnes qui tentent cette transition — format : "Erreur [X] : [ce que les gens font] — Pourquoi ça bloque : [conséquence concrète] — Alternative : [ce qu'il faut faire à la place]"`
 
 // ── CV parser ─────────────────────────────────────────────────────
 
@@ -408,7 +414,38 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
         "Si tu ne supportes pas [contrainte réelle de ce métier]",
         "Si tu cherches [ce que ce métier ne peut structurellement pas offrir]",
         "Si [incompatibilité concrète avec le profil ou mode de vie souhaité]"
-      ]
+      ],
+      "howToReachRole": {
+        "startingPoint": [
+          "Élément déjà acquis 1 — [expérience ou compétence concrète de ${fn}] directement utilisable dans cette transition",
+          "Élément déjà acquis 2 — [contact, crédibilité ou réalisation]",
+          "Élément déjà acquis 3 — [outil ou secteur maîtrisé]"
+        ],
+        "gapToFill": [
+          "Manque 1 — [compétence ou certification absente] — temps estimé pour combler : [N semaines/mois]",
+          "Manque 2 — [portfolio vide ou réseau inexistant] — temps estimé : [N semaines/mois]",
+          "Manque 3 — [connaissance spécifique au métier cible] — temps estimé : [N semaines/mois]"
+        ],
+        "recommendedPath": [
+          "Étape 1 — [action initiale concrète] (semaine 1 à 2)",
+          "Étape 2 — [formation ou mini-projet de validation] (semaine 2 à 6)",
+          "Étape 3 — [construction de preuves concrètes] (mois 2 à 4)",
+          "Étape 4 — [candidature ou premier client] (mois 3 à 6)",
+          "Étape 5 — [consolidation et montée en compétences] (mois 6 à 12)"
+        ],
+        "priorityActions": [
+          "1. [Verbe d'action] [objet précis lié au current_aligned] ([durée estimée]) → impact attendu : [résultat concret]",
+          "2. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "3. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "4. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "5. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]"
+        ],
+        "mistakesToAvoid": [
+          "Erreur 1 : [ce que les gens font classiquement] — Pourquoi ça bloque : [conséquence] — Alternative : [ce qu'il faut faire à la place]",
+          "Erreur 2 : [erreur fréquente spécifique à cette transition current_aligned] — Pourquoi ça bloque : [...] — Alternative : [...]",
+          "Erreur 3 : [autre erreur] — Pourquoi ça bloque : [...] — Alternative : [...]"
+        ]
+      }
     },
     {
       "pathType": "passion_based",
@@ -485,7 +522,38 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
         "Si tu as besoin de revenus stables rapidement — la phase de transition passion est plus longue",
         "Si tu cherches [ce que ce métier passion ne peut pas offrir structurellement]",
         "Si [incompatibilité concrète avec les exigences réelles de ce secteur]"
-      ]
+      ],
+      "howToReachRole": {
+        "startingPoint": [
+          "Élément déjà acquis 1 — [passion, compétence ou expérience de ${fn}] transférable dans cette voie",
+          "Élément déjà acquis 2 — [réseau ou crédibilité existante dans le domaine passion]",
+          "Élément déjà acquis 3 — [outil, secteur ou réalisation utilisable]"
+        ],
+        "gapToFill": [
+          "Manque 1 — [compétence ou certification manquante pour la voie passion] — temps estimé : [N semaines/mois]",
+          "Manque 2 — [portfolio ou preuve de légitimité absent] — temps estimé : [N semaines/mois]",
+          "Manque 3 — [réseau spécifique au secteur passion] — temps estimé : [N semaines/mois]"
+        ],
+        "recommendedPath": [
+          "Étape 1 — [validation de la passion via un test concret] (semaine 1 à 3)",
+          "Étape 2 — [formation ou montée en compétences spécifique] (mois 1 à 4)",
+          "Étape 3 — [construction de preuves dans le domaine passion] (mois 2 à 5)",
+          "Étape 4 — [premier rôle ou première mission dans ce secteur] (mois 4 à 9)",
+          "Étape 5 — [consolidation et spécialisation] (mois 9 à 18)"
+        ],
+        "priorityActions": [
+          "1. [Verbe d'action] [objet précis lié au passion_based] ([durée estimée]) → impact attendu : [résultat concret]",
+          "2. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "3. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "4. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "5. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]"
+        ],
+        "mistakesToAvoid": [
+          "Erreur 1 : [erreur classique dans une reconversion passion] — Pourquoi ça bloque : [...] — Alternative : [...]",
+          "Erreur 2 : [erreur fréquente spécifique à ce secteur passion] — Pourquoi ça bloque : [...] — Alternative : [...]",
+          "Erreur 3 : [autre erreur] — Pourquoi ça bloque : [...] — Alternative : [...]"
+        ]
+      }
     },
     {
       "pathType": "high_potential",
@@ -562,7 +630,38 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
         "Si tu as besoin de résultats rapides et de sécurité financière à court terme",
         "Si tu ne supportes pas [contrainte exigeante propre à cette trajectoire ambitieuse]",
         "Si [incompatibilité de profil ou de style de vie avec les exigences réelles]"
-      ]
+      ],
+      "howToReachRole": {
+        "startingPoint": [
+          "Élément déjà acquis 1 — [force ou avantage différenciateur de ${fn}] utilisable dans cette voie ambitieuse",
+          "Élément déjà acquis 2 — [connaissance sectorielle ou réseau existant]",
+          "Élément déjà acquis 3 — [compétence rare ou réalisation notable]"
+        ],
+        "gapToFill": [
+          "Manque 1 — [compétence ou ressource critique pour cette voie high_potential] — temps estimé : [N mois]",
+          "Manque 2 — [réseau spécifique ou investissement initial nécessaire] — temps estimé : [N mois]",
+          "Manque 3 — [validation du concept ou traction initiale] — temps estimé : [N mois]"
+        ],
+        "recommendedPath": [
+          "Étape 1 — [validation de l'hypothèse et test marché] (mois 1 à 2)",
+          "Étape 2 — [acquisition des compétences critiques manquantes] (mois 2 à 6)",
+          "Étape 3 — [construction de la crédibilité et des premières preuves] (mois 4 à 9)",
+          "Étape 4 — [premier rôle ou lancement] (mois 6 à 18)",
+          "Étape 5 — [développement et consolidation de la position] (mois 18 à 36)"
+        ],
+        "priorityActions": [
+          "1. [Verbe d'action] [objet précis lié au high_potential] ([durée estimée]) → impact attendu : [résultat concret]",
+          "2. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "3. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "4. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]",
+          "5. [Verbe d'action] [objet précis] ([durée estimée]) → impact attendu : [résultat concret]"
+        ],
+        "mistakesToAvoid": [
+          "Erreur 1 : [erreur classique dans une voie ambitieuse] — Pourquoi ça bloque : [...] — Alternative : [...]",
+          "Erreur 2 : [erreur fréquente spécifique à cette transition high_potential] — Pourquoi ça bloque : [...] — Alternative : [...]",
+          "Erreur 3 : [autre erreur] — Pourquoi ça bloque : [...] — Alternative : [...]"
+        ]
+      }
     }
   ],
 
@@ -586,7 +685,8 @@ RAPPEL FINAL :
 - OBLIGATOIRES dans chaque trajectoire : positioningStatement, linkedinHeadline, interviewPitch, cvKeywords, comparisonWithOtherPaths, companyTypesToTarget, questionsToAskProfessionals, choosePath, avoidPath
 - detailedActionPlan30Days : chaque semaine DOIT inclure objective, deliverable, practicalTip, mistakeToAvoid
 - companyTypesToTarget : adapter au pathType (entreprises de taille PME/startup/grande entreprise selon risk_level)
-- choosePath / avoidPath : honnêtes, concrets, personnalisés au profil — pas génériques`
+- choosePath / avoidPath : honnêtes, concrets, personnalisés au profil — pas génériques
+- howToReachRole : OBLIGATOIRE dans chaque trajectoire — priorityActions doit contenir EXACTEMENT 5 actions numérotées, chacune avec durée et impact attendu`
 }
 
 // ── Main export ───────────────────────────────────────────────────
