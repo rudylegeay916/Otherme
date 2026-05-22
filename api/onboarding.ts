@@ -1326,7 +1326,7 @@ RAPPEL FINAL :
   }
 
   const validation = validateAIReport(parsed)
-  if (!validation.ok) {
+  if (validation.ok === false) {
     console.error('[onboarding][validation] Rapport IA INVALIDE :', validation.error)
     console.error('[onboarding][validation] Extrait reçu :', JSON.stringify(parsed).slice(0, 500))
     throw new Error(`[openai] Rapport IA invalide — ${validation.error}`)

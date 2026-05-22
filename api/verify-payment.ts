@@ -112,7 +112,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             currency:           session.currency ?? 'eur',
             payment_status:     session.payment_status,
             paid_at:            new Date().toISOString(),
-          }).then(() => {}).catch(() => {})
+          })
           console.log(`[verify-payment] ✅ Rapport ${reportId} marqué payé (fallback webhook)`)
         }
       } catch (dbErr) {
