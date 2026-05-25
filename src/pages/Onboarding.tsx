@@ -18,18 +18,18 @@ import LanguageToggle from '../components/LanguageToggle'
 
 // ── Questions par étape (IDs dans QUESTIONS[]) ────────────────────
 const STEP_QUESTION_IDS: string[][] = [
-  [],                                                                      // Step 0 — Identité
-  [],                                                                      // Step 1 — CV
-  ['skills', 'askedFor', 'profile'],                                       // Step 2 — Compétences
-  ['motivation', 'energy', 'interests', 'timeActivity'],                   // Step 3 — Passions
-  ['lifestyle', 'workEnv', 'money', 'risk'],                               // Step 4 — Style de vie
-  ['drains', 'vision5y', 'successCriteria', 'avoidNext', 'transitionTest'],// Step 5 — Projection
-  ['relation', 'role', 'blocks', 'realisticPath'],                         // Step 6 — Profil
-  [],                                                                      // Step 7 — Adaptatives
+  [],                                          // Step 0 — Identité
+  [],                                          // Step 1 — CV
+  ['skills', 'askedFor'],                      // Step 2 — Compétences
+  ['energy', 'interests'],                     // Step 3 — Énergie & Domaines
+  ['motivation', 'lifestyle'],                 // Step 4 — Direction
+  ['workEnv', 'money', 'risk'],               // Step 5 — Environnement & Priorités
+  ['avoidNext', 'blocks', 'transitionTest'],  // Step 6 — Contraintes & Plan
+  [],                                          // Step 7 — Adaptatives
 ]
 
-// Étapes après lesquelles on affiche un checkpoint (index 0..3)
-const CHECKPOINT_AFTER: number[] = [3, 4, 5, 6]
+// Étapes après lesquelles on affiche un checkpoint (index 0..2)
+const CHECKPOINT_AFTER: number[] = [4, 5, 6]
 
 // ── Contenu des checkpoints ───────────────────────────────────────
 
@@ -52,11 +52,11 @@ function detectSignals(answers: Record<string, QuestionAnswer>) {
 
   return {
     liberty:     motiv.includes('Avoir plus de liberté') ||
-                 lifestyle.some(o => ['Libre et flexible', 'Indépendante', 'Nomade / à distance'].includes(o)),
+                 lifestyle.some(o => ['Libre et flexible', 'Indépendant', 'Nomade / à distance'].includes(o)),
     creativity:  motiv.includes('Créer mon activité') ||
-                 lifestyle.includes('Créative') ||
+                 lifestyle.includes('Créatif et varié') ||
                  energy.some(o => ['Créer', 'Imaginer'].includes(o)) ||
-                 interests.some(o => ['Art', 'Musique'].includes(o)),
+                 interests.includes('Art & Culture'),
     meaning:     motiv.some(o => ['Trouver plus de sens', 'Me sentir plus aligné'].includes(o)) ||
                  lifestyle.includes('Utile aux autres'),
     money:       motiv.includes('Gagner plus') ||
@@ -77,13 +77,14 @@ function getCheckpointContent(
 
   const generic: CheckpointContent[] = c.generic.map(g => ({ ...g }))
 
-  if (index === 1) {
+  if (index === 0) {
     if (s.liberty)    return c.liberty
     if (s.creativity) return c.creativity
     if (s.meaning)    return c.meaning
     if (s.money)      return c.money
   }
-  if (index === 2 && s.progressive) return c.progressive
+  if (index === 1 && s.progressive) return c.progressive
+  if (index === 2) return generic[3] ?? generic[2]
 
   return generic[index] ?? generic[0]
 }
