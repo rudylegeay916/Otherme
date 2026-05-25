@@ -10,6 +10,7 @@ import {
 import Logo from '../components/Logo'
 import LanguageToggle from '../components/LanguageToggle'
 import AnimatedLifePathsBackground from '../components/AnimatedLifePathsBackground'
+import OtherMeStoryShowcase from '../components/OtherMeStoryShowcase'
 import { hasStartedTest, clearProgress } from '../lib/onboardingStorage'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTr } from '../lib/i18n/translations'
@@ -447,6 +448,9 @@ export default function Landing() {
           </div>
         </section>
       )}
+
+      {/* ── Signature showcase: OtherMe story ────────────────────── */}
+      <OtherMeStoryShowcase lang={lang} />
 
       {/* ── Proof bandeau ─────────────────────────────────────────── */}
       <section className="py-10 px-4 border-y border-white/[0.05] bg-dark-800/20 backdrop-blur-sm">

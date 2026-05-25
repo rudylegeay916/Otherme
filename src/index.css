@@ -66,6 +66,91 @@
   }
 }
 
+/* ── Path animation (AnimatedLifePathsBackground) ─────────────── */
+
+@keyframes pathFlow {
+  0%   { stroke-dashoffset: 2400; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+.path-flow {
+  stroke-dasharray: 220, 2200;
+  stroke-dashoffset: 2400;
+  animation: pathFlow 12s ease-in-out infinite;
+}
+
+/* ── AnimatedOtherMeLogo & OtherMeStoryShowcase animations ─────── */
+
+@keyframes pathFlowShort {
+  0%   { stroke-dashoffset: 0; opacity: 0; }
+  8%   { opacity: 1; }
+  82%  { opacity: 1; }
+  100% { stroke-dashoffset: -80; opacity: 0; }
+}
+
+@keyframes alomBreathe {
+  0%, 100% { transform: scale(1);    opacity: 0.82; }
+  50%       { transform: scale(1.04); opacity: 1;    }
+}
+
+@keyframes alomRingRotate  { from { transform: rotate(0deg);    } to { transform: rotate(360deg);  } }
+@keyframes alomRingRotateR { from { transform: rotate(0deg);    } to { transform: rotate(-360deg); } }
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-7px); }
+}
+
+.path-flow-short {
+  stroke-dasharray: 42 300;
+  stroke-dashoffset: 0;
+  animation: pathFlowShort 3s ease-in-out infinite;
+}
+
+.alom-breathe {
+  animation: alomBreathe 4s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.alom-ring-1 {
+  animation: alomRingRotate 26s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.alom-ring-2 {
+  animation: alomRingRotateR 19s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.float-card {
+  animation-name: floatCard;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .path-flow,
+  .path-flow-short,
+  .alom-breathe,
+  .alom-ring-1,
+  .alom-ring-2,
+  .float-card {
+    animation: none !important;
+    transform: none !important;
+  }
+  .path-flow-short {
+    stroke-dasharray: unset;
+    stroke-dashoffset: 0;
+    opacity: 0.15;
+  }
+}
+
 /* Blur overlay for locked trajectories */
 .blur-locked {
   filter: blur(8px);
