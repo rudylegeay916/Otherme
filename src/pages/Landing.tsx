@@ -149,8 +149,8 @@ const WHY_DIFFERENT: Array<{ Icon: IconComponent; fr: { title: string; desc: str
   },
 ]
 
-// Step icons for "Comment ça fonctionne ?" (indexed 0-2, matches t.steps order)
-const STEP_ICONS: IconComponent[] = [ClipboardList, ScanSearch, Route]
+// Step icons for "Comment ça fonctionne ?" (indexed 0-3, matches t.steps order)
+const STEP_ICONS: IconComponent[] = [ClipboardList, FileText, ScanSearch, Route]
 
 // ── Exemple de trajectoire — données statiques ────────────────────────────────
 
@@ -441,6 +441,20 @@ export default function Landing() {
         </section>
       )}
 
+      {/* ── Proof bandeau ─────────────────────────────────────────── */}
+      <section className="py-10 px-4 border-y border-white/[0.05] bg-dark-900/40">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
+            {t.proofItems.map((item, i) => (
+              <div key={i} className="text-center">
+                <div className="text-2xl font-black gradient-text">{item.value}</div>
+                <div className="text-xs text-slate-500 mt-0.5">{item.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Comment ça fonctionne ──────────────────────────────────── */}
       <section className="py-28 px-4">
         <div className="max-w-5xl mx-auto">
@@ -451,7 +465,7 @@ export default function Landing() {
             </h2>
             <p className="text-slate-500 text-base max-w-md mx-auto">{t.howSub}</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {t.steps.map((step, i) => {
               const StepIcon = STEP_ICONS[i]
               return (
@@ -465,6 +479,71 @@ export default function Landing() {
                 </div>
               )
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Ce que tu découvres ───────────────────────────────────── */}
+      <section className="py-24 px-4 bg-dark-900/60">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
+              {lang === 'fr' ? 'Les 3 trajectoires' : 'The 3 paths'}
+            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
+              {t.pathTypesTitle}{' '}<span className="gradient-text">{t.pathTypesAccent}</span>
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {t.pathTypes.map((pt, i) => {
+              const colorMap: Record<string, { bg: string; border: string; badge: string; dot: string }> = {
+                emerald: { bg: 'bg-emerald-600/[0.06]', border: 'border-emerald-500/20', badge: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20', dot: 'bg-emerald-400' },
+                violet:  { bg: 'bg-violet-600/[0.06]',  border: 'border-violet-500/20',  badge: 'bg-violet-500/10 text-violet-300 border-violet-500/20',   dot: 'bg-violet-400' },
+                amber:   { bg: 'bg-amber-600/[0.06]',   border: 'border-amber-500/20',   badge: 'bg-amber-500/10 text-amber-300 border-amber-500/20',       dot: 'bg-amber-400' },
+              }
+              const c = colorMap[pt.color] ?? colorMap.violet
+              return (
+                <div key={i} className={`card p-7 border ${c.border} ${c.bg} hover:border-white/[0.15] transition-colors duration-300`}>
+                  <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold mb-5 ${c.badge}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`} />
+                    {pt.label}
+                  </div>
+                  <h3 className="text-slate-100 font-bold text-lg mb-3">{pt.title}</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed">{pt.desc}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Comparaison Test classique vs OtherMe ─────────────────── */}
+      <section className="py-24 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
+              {lang === 'fr' ? 'Différence' : 'What sets it apart'}
+            </p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-100">
+              {t.compTitle}{' '}<span className="gradient-text">{t.compVsAccent}</span>{' '}{t.compOtherme}
+            </h2>
+          </div>
+          <div className="card overflow-hidden">
+            <div className="grid grid-cols-3 text-xs font-semibold uppercase tracking-wider border-b border-white/[0.08]">
+              <div className="p-4 text-slate-500">{lang === 'fr' ? 'Critère' : 'Criteria'}</div>
+              <div className="p-4 text-slate-500 border-l border-white/[0.06]">{t.compTitle}</div>
+              <div className="p-4 text-brand-400 border-l border-white/[0.06]">{t.compOtherme}</div>
+            </div>
+            {t.compRows.map((row, i) => (
+              <div key={i} className={`grid grid-cols-3 text-sm ${i < t.compRows.length - 1 ? 'border-b border-white/[0.05]' : ''}`}>
+                <div className="p-4 text-slate-400 font-medium">{row.label}</div>
+                <div className="p-4 text-slate-500 border-l border-white/[0.06]">{row.classic}</div>
+                <div className="p-4 text-slate-200 border-l border-white/[0.06] flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-400 flex-shrink-0" />
+                  {row.otherme}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -1466,31 +1545,38 @@ export default function Landing() {
               {lang === 'fr' ? 'Trajectoires' : 'Paths'}
             </p>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
-              {t.testiTitle}{' '}<span className="gradient-text">{t.testiAccent}</span>{' '}{t.testiTitle2}
+              {t.testiTitle}{' '}<span className="gradient-text">{t.testiAccent}</span>{t.testiTitle2 ? <>{' '}{t.testiTitle2}</> : null}
             </h2>
-            <p className="text-slate-500 text-sm max-w-md mx-auto">
-              {lang === 'fr'
-                ? 'Ces exemples illustrent des transitions type. Ton rapport sera entièrement adapté à ton profil spécifique.'
-                : 'These examples illustrate typical transitions. Your report will be fully tailored to your specific profile.'}
-            </p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {t.testimonials.map((ex, i) => (
               <div key={i} className="card p-6 flex flex-col hover:border-white/[0.12] transition-colors duration-300">
-                <div className="mb-4">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-400/70 uppercase tracking-wider">
-                    <span className="w-3 h-px bg-brand-600/40" />
-                    {lang === 'fr' ? 'Exemple' : 'Example'}
-                  </span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-600/30 to-indigo-600/30 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-slate-200 font-bold text-sm">{ex.name[0]}</span>
+                  </div>
+                  <div>
+                    <div className="text-slate-100 font-semibold text-sm">{ex.name}, {ex.age} {lang === 'fr' ? 'ans' : 'yo'}</div>
+                    <div className="text-slate-500 text-xs">{ex.from}</div>
+                  </div>
                 </div>
-                <h4 className="text-slate-100 font-bold text-sm mb-2 leading-snug">{ex.name}</h4>
-                <p className="text-slate-400 text-sm leading-relaxed mb-5 flex-1">{ex.text}</p>
-                <div className="pt-4 border-t border-white/[0.06]">
-                  <div className="text-brand-400/70 text-xs font-medium">{ex.job}</div>
+                <div className="mb-3 flex items-center gap-1.5 text-xs text-brand-400/80 font-medium">
+                  <span>→</span>
+                  <span>{ex.to}</span>
+                </div>
+                <p className="text-slate-400 text-sm leading-relaxed mb-5 flex-1 italic">"{ex.text}"</p>
+                <div className="pt-4 border-t border-white/[0.06] flex flex-col gap-2">
+                  <div className="flex flex-wrap gap-1.5">
+                    {ex.tags.map((tag) => (
+                      <span key={tag} className="px-2 py-0.5 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-300 text-[10px] font-medium">{tag}</span>
+                    ))}
+                  </div>
+                  <div className="text-brand-400/60 text-xs">{lang === 'fr' ? 'Durée estimée' : 'Estimated duration'} : {ex.duration}</div>
                 </div>
               </div>
             ))}
           </div>
+          <p className="text-center text-slate-600 text-xs mt-8">{t.testiDisclaimer}</p>
         </div>
       </section>
 
