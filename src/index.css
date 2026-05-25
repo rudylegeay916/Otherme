@@ -78,3 +78,27 @@
 ::-webkit-scrollbar-track  { background: #050509; }
 ::-webkit-scrollbar-thumb  { background: #2d2b4a; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #45446a; }
+
+/* ── Path animation (AnimatedLifePathsBackground) ─────────────── */
+
+@keyframes pathFlow {
+  0%   { stroke-dashoffset: 2400; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+.path-flow {
+  stroke-dasharray: 220, 2200;
+  stroke-dashoffset: 2400;
+  animation: pathFlow 12s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .path-flow {
+    animation: none;
+    stroke-dasharray: unset;
+    stroke-dashoffset: 0;
+    opacity: 0.06;
+  }
+}

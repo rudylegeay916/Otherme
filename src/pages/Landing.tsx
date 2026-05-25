@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import Logo from '../components/Logo'
 import LanguageToggle from '../components/LanguageToggle'
+import AnimatedLifePathsBackground from '../components/AnimatedLifePathsBackground'
 import { hasStartedTest, clearProgress } from '../lib/onboardingStorage'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTr } from '../lib/i18n/translations'
@@ -326,8 +327,8 @@ export default function Landing() {
     <div className="min-h-screen bg-dark-950">
 
       {/* ── Navbar ─────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3.5 bg-dark-950/85 backdrop-blur-md border-b border-white/[0.06]">
-        <Logo size={68} />
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3.5 bg-dark-950/90 backdrop-blur-xl border-b border-white/[0.05]">
+        <Logo size={52} />
         <div className="flex items-center gap-3">
           <LanguageToggle />
           {started ? (
@@ -362,9 +363,15 @@ export default function Landing() {
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-20 overflow-hidden">
 
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-violet-700/[0.09] rounded-full blur-[140px]" />
-          <div className="absolute top-[60%] left-[18%] w-[300px] h-[300px] bg-indigo-800/[0.07] rounded-full blur-[100px]" />
-          <div className="absolute top-[15%] right-[12%] w-[220px] h-[220px] bg-purple-800/[0.06] rounded-full blur-[80px]" />
+          {/* Animated life paths */}
+          <AnimatedLifePathsBackground />
+          {/* Layered ambient blobs */}
+          <div className="absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-violet-700/[0.08] rounded-full blur-[160px]" />
+          <div className="absolute top-[55%] left-[15%] w-[320px] h-[320px] bg-indigo-800/[0.07] rounded-full blur-[110px]" />
+          <div className="absolute top-[20%] right-[10%] w-[260px] h-[260px] bg-purple-800/[0.06] rounded-full blur-[90px]" />
+          <div className="absolute bottom-[10%] left-[45%] w-[200px] h-[200px] bg-violet-900/[0.05] rounded-full blur-[70px]" />
+          {/* Subtle radial center glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-radial opacity-[0.04]" style={{ background: 'radial-gradient(ellipse, rgba(139,92,246,0.3) 0%, transparent 70%)' }} />
         </div>
 
         <div className="relative z-10 text-center max-w-4xl mx-auto animate-fade-in">
@@ -407,12 +414,12 @@ export default function Landing() {
           )}
 
           {/* Microcopy sous CTA */}
-          <div className="flex items-center justify-center gap-4 sm:gap-6 text-xs text-slate-600 flex-wrap">
-            <span>{t.statRating}</span>
-            <span className="hidden sm:block w-px h-3 bg-dark-600" />
-            <span>{t.statReports}</span>
-            <span className="hidden sm:block w-px h-3 bg-dark-600" />
-            <span>{t.statSpeed}</span>
+          <div className="flex items-center justify-center gap-3 sm:gap-5 text-xs text-slate-600 flex-wrap mt-2">
+            <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-emerald-500/60" />{t.statRating}</span>
+            <span className="hidden sm:block w-px h-3 bg-dark-700" />
+            <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-violet-500/60" />{t.statReports}</span>
+            <span className="hidden sm:block w-px h-3 bg-dark-700" />
+            <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-blue-500/60" />{t.statSpeed}</span>
           </div>
         </div>
 
@@ -442,13 +449,14 @@ export default function Landing() {
       )}
 
       {/* ── Proof bandeau ─────────────────────────────────────────── */}
-      <section className="py-10 px-4 border-y border-white/[0.05] bg-dark-900/40">
+      <section className="py-10 px-4 border-y border-white/[0.05] bg-dark-800/20 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto">
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
+          <div className="flex flex-wrap items-center justify-center gap-0">
             {t.proofItems.map((item, i) => (
-              <div key={i} className="text-center">
-                <div className="text-2xl font-black gradient-text">{item.value}</div>
-                <div className="text-xs text-slate-500 mt-0.5">{item.label}</div>
+              <div key={i} className="text-center px-8 md:px-12 py-2 relative">
+                {i > 0 && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-px h-8 bg-white/[0.06]" />}
+                <div className="text-2xl sm:text-3xl font-black gradient-text tracking-tight">{item.value}</div>
+                <div className="text-xs text-slate-500 mt-0.5 whitespace-nowrap">{item.label}</div>
               </div>
             ))}
           </div>
@@ -496,20 +504,44 @@ export default function Landing() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {t.pathTypes.map((pt, i) => {
-              const colorMap: Record<string, { bg: string; border: string; badge: string; dot: string }> = {
-                emerald: { bg: 'bg-emerald-600/[0.06]', border: 'border-emerald-500/20', badge: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20', dot: 'bg-emerald-400' },
-                violet:  { bg: 'bg-violet-600/[0.06]',  border: 'border-violet-500/20',  badge: 'bg-violet-500/10 text-violet-300 border-violet-500/20',   dot: 'bg-violet-400' },
-                amber:   { bg: 'bg-amber-600/[0.06]',   border: 'border-amber-500/20',   badge: 'bg-amber-500/10 text-amber-300 border-amber-500/20',       dot: 'bg-amber-400' },
+              const colorMap: Record<string, { bg: string; border: string; badge: string; dot: string; glow: string; num: string }> = {
+                emerald: {
+                  bg: 'bg-gradient-to-br from-emerald-950/60 to-dark-800',
+                  border: 'border-emerald-500/25',
+                  badge: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20',
+                  dot: 'bg-emerald-400',
+                  glow: 'hover:shadow-[0_0_40px_rgba(16,185,129,0.08)]',
+                  num: 'text-emerald-800/60',
+                },
+                violet: {
+                  bg: 'bg-gradient-to-br from-violet-950/60 to-dark-800',
+                  border: 'border-violet-500/30',
+                  badge: 'bg-violet-500/10 text-violet-300 border-violet-500/20',
+                  dot: 'bg-violet-400',
+                  glow: 'hover:shadow-[0_0_40px_rgba(124,58,237,0.10)]',
+                  num: 'text-violet-800/60',
+                },
+                amber: {
+                  bg: 'bg-gradient-to-br from-amber-950/60 to-dark-800',
+                  border: 'border-amber-500/25',
+                  badge: 'bg-amber-500/10 text-amber-300 border-amber-500/20',
+                  dot: 'bg-amber-400',
+                  glow: 'hover:shadow-[0_0_40px_rgba(245,158,11,0.08)]',
+                  num: 'text-amber-800/60',
+                },
               }
               const c = colorMap[pt.color] ?? colorMap.violet
               return (
-                <div key={i} className={`card p-7 border ${c.border} ${c.bg} hover:border-white/[0.15] transition-colors duration-300`}>
+                <div key={i} className={`relative rounded-2xl border p-7 transition-all duration-300 overflow-hidden ${c.border} ${c.bg} ${c.glow}`}>
+                  {/* Background number */}
+                  <div className={`absolute top-4 right-5 text-6xl font-black select-none ${c.num}`}>{String(i + 1).padStart(2, '0')}</div>
+                  {/* Badge */}
                   <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold mb-5 ${c.badge}`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`} />
                     {pt.label}
                   </div>
-                  <h3 className="text-slate-100 font-bold text-lg mb-3">{pt.title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">{pt.desc}</p>
+                  <h3 className="text-slate-100 font-bold text-lg mb-3 leading-snug">{pt.title}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">{pt.desc}</p>
                 </div>
               )
             })}
@@ -528,19 +560,31 @@ export default function Landing() {
               {t.compTitle}{' '}<span className="gradient-text">{t.compVsAccent}</span>{' '}{t.compOtherme}
             </h2>
           </div>
-          <div className="card overflow-hidden">
-            <div className="grid grid-cols-3 text-xs font-semibold uppercase tracking-wider border-b border-white/[0.08]">
-              <div className="p-4 text-slate-500">{lang === 'fr' ? 'Critère' : 'Criteria'}</div>
-              <div className="p-4 text-slate-500 border-l border-white/[0.06]">{t.compTitle}</div>
-              <div className="p-4 text-brand-400 border-l border-white/[0.06]">{t.compOtherme}</div>
+          <div className="rounded-2xl border border-white/[0.07] overflow-hidden">
+            {/* Header */}
+            <div className="grid grid-cols-3 border-b border-white/[0.07]">
+              <div className="p-4 bg-dark-800/60" />
+              <div className="p-4 bg-dark-800/60 border-l border-white/[0.06]">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{t.compTitle}</span>
+              </div>
+              <div className="p-4 bg-violet-900/20 border-l border-violet-500/20">
+                <span className="text-xs font-semibold text-brand-300 uppercase tracking-wider">{t.compOtherme}</span>
+              </div>
             </div>
             {t.compRows.map((row, i) => (
               <div key={i} className={`grid grid-cols-3 text-sm ${i < t.compRows.length - 1 ? 'border-b border-white/[0.05]' : ''}`}>
-                <div className="p-4 text-slate-400 font-medium">{row.label}</div>
-                <div className="p-4 text-slate-500 border-l border-white/[0.06]">{row.classic}</div>
-                <div className="p-4 text-slate-200 border-l border-white/[0.06] flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-400 flex-shrink-0" />
-                  {row.otherme}
+                <div className="p-4 text-slate-400 font-medium text-xs bg-dark-800/30">{row.label}</div>
+                <div className="p-4 text-slate-600 border-l border-white/[0.05] bg-dark-800/20 flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-dark-700 flex items-center justify-center flex-shrink-0">
+                    <span className="text-slate-600 text-[9px] font-bold">✕</span>
+                  </span>
+                  <span className="text-xs">{row.classic}</span>
+                </div>
+                <div className="p-4 border-l border-violet-500/15 bg-violet-900/10 flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
+                    <span className="text-emerald-400 text-[9px] font-bold">✓</span>
+                  </span>
+                  <span className="text-xs text-slate-200">{row.otherme}</span>
                 </div>
               </div>
             ))}
@@ -1550,28 +1594,44 @@ export default function Landing() {
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {t.testimonials.map((ex, i) => (
-              <div key={i} className="card p-6 flex flex-col hover:border-white/[0.12] transition-colors duration-300">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-600/30 to-indigo-600/30 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-slate-200 font-bold text-sm">{ex.name[0]}</span>
+              <div key={i} className="bg-dark-800 border border-white/[0.07] rounded-2xl p-6 flex flex-col hover:border-white/[0.14] hover:shadow-[0_0_30px_rgba(124,58,237,0.06)] transition-all duration-300">
+                {/* Profile header */}
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="relative flex-shrink-0">
+                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-violet-600 to-indigo-700 flex items-center justify-center ring-2 ring-violet-500/20">
+                      <span className="text-white font-bold text-base">{ex.name[0]}</span>
+                    </div>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-dark-800" />
                   </div>
                   <div>
                     <div className="text-slate-100 font-semibold text-sm">{ex.name}, {ex.age} {lang === 'fr' ? 'ans' : 'yo'}</div>
-                    <div className="text-slate-500 text-xs">{ex.from}</div>
+                    <div className="text-slate-500 text-xs mt-0.5">{lang === 'fr' ? 'Profil illustratif' : 'Illustrative profile'}</div>
                   </div>
                 </div>
-                <div className="mb-3 flex items-center gap-1.5 text-xs text-brand-400/80 font-medium">
-                  <span>→</span>
-                  <span>{ex.to}</span>
+                {/* Transition arrow */}
+                <div className="flex items-start gap-2 mb-4 p-3 rounded-xl bg-dark-900/60 border border-white/[0.05]">
+                  <div className="flex-1 min-w-0">
+                    <div className="text-slate-500 text-[11px] mb-0.5">{lang === 'fr' ? 'Avant' : 'Before'}</div>
+                    <div className="text-slate-300 text-xs font-medium truncate">{ex.from}</div>
+                  </div>
+                  <div className="text-brand-400 px-1 flex-shrink-0 mt-3">→</div>
+                  <div className="flex-1 min-w-0 text-right">
+                    <div className="text-brand-400/80 text-[11px] mb-0.5">{lang === 'fr' ? 'Après' : 'After'}</div>
+                    <div className="text-brand-300 text-xs font-semibold truncate">{ex.to}</div>
+                  </div>
                 </div>
-                <p className="text-slate-400 text-sm leading-relaxed mb-5 flex-1 italic">"{ex.text}"</p>
-                <div className="pt-4 border-t border-white/[0.06] flex flex-col gap-2">
-                  <div className="flex flex-wrap gap-1.5">
+                {/* Quote */}
+                <p className="text-slate-400 text-sm leading-relaxed flex-1 mb-4">
+                  <span className="text-violet-400/60 text-lg leading-none font-serif mr-1">"</span>{ex.text}<span className="text-violet-400/60 text-lg leading-none font-serif ml-1">"</span>
+                </p>
+                {/* Footer */}
+                <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between gap-2">
+                  <div className="flex flex-wrap gap-1">
                     {ex.tags.map((tag) => (
-                      <span key={tag} className="px-2 py-0.5 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-300 text-[10px] font-medium">{tag}</span>
+                      <span key={tag} className="px-2 py-0.5 rounded-full bg-violet-600/10 border border-violet-500/15 text-violet-300/80 text-[10px] font-medium">{tag}</span>
                     ))}
                   </div>
-                  <div className="text-brand-400/60 text-xs">{lang === 'fr' ? 'Durée estimée' : 'Estimated duration'} : {ex.duration}</div>
+                  <div className="text-slate-600 text-[10px] whitespace-nowrap flex-shrink-0">{ex.duration}</div>
                 </div>
               </div>
             ))}
