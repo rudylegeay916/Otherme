@@ -373,21 +373,21 @@ export default function Landing() {
         </div>
       )}
 
-      {/* ── Hero — plein écran, image en fond ──────────────────────── */}
-      <section className="relative min-h-screen overflow-hidden">
+      {/* ── Hero — image plein écran en fond ──────────────────────── */}
+      <section className="relative min-h-screen overflow-hidden bg-dark-950">
 
-        {/* ── Image pleine largeur en fond ──────────────────────────── */}
-        {/* Wrapper parallax : dépasse légèrement en haut/bas pour le mouvement */}
+        {/* ── Image de fond ─────────────────────────────────────────── */}
+        {/* Outer : parallax — dépasse de 60px en haut/bas pour éviter les gaps */}
         <div
           className="absolute left-0 right-0 pointer-events-none"
           style={{
-            top: '-48px',
-            bottom: '-48px',
-            ...(heroParallax ? { transform: `translateY(-${heroParallax}px)` } : {}),
+            top: '-60px',
+            bottom: '-60px',
+            transform: heroParallax ? `translateY(-${heroParallax}px)` : undefined,
           }}
         >
-          {/* Zoom-in au chargement */}
-          <div className="absolute inset-0 animate-hero-image">
+          {/* Inner : zoom-in au chargement (séparé du parallax) */}
+          <div className="absolute inset-0 hero-bg-zoom">
             <img
               src="/hero-otherme.png"
               alt=""
@@ -397,36 +397,34 @@ export default function Landing() {
           </div>
         </div>
 
-        {/* ── Overlays — lisibilité & harmonie dark ─────────────────── */}
+        {/* ── Overlays de lisibilité ─────────────────────────────────── */}
         {/* Couverture sombre globale */}
-        <div className="absolute inset-0 bg-dark-950/52 pointer-events-none" />
+        <div className="absolute inset-0 bg-black/50 pointer-events-none" />
         {/* Gradient gauche fort — texte toujours lisible */}
-        <div className="absolute inset-0 bg-gradient-to-r from-dark-950 via-dark-950/82 to-dark-950/20 pointer-events-none" />
-        {/* Fondu bas — intégration avec la section suivante */}
-        <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-dark-950 via-dark-950/70 to-transparent pointer-events-none" />
-        {/* Fondu haut — intégration avec la navbar */}
-        <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-dark-950/75 to-transparent pointer-events-none" />
-
-        {/* ── Atmospheric layers ────────────────────────────────────── */}
-        {/* Animated paths — très discrets sur l'image */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.10]">
-          <AnimatedLifePathsBackground />
-        </div>
-        {/* Accent violet radial — profondeur */}
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            top: '28%', left: '18%',
-            width: '680px', height: '520px',
-            background: 'radial-gradient(ellipse, rgba(109,40,217,0.13) 0%, transparent 68%)',
-            filter: 'blur(70px)',
-          }}
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(to right, rgba(5,5,9,0.95) 0%, rgba(5,5,9,0.75) 40%, rgba(5,5,9,0.20) 75%, transparent 100%)' }}
+        />
+        {/* Fondu bas — fusion avec la section suivante */}
+        <div className="absolute inset-x-0 bottom-0 h-56 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, #050509 0%, rgba(5,5,9,0.70) 50%, transparent 100%)' }}
+        />
+        {/* Fondu haut — fusion avec la navbar */}
+        <div className="absolute inset-x-0 top-0 h-40 pointer-events-none"
+          style={{ background: 'linear-gradient(to bottom, rgba(5,5,9,0.65) 0%, transparent 100%)' }}
         />
 
-        {/* ── Contenu — superposé à gauche ──────────────────────────── */}
-        <div className="relative z-10 flex flex-col min-h-screen px-6 sm:px-8 lg:px-16 xl:px-24 pt-28 pb-14">
-          <div className="flex-1 flex flex-col justify-center">
-            <div className="max-w-xl lg:max-w-2xl">
+        {/* ── Layers atmosphériques ─────────────────────────────────── */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity: 0.08 }}>
+          <AnimatedLifePathsBackground />
+        </div>
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 700px 550px at 22% 58%, rgba(109,40,217,0.12) 0%, transparent 70%)' }}
+        />
+
+        {/* ── Contenu superposé à gauche ────────────────────────────── */}
+        <div className="relative z-10 flex flex-col min-h-screen px-6 sm:px-10 lg:px-16 xl:px-24 pt-28 pb-16">
+          <div className="flex-1 flex items-center">
+            <div className="w-full max-w-2xl">
 
               {/* Badge */}
               <div
@@ -442,20 +440,20 @@ export default function Landing() {
                 className="font-bold tracking-tight mb-7 animate-slide-up-hero"
                 style={{ animationDelay: '80ms' }}
               >
-                <span className="block text-slate-100 text-[2.5rem] sm:text-[3.2rem] md:text-[3.8rem] lg:text-[4.2rem] xl:text-[4.6rem] leading-[1.14]">
+                <span className="block text-white text-[2.5rem] sm:text-[3.2rem] md:text-[3.8rem] lg:text-[4.2rem] xl:text-[4.6rem] leading-[1.12]">
                   {t.heroTitle}
                 </span>
-                <span className="block gradient-text text-[2rem] sm:text-[2.6rem] md:text-[3rem] lg:text-[3.5rem] xl:text-[3.8rem] leading-[1.20]">
+                <span className="block gradient-text text-[2.1rem] sm:text-[2.6rem] md:text-[3rem] lg:text-[3.5rem] xl:text-[3.9rem] leading-[1.20]">
                   {t.heroAccent}
                 </span>
-                <span className="block gradient-text text-[2rem] sm:text-[2.6rem] md:text-[3rem] lg:text-[3.5rem] xl:text-[3.8rem] leading-[1.20]">
+                <span className="block gradient-text text-[2.1rem] sm:text-[2.6rem] md:text-[3rem] lg:text-[3.5rem] xl:text-[3.9rem] leading-[1.20]">
                   {t.heroTitle2}
                 </span>
               </h1>
 
               {/* Sous-titre */}
               <p
-                className="text-base md:text-[1.08rem] text-slate-300/80 mb-10 max-w-md leading-relaxed animate-slide-up-hero"
+                className="text-[1.05rem] text-slate-300/80 mb-10 max-w-md leading-relaxed animate-slide-up-hero"
                 style={{ animationDelay: '190ms' }}
                 dangerouslySetInnerHTML={{ __html: t.heroSub }}
               />
@@ -463,7 +461,7 @@ export default function Landing() {
               {/* CTA */}
               <div
                 className="animate-slide-up-hero"
-                style={{ animationDelay: '290ms' }}
+                style={{ animationDelay: '280ms' }}
               >
                 {started ? (
                   <div className="flex flex-col sm:flex-row items-start gap-3 mb-10">
@@ -480,7 +478,7 @@ export default function Landing() {
               {/* Microcopy */}
               <div
                 className="flex items-center gap-3 sm:gap-5 text-xs text-slate-500 flex-wrap animate-slide-up-hero"
-                style={{ animationDelay: '380ms' }}
+                style={{ animationDelay: '370ms' }}
               >
                 <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-emerald-500/60" />{t.statRating}</span>
                 <span className="hidden sm:block w-px h-3 bg-dark-700" />
@@ -492,7 +490,7 @@ export default function Landing() {
           </div>
 
           {/* Scroll cue */}
-          <div className="flex justify-center pt-4 text-dark-600 animate-bounce">
+          <div className="flex justify-center text-dark-600 animate-bounce">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
             </svg>

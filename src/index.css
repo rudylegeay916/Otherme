@@ -164,6 +164,21 @@
   }
 }
 
+/* ── Hero background zoom-in ──────────────────────────────── */
+
+@keyframes heroBgZoom {
+  from { transform: scale(1.06); }
+  to   { transform: scale(1); }
+}
+
+.hero-bg-zoom {
+  animation: heroBgZoom 1.4s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-zoom { animation: none; }
+}
+
 /* Blur overlay for locked trajectories */
 .blur-locked {
   filter: blur(8px);
