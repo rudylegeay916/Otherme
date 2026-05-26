@@ -376,52 +376,68 @@ export default function Landing() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-radial opacity-[0.04]" style={{ background: 'radial-gradient(ellipse, rgba(139,92,246,0.3) 0%, transparent 70%)' }} />
         </div>
 
-        <div className="relative z-10 text-center max-w-4xl mx-auto animate-fade-in">
+        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-300/90 text-xs font-medium mb-8 tracking-wide">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-400/80" />
-            {t.badge}
+          {/* Text content */}
+          <div className="flex-1 text-center animate-fade-in">
+
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-300/90 text-xs font-medium mb-8 tracking-wide">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-400/80" />
+              {t.badge}
+            </div>
+
+            {/* Titre hero */}
+            <h1 className="font-bold tracking-tight mb-8">
+              <span className="block text-slate-100 text-[2.4rem] sm:text-[3rem] md:text-[3.5rem] leading-[1.28]">
+                {t.heroTitle}
+              </span>
+              <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.28]">
+                {t.heroAccent}
+              </span>
+              <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.28]">
+                {t.heroTitle2}
+              </span>
+            </h1>
+
+            {/* Sous-titre */}
+            <p
+              className="text-base md:text-lg text-slate-400 mb-10 max-w-xl mx-auto leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: t.heroSub }}
+            />
+
+            {/* CTA */}
+            {started ? (
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
+                <button onClick={handleResume} className="btn-primary text-base py-3.5 px-9 w-full sm:w-auto">{t.ctaResume}</button>
+                <button onClick={() => setShowConfirm(true)} className="btn-secondary text-base py-3.5 px-8 w-full sm:w-auto">{t.ctaRestart}</button>
+              </div>
+            ) : (
+              <div className="flex justify-center mb-10">
+                <button onClick={handleStart} className="btn-primary text-base py-3.5 px-9">{t.heroCta}</button>
+              </div>
+            )}
+
+            {/* Microcopy sous CTA */}
+            <div className="flex items-center justify-center gap-3 sm:gap-5 text-xs text-slate-600 flex-wrap mt-2">
+              <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-emerald-500/60" />{t.statRating}</span>
+              <span className="hidden sm:block w-px h-3 bg-dark-700" />
+              <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-violet-500/60" />{t.statReports}</span>
+              <span className="hidden sm:block w-px h-3 bg-dark-700" />
+              <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-blue-500/60" />{t.statSpeed}</span>
+            </div>
           </div>
 
-          {/* Titre hero */}
-          <h1 className="font-bold tracking-tight mb-8">
-            <span className="block text-slate-100 text-[2.4rem] sm:text-[3rem] md:text-[3.5rem] leading-[1.28]">
-              {t.heroTitle}
-            </span>
-            <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.28]">
-              {t.heroAccent}
-            </span>
-            <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.28]">
-              {t.heroTitle2}
-            </span>
-          </h1>
-
-          {/* Sous-titre */}
-          <p
-            className="text-base md:text-lg text-slate-400 mb-10 max-w-xl mx-auto leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: t.heroSub }}
-          />
-
-          {/* CTA */}
-          {started ? (
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
-              <button onClick={handleResume} className="btn-primary text-base py-3.5 px-9 w-full sm:w-auto">{t.ctaResume}</button>
-              <button onClick={() => setShowConfirm(true)} className="btn-secondary text-base py-3.5 px-8 w-full sm:w-auto">{t.ctaRestart}</button>
+          {/* Hero image — droite sur desktop, sous le texte sur mobile */}
+          <div className="w-full lg:w-[420px] xl:w-[460px] flex-shrink-0 animate-hero-image">
+            <div className="relative rounded-2xl border border-violet-500/30 shadow-[0_0_50px_rgba(139,92,246,0.18)] overflow-hidden">
+              <div className="absolute inset-0 bg-black/15 pointer-events-none z-10 rounded-2xl" />
+              <img
+                src="/hero-otherme.png"
+                alt="Personne en réflexion face à une fenêtre, symbolisant une nouvelle direction professionnelle."
+                className="w-full h-auto block"
+              />
             </div>
-          ) : (
-            <div className="flex justify-center mb-10">
-              <button onClick={handleStart} className="btn-primary text-base py-3.5 px-9">{t.heroCta}</button>
-            </div>
-          )}
-
-          {/* Microcopy sous CTA */}
-          <div className="flex items-center justify-center gap-3 sm:gap-5 text-xs text-slate-600 flex-wrap mt-2">
-            <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-emerald-500/60" />{t.statRating}</span>
-            <span className="hidden sm:block w-px h-3 bg-dark-700" />
-            <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-violet-500/60" />{t.statReports}</span>
-            <span className="hidden sm:block w-px h-3 bg-dark-700" />
-            <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-blue-500/60" />{t.statSpeed}</span>
           </div>
         </div>
 
