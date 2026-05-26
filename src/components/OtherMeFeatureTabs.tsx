@@ -82,49 +82,65 @@ const COLOR = {
 // ── Mock visuals per tab ──────────────────────────────────────────────────────
 
 const SIGNAL_COLORS = {
-  violet:  {
-    bg: 'rgba(109,40,217,0.10)',
-    border: 'rgba(139,92,246,0.22)',
-    borderHover: 'rgba(139,92,246,0.45)',
-    glow: 'rgba(139,92,246,0.18)',
-    spotlight: 'rgba(139,92,246,0.20)',
-    iconBg: 'rgba(109,40,217,0.18)',
-    tagBg: 'rgba(139,92,246,0.14)',
-    tagText: '#c4b5fd',
-    iconClass: 'text-violet-400',
+  violet: {
+    bg:          'rgba(109,40,217,0.09)',
+    bgHover:     'rgba(109,40,217,0.15)',
+    border:      'rgba(139,92,246,0.20)',
+    borderHover: 'rgba(139,92,246,0.52)',
+    glow:        'rgba(139,92,246,0.22)',
+    spotlight:   'rgba(139,92,246,0.18)',
+    iconBg:      'rgba(109,40,217,0.22)',
+    iconGlow:    'rgba(139,92,246,0.35)',
+    tagBg:       'rgba(139,92,246,0.13)',
+    tagBgHover:  'rgba(139,92,246,0.24)',
+    tagText:     '#c4b5fd',
+    stripe:      'rgba(139,92,246,0.75)',
+    iconClass:   'text-violet-400',
   },
   emerald: {
-    bg: 'rgba(5,150,105,0.08)',
-    border: 'rgba(52,211,153,0.18)',
-    borderHover: 'rgba(52,211,153,0.40)',
-    glow: 'rgba(52,211,153,0.14)',
-    spotlight: 'rgba(52,211,153,0.18)',
-    iconBg: 'rgba(5,150,105,0.18)',
-    tagBg: 'rgba(52,211,153,0.12)',
-    tagText: '#6ee7b7',
-    iconClass: 'text-emerald-400',
+    bg:          'rgba(5,150,105,0.07)',
+    bgHover:     'rgba(5,150,105,0.12)',
+    border:      'rgba(52,211,153,0.17)',
+    borderHover: 'rgba(52,211,153,0.44)',
+    glow:        'rgba(52,211,153,0.18)',
+    spotlight:   'rgba(52,211,153,0.16)',
+    iconBg:      'rgba(5,150,105,0.22)',
+    iconGlow:    'rgba(52,211,153,0.32)',
+    tagBg:       'rgba(52,211,153,0.11)',
+    tagBgHover:  'rgba(52,211,153,0.22)',
+    tagText:     '#6ee7b7',
+    stripe:      'rgba(52,211,153,0.75)',
+    iconClass:   'text-emerald-400',
   },
-  blue:    {
-    bg: 'rgba(37,99,235,0.08)',
-    border: 'rgba(96,165,250,0.18)',
-    borderHover: 'rgba(96,165,250,0.40)',
-    glow: 'rgba(96,165,250,0.14)',
-    spotlight: 'rgba(96,165,250,0.18)',
-    iconBg: 'rgba(37,99,235,0.18)',
-    tagBg: 'rgba(96,165,250,0.12)',
-    tagText: '#93c5fd',
-    iconClass: 'text-blue-400',
+  blue: {
+    bg:          'rgba(37,99,235,0.07)',
+    bgHover:     'rgba(37,99,235,0.12)',
+    border:      'rgba(96,165,250,0.17)',
+    borderHover: 'rgba(96,165,250,0.44)',
+    glow:        'rgba(96,165,250,0.18)',
+    spotlight:   'rgba(96,165,250,0.16)',
+    iconBg:      'rgba(37,99,235,0.22)',
+    iconGlow:    'rgba(96,165,250,0.32)',
+    tagBg:       'rgba(96,165,250,0.11)',
+    tagBgHover:  'rgba(96,165,250,0.22)',
+    tagText:     '#93c5fd',
+    stripe:      'rgba(96,165,250,0.75)',
+    iconClass:   'text-blue-400',
   },
-  amber:   {
-    bg: 'rgba(146,64,14,0.08)',
-    border: 'rgba(251,191,36,0.16)',
-    borderHover: 'rgba(251,191,36,0.36)',
-    glow: 'rgba(251,191,36,0.12)',
-    spotlight: 'rgba(251,191,36,0.16)',
-    iconBg: 'rgba(146,64,14,0.20)',
-    tagBg: 'rgba(251,191,36,0.10)',
-    tagText: '#fcd34d',
-    iconClass: 'text-amber-400',
+  amber: {
+    bg:          'rgba(146,64,14,0.07)',
+    bgHover:     'rgba(146,64,14,0.12)',
+    border:      'rgba(251,191,36,0.15)',
+    borderHover: 'rgba(251,191,36,0.40)',
+    glow:        'rgba(251,191,36,0.16)',
+    spotlight:   'rgba(251,191,36,0.14)',
+    iconBg:      'rgba(146,64,14,0.24)',
+    iconGlow:    'rgba(251,191,36,0.28)',
+    tagBg:       'rgba(251,191,36,0.10)',
+    tagBgHover:  'rgba(251,191,36,0.20)',
+    tagText:     '#fcd34d',
+    stripe:      'rgba(251,191,36,0.75)',
+    iconClass:   'text-amber-400',
   },
 } as const
 
@@ -132,23 +148,25 @@ type SignalColor = keyof typeof SIGNAL_COLORS
 
 function AnalyseVisual() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible]   = useState(false)
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null)
   const [hoverPos, setHoverPos] = useState<Record<number, { x: number; y: number } | null>>({})
+
+  const prefersReduced = useRef(
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ).current
 
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setVisible(true)
-      return
-    }
+    if (prefersReduced) { setVisible(true); return }
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
-      { threshold: 0.12 }
+      { threshold: 0.10 }
     )
     obs.observe(el)
     return () => obs.disconnect()
-  }, [])
+  }, [prefersReduced])
 
   const signals: { Icon: React.ComponentType<LucideProps>; label: string; tags: string[]; color: SignalColor }[] = [
     { Icon: Brain,     label: 'Compétences', tags: ['Communication', 'Organisation', 'Analyse'], color: 'violet'  },
@@ -158,70 +176,116 @@ function AnalyseVisual() {
   ]
 
   return (
-    <div ref={containerRef} className="grid grid-cols-2 gap-3">
+    <div ref={containerRef} className="grid grid-cols-2 gap-4">
       {signals.map((s, i) => {
-        const sc = SIGNAL_COLORS[s.color]
-        const pos = hoverPos[i]
-        const delay = i * 90
+        const sc       = SIGNAL_COLORS[s.color]
+        const pos      = hoverPos[i]
+        const isHover  = hoverIdx === i
+        const delay    = i * 105
+        const easeIn   = prefersReduced ? 'none' : `opacity 0.62s ease ${delay}ms, transform 0.62s ease ${delay}ms`
 
         return (
+          /* ── Entrance wrapper — handles scroll-stagger animation ── */
           <div
             key={i}
-            className="relative overflow-hidden rounded-xl p-4 backdrop-blur-sm cursor-default"
             style={{
-              background: sc.bg,
-              border: `1px solid ${pos ? sc.borderHover : sc.border}`,
-              boxShadow: pos
-                ? `0 4px 24px ${sc.glow}, 0 0 0 1px ${sc.borderHover}`
-                : `0 2px 8px rgba(0,0,0,0.18)`,
-              opacity: visible ? 1 : 0,
-              transform: visible ? 'translateY(0px)' : 'translateY(18px)',
-              transition: `opacity 0.55s ease ${delay}ms, transform 0.55s ease ${delay}ms, box-shadow 0.25s ease, border-color 0.25s ease`,
+              opacity:    visible ? 1 : 0,
+              transform:  visible ? 'scale(1) translateY(0px)' : 'scale(0.97) translateY(24px)',
+              transition: easeIn,
             }}
-            onMouseMove={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect()
-              setHoverPos(prev => ({ ...prev, [i]: { x: e.clientX - rect.left, y: e.clientY - rect.top } }))
-            }}
-            onMouseLeave={() => setHoverPos(prev => ({ ...prev, [i]: null }))}
           >
-            {/* Cursor spotlight */}
-            {pos && (
+            {/* ── Hover card — elevation + glow on hover ── */}
+            <div
+              className="relative overflow-hidden rounded-2xl p-5 h-full cursor-default select-none"
+              style={{
+                background:  isHover ? sc.bgHover : sc.bg,
+                border:      `1px solid ${isHover ? sc.borderHover : sc.border}`,
+                boxShadow:   isHover
+                  ? `0 8px 32px ${sc.glow}, 0 0 0 1px ${sc.borderHover}`
+                  : '0 2px 12px rgba(0,0,0,0.20)',
+                backdropFilter: 'blur(6px)',
+                transform:   isHover ? 'translateY(-4px)' : 'translateY(0px)',
+                transition:  'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease',
+              }}
+              onMouseEnter={() => setHoverIdx(i)}
+              onMouseMove={(e) => {
+                const r = e.currentTarget.getBoundingClientRect()
+                setHoverPos(prev => ({ ...prev, [i]: { x: e.clientX - r.left, y: e.clientY - r.top } }))
+              }}
+              onMouseLeave={() => {
+                setHoverIdx(null)
+                setHoverPos(prev => ({ ...prev, [i]: null }))
+              }}
+            >
+              {/* Top accent stripe — brightens on hover */}
               <div
-                className="absolute inset-0 pointer-events-none"
+                className="absolute top-0 left-5 right-5 h-px"
                 style={{
-                  background: `radial-gradient(100px circle at ${pos.x}px ${pos.y}px, ${sc.spotlight}, transparent 70%)`,
-                  transition: 'background 0.05s linear',
+                  background: `linear-gradient(90deg, transparent, ${sc.stripe}, transparent)`,
+                  opacity:    isHover ? 0.90 : 0.30,
+                  transition: 'opacity 0.22s ease',
                 }}
               />
-            )}
 
-            {/* Icon + label */}
-            <div className="flex items-center gap-2.5 mb-3">
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ background: sc.iconBg }}
-              >
-                <s.Icon size={15} strokeWidth={1.6} className={sc.iconClass} />
-              </div>
-              <p className="text-slate-200 text-xs font-semibold leading-tight">{s.label}</p>
-            </div>
-
-            {/* Tags */}
-            <div className="flex flex-wrap gap-1">
-              {s.tags.map((t, ti) => (
-                <span
-                  key={t}
-                  className="px-2 py-0.5 rounded-md text-[10px] font-medium"
+              {/* Cursor-following radial spotlight */}
+              {pos && !prefersReduced && (
+                <div
+                  className="absolute inset-0 pointer-events-none"
                   style={{
-                    background: sc.tagBg,
-                    color: sc.tagText,
-                    opacity: visible ? 1 : 0,
-                    transition: `opacity 0.4s ease ${delay + 220 + ti * 70}ms`,
+                    background: `radial-gradient(130px circle at ${pos.x}px ${pos.y}px, ${sc.spotlight}, transparent 70%)`,
+                  }}
+                />
+              )}
+
+              {/* Icon ring + category label */}
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{
+                    background: sc.iconBg,
+                    boxShadow:  isHover ? `0 0 14px ${sc.iconGlow}` : 'none',
+                    transform:  isHover ? 'scale(1.08)' : 'scale(1)',
+                    transition: 'transform 0.22s ease, box-shadow 0.22s ease',
                   }}
                 >
-                  {t}
-                </span>
-              ))}
+                  <s.Icon size={16} strokeWidth={1.6} className={sc.iconClass} />
+                </div>
+                <p className="text-slate-100 text-sm font-semibold leading-tight tracking-tight">{s.label}</p>
+              </div>
+
+              {/* Tags — stagger-in after card appears */}
+              <div className="flex flex-wrap gap-1.5">
+                {s.tags.map((t, ti) => (
+                  <span
+                    key={t}
+                    className="px-2 py-1 rounded-lg text-[11px] font-medium leading-none"
+                    style={{
+                      background: isHover ? sc.tagBgHover : sc.tagBg,
+                      color:      sc.tagText,
+                      opacity:    visible ? 1 : 0,
+                      transform:  visible ? 'translateY(0px)' : 'translateY(6px)',
+                      transition: prefersReduced
+                        ? 'none'
+                        : `opacity 0.40s ease ${delay + 300 + ti * 80}ms, transform 0.40s ease ${delay + 300 + ti * 80}ms, background 0.20s ease`,
+                    }}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              {/* Bottom scan line — sweeps in once card is visible */}
+              <div className="absolute bottom-0 left-0 right-0 h-px overflow-hidden rounded-b-2xl">
+                <div
+                  style={{
+                    height:     '100%',
+                    background: `linear-gradient(90deg, transparent, ${sc.stripe}, transparent)`,
+                    width:      visible ? '100%' : '0%',
+                    opacity:    0.45,
+                    transition: prefersReduced ? 'none' : `width 1.1s ease ${delay + 580}ms`,
+                  }}
+                />
+              </div>
             </div>
           </div>
         )
@@ -403,9 +467,12 @@ export default function OtherMeFeatureTabs({ lang }: Props) {
 
   return (
     <section className="relative py-20 md:py-28 px-4 overflow-hidden bg-dark-900/50">
-      {/* Ambient blob */}
+      {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-violet-900/[0.06] rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[600px] rounded-full blur-[140px]"
+          style={{ background: 'radial-gradient(ellipse, rgba(109,40,217,0.09) 0%, rgba(109,40,217,0.03) 60%, transparent 80%)' }} />
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] rounded-full blur-[100px]"
+          style={{ background: 'rgba(109,40,217,0.04)' }} />
       </div>
 
       <div className="relative max-w-6xl mx-auto">
