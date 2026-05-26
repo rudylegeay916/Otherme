@@ -393,25 +393,25 @@ export default function Landing() {
               alt=""
               aria-hidden="true"
               className="w-full h-full object-cover object-right"
-              style={{ filter: 'brightness(1.12) saturate(1.08)' }}
+              style={{ filter: 'brightness(1.18) contrast(1.04) saturate(1.10)' }}
             />
           </div>
         </div>
 
         {/* ── Overlays de lisibilité ─────────────────────────────────── */}
-        {/* Couverture sombre globale — allégée (0.50 → 0.32) */}
-        <div className="absolute inset-0 bg-black/30 pointer-events-none" />
-        {/* Gradient gauche — allégé pour laisser respirer la photo */}
+        {/* Couverture sombre globale — 0.30 → 0.20 */}
+        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+        {/* Gradient gauche — zone texte préservée, centre allégé */}
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(to right, rgba(5,5,9,0.88) 0%, rgba(5,5,9,0.60) 38%, rgba(5,5,9,0.12) 68%, transparent 100%)' }}
+          style={{ background: 'linear-gradient(to right, rgba(5,5,9,0.85) 0%, rgba(5,5,9,0.45) 35%, rgba(5,5,9,0.08) 60%, transparent 88%)' }}
         />
         {/* Fondu bas — fusion avec la section suivante */}
         <div className="absolute inset-x-0 bottom-0 h-56 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, #050509 0%, rgba(5,5,9,0.60) 50%, transparent 100%)' }}
+          style={{ background: 'linear-gradient(to top, #050509 0%, rgba(5,5,9,0.50) 50%, transparent 100%)' }}
         />
         {/* Fondu haut — fusion avec la navbar */}
         <div className="absolute inset-x-0 top-0 h-40 pointer-events-none"
-          style={{ background: 'linear-gradient(to bottom, rgba(5,5,9,0.50) 0%, transparent 100%)' }}
+          style={{ background: 'linear-gradient(to bottom, rgba(5,5,9,0.38) 0%, transparent 100%)' }}
         />
 
         {/* ── Layers atmosphériques ─────────────────────────────────── */}
