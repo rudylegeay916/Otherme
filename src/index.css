@@ -158,6 +158,25 @@
     stroke-dashoffset: 0;
     opacity: 0.15;
   }
+  .animate-hero-image,
+  .animate-slide-up-hero {
+    animation: none !important;
+  }
+}
+
+/* ── Hero background zoom-in ──────────────────────────────── */
+
+@keyframes heroBgZoom {
+  from { transform: scale(1.06); }
+  to   { transform: scale(1); }
+}
+
+.hero-bg-zoom {
+  animation: heroBgZoom 1.4s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-zoom { animation: none; }
 }
 
 /* Blur overlay for locked trajectories */

@@ -241,6 +241,24 @@ function AgirVisual() {
   )
 }
 
+function AnalyseImageCard() {
+  return (
+    <div
+      className="relative rounded-2xl border border-violet-500/25 shadow-[0_0_40px_rgba(139,92,246,0.12)] overflow-hidden
+        transition-all duration-300
+        hover:scale-[1.015] hover:border-violet-400/45 hover:shadow-[0_0_50px_rgba(139,92,246,0.20)]
+        motion-reduce:transition-none motion-reduce:hover:scale-100"
+    >
+      <div className="absolute inset-0 bg-black/15 pointer-events-none z-10" />
+      <img
+        src="/analyser-otherme.png"
+        alt="Personne analysant son parcours professionnel avec CV, compétences, expériences, envies et contraintes."
+        className="w-full h-auto block"
+      />
+    </div>
+  )
+}
+
 const VISUALS: Record<string, React.ComponentType> = {
   analyse: AnalyseVisual,
   revele:  ReveleVisual,
@@ -321,22 +339,35 @@ export default function OtherMeFeatureTabs({ lang }: Props) {
 
           {/* Content panel */}
           <div key={active} className="animate-fade-in">
-            <div className="flex items-center gap-3 mb-5">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${c.card}`}>
-                <tab.Icon size={18} strokeWidth={1.5} className={c.badge} />
-              </div>
-              <span className={`text-[11px] font-bold uppercase tracking-[0.18em] ${c.num}`}>{tab.num}</span>
-            </div>
-            <h3 className="text-2xl md:text-3xl font-bold text-slate-100 mb-4 leading-snug">
-              {lang === 'fr' ? tab.titleFr : tab.titleEn}
-            </h3>
-            <p className="text-slate-400 text-base leading-relaxed mb-10">
-              {lang === 'fr' ? tab.descFr : tab.descEn}
-            </p>
+            <div className={tab.id === 'analyse' ? 'flex items-start gap-10' : undefined}>
 
-            {/* Animated visual mockup */}
-            <div className="max-w-lg">
-              <Visual />
+              {/* Main content */}
+              <div className={tab.id === 'analyse' ? 'flex-1 min-w-0' : undefined}>
+                <div className="flex items-center gap-3 mb-5">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${c.card}`}>
+                    <tab.Icon size={18} strokeWidth={1.5} className={c.badge} />
+                  </div>
+                  <span className={`text-[11px] font-bold uppercase tracking-[0.18em] ${c.num}`}>{tab.num}</span>
+                </div>
+                <h3 className="text-2xl md:text-3xl font-bold text-slate-100 mb-4 leading-snug">
+                  {lang === 'fr' ? tab.titleFr : tab.titleEn}
+                </h3>
+                <p className="text-slate-400 text-base leading-relaxed mb-10">
+                  {lang === 'fr' ? tab.descFr : tab.descEn}
+                </p>
+
+                {/* Animated visual mockup */}
+                <div className="max-w-lg">
+                  <Visual />
+                </div>
+              </div>
+
+              {/* Analyser image — right column on desktop */}
+              {tab.id === 'analyse' && (
+                <Reveal className="w-[260px] xl:w-[300px] flex-shrink-0 pt-1" delay={150}>
+                  <AnalyseImageCard />
+                </Reveal>
+              )}
             </div>
           </div>
         </div>
@@ -374,6 +405,12 @@ export default function OtherMeFeatureTabs({ lang }: Props) {
               {lang === 'fr' ? tab.descFr : tab.descEn}
             </p>
             <Visual />
+            {/* Analyser image — below cards on mobile */}
+            {tab.id === 'analyse' && (
+              <Reveal className="mt-6" delay={100}>
+                <AnalyseImageCard />
+              </Reveal>
+            )}
           </div>
         </div>
       </div>

@@ -36,9 +36,11 @@ export default {
         display: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif'],
       },
       animation: {
-        'fade-in':    'fadeIn 0.5s ease-in-out',
-        'slide-up':   'slideUp 0.5s ease-out',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fade-in':        'fadeIn 0.5s ease-in-out',
+        'slide-up':       'slideUp 0.5s ease-out',
+        'slide-up-hero':  'slideUp 0.78s ease-out forwards',
+        'pulse-slow':     'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'hero-image':     'heroImage 1.1s ease-out forwards',
       },
       keyframes: {
         fadeIn: {
@@ -48,6 +50,10 @@ export default {
         slideUp: {
           '0%':   { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        heroImage: {
+          '0%':   { opacity: '0', transform: 'scale(1.06)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
         },
       },
     },

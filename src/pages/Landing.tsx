@@ -316,8 +316,20 @@ export default function Landing() {
 
   const [started, setStarted]         = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [heroParallax, setHeroParallax] = useState(0)
 
   useEffect(() => { setStarted(hasStartedTest()) }, [])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (mq.matches) return
+    const onScroll = () => {
+      if (window.innerWidth < 1024) return
+      setHeroParallax(Math.min(window.scrollY * 0.055, 36))
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const handleStart          = () => navigate('/onboarding')
   const handleResume         = () => navigate('/onboarding')
@@ -329,7 +341,7 @@ export default function Landing() {
     <div className="min-h-screen bg-dark-950">
 
       {/* ── Navbar ─────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3.5 bg-dark-950/90 backdrop-blur-xl border-b border-white/[0.05]">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3.5 bg-dark-950/75 backdrop-blur-xl border-b border-white/[0.06]">
         <Logo size={52} />
         <div className="flex items-center gap-3">
           <LanguageToggle />
@@ -361,75 +373,129 @@ export default function Landing() {
         </div>
       )}
 
-      {/* ── Hero ───────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-20 overflow-hidden">
+      {/* ── Hero — image plein écran en fond ──────────────────────── */}
+      <section className="relative min-h-screen overflow-hidden bg-dark-950">
 
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {/* Animated life paths */}
+        {/* ── Image de fond ─────────────────────────────────────────── */}
+        {/* Outer : parallax — dépasse de 60px en haut/bas pour éviter les gaps */}
+        <div
+          className="absolute left-0 right-0 pointer-events-none"
+          style={{
+            top: '-60px',
+            bottom: '-60px',
+            transform: heroParallax ? `translateY(-${heroParallax}px)` : undefined,
+          }}
+        >
+          {/* Inner : zoom-in au chargement (séparé du parallax) */}
+          <div className="absolute inset-0 hero-bg-zoom">
+            <img
+              src="/hero-otherme.png"
+              alt=""
+              aria-hidden="true"
+              className="w-full h-full object-cover object-right"
+              style={{ filter: 'brightness(1.12) saturate(1.08)' }}
+            />
+          </div>
+        </div>
+
+        {/* ── Overlays de lisibilité ─────────────────────────────────── */}
+        {/* Couverture sombre globale — allégée (0.50 → 0.32) */}
+        <div className="absolute inset-0 bg-black/30 pointer-events-none" />
+        {/* Gradient gauche — allégé pour laisser respirer la photo */}
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(to right, rgba(5,5,9,0.88) 0%, rgba(5,5,9,0.60) 38%, rgba(5,5,9,0.12) 68%, transparent 100%)' }}
+        />
+        {/* Fondu bas — fusion avec la section suivante */}
+        <div className="absolute inset-x-0 bottom-0 h-56 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, #050509 0%, rgba(5,5,9,0.60) 50%, transparent 100%)' }}
+        />
+        {/* Fondu haut — fusion avec la navbar */}
+        <div className="absolute inset-x-0 top-0 h-40 pointer-events-none"
+          style={{ background: 'linear-gradient(to bottom, rgba(5,5,9,0.50) 0%, transparent 100%)' }}
+        />
+
+        {/* ── Layers atmosphériques ─────────────────────────────────── */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity: 0.08 }}>
           <AnimatedLifePathsBackground />
-          {/* Layered ambient blobs */}
-          <div className="absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-violet-700/[0.08] rounded-full blur-[160px]" />
-          <div className="absolute top-[55%] left-[15%] w-[320px] h-[320px] bg-indigo-800/[0.07] rounded-full blur-[110px]" />
-          <div className="absolute top-[20%] right-[10%] w-[260px] h-[260px] bg-purple-800/[0.06] rounded-full blur-[90px]" />
-          <div className="absolute bottom-[10%] left-[45%] w-[200px] h-[200px] bg-violet-900/[0.05] rounded-full blur-[70px]" />
-          {/* Subtle radial center glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-radial opacity-[0.04]" style={{ background: 'radial-gradient(ellipse, rgba(139,92,246,0.3) 0%, transparent 70%)' }} />
         </div>
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 700px 550px at 22% 58%, rgba(109,40,217,0.12) 0%, transparent 70%)' }}
+        />
 
-        <div className="relative z-10 text-center max-w-4xl mx-auto animate-fade-in">
+        {/* ── Contenu superposé à gauche ────────────────────────────── */}
+        <div className="relative z-10 flex flex-col min-h-screen px-6 sm:px-10 lg:px-16 xl:px-24 pt-28 pb-16">
+          <div className="flex-1 flex items-center">
+            <div className="w-full max-w-2xl">
 
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-300/90 text-xs font-medium mb-8 tracking-wide">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-400/80" />
-            {t.badge}
+              {/* Badge */}
+              <div
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-300/90 text-xs font-medium mb-8 tracking-wide animate-slide-up-hero"
+                style={{ animationDelay: '0ms' }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-400/80" />
+                {t.badge}
+              </div>
+
+              {/* Titre hero */}
+              <h1
+                className="font-bold tracking-tight mb-7 animate-slide-up-hero"
+                style={{ animationDelay: '80ms' }}
+              >
+                <span className="block text-white text-[2.5rem] sm:text-[3.2rem] md:text-[3.8rem] lg:text-[4.2rem] xl:text-[4.6rem] leading-[1.12]">
+                  {t.heroTitle}
+                </span>
+                <span className="block gradient-text text-[2.1rem] sm:text-[2.6rem] md:text-[3rem] lg:text-[3.5rem] xl:text-[3.9rem] leading-[1.20]">
+                  {t.heroAccent}
+                </span>
+                <span className="block gradient-text text-[2.1rem] sm:text-[2.6rem] md:text-[3rem] lg:text-[3.5rem] xl:text-[3.9rem] leading-[1.20]">
+                  {t.heroTitle2}
+                </span>
+              </h1>
+
+              {/* Sous-titre */}
+              <p
+                className="text-[1.05rem] text-slate-300/80 mb-10 max-w-md leading-relaxed animate-slide-up-hero"
+                style={{ animationDelay: '190ms' }}
+                dangerouslySetInnerHTML={{ __html: t.heroSub }}
+              />
+
+              {/* CTA */}
+              <div
+                className="animate-slide-up-hero"
+                style={{ animationDelay: '280ms' }}
+              >
+                {started ? (
+                  <div className="flex flex-col sm:flex-row items-start gap-3 mb-10">
+                    <button onClick={handleResume} className="btn-primary text-base py-3.5 px-9 w-full sm:w-auto">{t.ctaResume}</button>
+                    <button onClick={() => setShowConfirm(true)} className="btn-secondary text-base py-3.5 px-8 w-full sm:w-auto">{t.ctaRestart}</button>
+                  </div>
+                ) : (
+                  <div className="mb-10">
+                    <button onClick={handleStart} className="btn-primary text-base py-3.5 px-9">{t.heroCta}</button>
+                  </div>
+                )}
+              </div>
+
+              {/* Microcopy */}
+              <div
+                className="flex items-center gap-3 sm:gap-5 text-xs text-slate-500 flex-wrap animate-slide-up-hero"
+                style={{ animationDelay: '370ms' }}
+              >
+                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-emerald-500/60" />{t.statRating}</span>
+                <span className="hidden sm:block w-px h-3 bg-dark-700" />
+                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-violet-500/60" />{t.statReports}</span>
+                <span className="hidden sm:block w-px h-3 bg-dark-700" />
+                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-blue-500/60" />{t.statSpeed}</span>
+              </div>
+            </div>
           </div>
 
-          {/* Titre hero */}
-          <h1 className="font-bold tracking-tight mb-8">
-            <span className="block text-slate-100 text-[2.4rem] sm:text-[3rem] md:text-[3.5rem] leading-[1.28]">
-              {t.heroTitle}
-            </span>
-            <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.28]">
-              {t.heroAccent}
-            </span>
-            <span className="block gradient-text text-[2rem] sm:text-[2.5rem] md:text-[2.9rem] leading-[1.28]">
-              {t.heroTitle2}
-            </span>
-          </h1>
-
-          {/* Sous-titre */}
-          <p
-            className="text-base md:text-lg text-slate-400 mb-10 max-w-xl mx-auto leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: t.heroSub }}
-          />
-
-          {/* CTA */}
-          {started ? (
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
-              <button onClick={handleResume} className="btn-primary text-base py-3.5 px-9 w-full sm:w-auto">{t.ctaResume}</button>
-              <button onClick={() => setShowConfirm(true)} className="btn-secondary text-base py-3.5 px-8 w-full sm:w-auto">{t.ctaRestart}</button>
-            </div>
-          ) : (
-            <div className="flex justify-center mb-10">
-              <button onClick={handleStart} className="btn-primary text-base py-3.5 px-9">{t.heroCta}</button>
-            </div>
-          )}
-
-          {/* Microcopy sous CTA */}
-          <div className="flex items-center justify-center gap-3 sm:gap-5 text-xs text-slate-600 flex-wrap mt-2">
-            <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-emerald-500/60" />{t.statRating}</span>
-            <span className="hidden sm:block w-px h-3 bg-dark-700" />
-            <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-violet-500/60" />{t.statReports}</span>
-            <span className="hidden sm:block w-px h-3 bg-dark-700" />
-            <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-blue-500/60" />{t.statSpeed}</span>
+          {/* Scroll cue */}
+          <div className="flex justify-center text-dark-600 animate-bounce">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+            </svg>
           </div>
-        </div>
-
-        {/* Scroll cue */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-dark-600 animate-bounce">
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-          </svg>
         </div>
       </section>
 
