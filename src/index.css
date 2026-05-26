@@ -158,7 +158,8 @@
     stroke-dashoffset: 0;
     opacity: 0.15;
   }
-  .animate-hero-image {
+  .animate-hero-image,
+  .animate-slide-up-hero {
     animation: none !important;
   }
 }

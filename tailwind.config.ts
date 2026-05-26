@@ -36,10 +36,11 @@ export default {
         display: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif'],
       },
       animation: {
-        'fade-in':    'fadeIn 0.5s ease-in-out',
-        'slide-up':   'slideUp 0.5s ease-out',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'hero-image': 'heroImage 0.9s ease-out forwards',
+        'fade-in':        'fadeIn 0.5s ease-in-out',
+        'slide-up':       'slideUp 0.5s ease-out',
+        'slide-up-hero':  'slideUp 0.78s ease-out forwards',
+        'pulse-slow':     'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'hero-image':     'heroImage 1.1s ease-out forwards',
       },
       keyframes: {
         fadeIn: {
