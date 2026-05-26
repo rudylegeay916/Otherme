@@ -316,8 +316,20 @@ export default function Landing() {
 
   const [started, setStarted]         = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [heroParallax, setHeroParallax] = useState(0)
 
   useEffect(() => { setStarted(hasStartedTest()) }, [])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (mq.matches) return
+    const onScroll = () => {
+      if (window.innerWidth < 1024) return
+      setHeroParallax(Math.min(window.scrollY * 0.055, 36))
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const handleStart          = () => navigate('/onboarding')
   const handleResume         = () => navigate('/onboarding')
@@ -376,7 +388,7 @@ export default function Landing() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-radial opacity-[0.04]" style={{ background: 'radial-gradient(ellipse, rgba(139,92,246,0.3) 0%, transparent 70%)' }} />
         </div>
 
-        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-10">
 
           {/* Text content */}
           <div className="flex-1 text-center animate-fade-in">
@@ -428,15 +440,28 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Hero image — droite sur desktop, sous le texte sur mobile */}
-          <div className="w-full lg:w-[420px] xl:w-[460px] flex-shrink-0 animate-hero-image">
-            <div className="relative rounded-2xl border border-violet-500/30 shadow-[0_0_50px_rgba(139,92,246,0.18)] overflow-hidden">
-              <div className="absolute inset-0 bg-black/15 pointer-events-none z-10 rounded-2xl" />
+          {/* Hero image — éditorial, fondue dans la composition */}
+          <div
+            className="w-full lg:w-[500px] xl:w-[560px] flex-shrink-0 relative"
+            style={heroParallax ? { transform: `translateY(-${heroParallax}px)` } : undefined}
+          >
+            {/* Zoom-in + fade au chargement */}
+            <div className="relative overflow-hidden animate-hero-image">
               <img
                 src="/hero-otherme.png"
                 alt="Personne en réflexion face à une fenêtre, symbolisant une nouvelle direction professionnelle."
                 className="w-full h-auto block"
               />
+              {/* Overlay sombre pour harmoniser avec le fond dark */}
+              <div className="absolute inset-0 bg-dark-950/30 pointer-events-none" />
+              {/* Gauche : dissolution vers la zone texte */}
+              <div className="absolute inset-y-0 left-0 w-40 xl:w-52 bg-gradient-to-r from-dark-950 via-dark-950/70 to-transparent pointer-events-none" />
+              {/* Haut */}
+              <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-dark-950/85 to-transparent pointer-events-none" />
+              {/* Bas */}
+              <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-dark-950 via-dark-950/65 to-transparent pointer-events-none" />
+              {/* Droite */}
+              <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-dark-950/55 to-transparent pointer-events-none" />
             </div>
           </div>
         </div>

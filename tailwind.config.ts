@@ -51,7 +51,7 @@ export default {
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         heroImage: {
-          '0%':   { opacity: '0', transform: 'scale(1.04)' },
+          '0%':   { opacity: '0', transform: 'scale(1.06)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
         },
       },
