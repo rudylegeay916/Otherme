@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   ScanSearch, Lightbulb, ArrowRightLeft, ListChecks, Zap,
+  Brain, Heart, BarChart2, FileText,
   type LucideProps,
 } from 'lucide-react'
 import Reveal from './Reveal'
@@ -80,28 +81,151 @@ const COLOR = {
 
 // ── Mock visuals per tab ──────────────────────────────────────────────────────
 
+const SIGNAL_COLORS = {
+  violet:  {
+    bg: 'rgba(109,40,217,0.10)',
+    border: 'rgba(139,92,246,0.22)',
+    borderHover: 'rgba(139,92,246,0.45)',
+    glow: 'rgba(139,92,246,0.18)',
+    spotlight: 'rgba(139,92,246,0.20)',
+    iconBg: 'rgba(109,40,217,0.18)',
+    tagBg: 'rgba(139,92,246,0.14)',
+    tagText: '#c4b5fd',
+    iconClass: 'text-violet-400',
+  },
+  emerald: {
+    bg: 'rgba(5,150,105,0.08)',
+    border: 'rgba(52,211,153,0.18)',
+    borderHover: 'rgba(52,211,153,0.40)',
+    glow: 'rgba(52,211,153,0.14)',
+    spotlight: 'rgba(52,211,153,0.18)',
+    iconBg: 'rgba(5,150,105,0.18)',
+    tagBg: 'rgba(52,211,153,0.12)',
+    tagText: '#6ee7b7',
+    iconClass: 'text-emerald-400',
+  },
+  blue:    {
+    bg: 'rgba(37,99,235,0.08)',
+    border: 'rgba(96,165,250,0.18)',
+    borderHover: 'rgba(96,165,250,0.40)',
+    glow: 'rgba(96,165,250,0.14)',
+    spotlight: 'rgba(96,165,250,0.18)',
+    iconBg: 'rgba(37,99,235,0.18)',
+    tagBg: 'rgba(96,165,250,0.12)',
+    tagText: '#93c5fd',
+    iconClass: 'text-blue-400',
+  },
+  amber:   {
+    bg: 'rgba(146,64,14,0.08)',
+    border: 'rgba(251,191,36,0.16)',
+    borderHover: 'rgba(251,191,36,0.36)',
+    glow: 'rgba(251,191,36,0.12)',
+    spotlight: 'rgba(251,191,36,0.16)',
+    iconBg: 'rgba(146,64,14,0.20)',
+    tagBg: 'rgba(251,191,36,0.10)',
+    tagText: '#fcd34d',
+    iconClass: 'text-amber-400',
+  },
+} as const
+
+type SignalColor = keyof typeof SIGNAL_COLORS
+
 function AnalyseVisual() {
-  const signals = [
-    { icon: '🧠', label: 'Compétences', tags: ['Communication', 'Organisation', 'Analyse'], color: 'violet' },
-    { icon: '❤️', label: 'Passions',    tags: ['Technologie', 'Créativité', 'Enseigner'],   color: 'emerald' },
-    { icon: '📊', label: 'Situation',   tags: ['Salarié · 5 ans', 'Bac+5', 'Paris'],        color: 'blue' },
-    { icon: '📄', label: 'CV ajouté',   tags: ['3 expériences', 'Secteur : Tech'],           color: 'amber' },
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+  const [hoverPos, setHoverPos] = useState<Record<number, { x: number; y: number } | null>>({})
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setVisible(true)
+      return
+    }
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { threshold: 0.12 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  const signals: { Icon: React.ComponentType<LucideProps>; label: string; tags: string[]; color: SignalColor }[] = [
+    { Icon: Brain,     label: 'Compétences', tags: ['Communication', 'Organisation', 'Analyse'], color: 'violet'  },
+    { Icon: Heart,     label: 'Passions',    tags: ['Technologie', 'Créativité', 'Enseigner'],   color: 'emerald' },
+    { Icon: BarChart2, label: 'Situation',   tags: ['Salarié · 5 ans', 'Bac+5', 'Paris'],        color: 'blue'    },
+    { Icon: FileText,  label: 'CV ajouté',   tags: ['3 expériences', 'Secteur : Tech'],           color: 'amber'   },
   ]
+
   return (
-    <div className="grid grid-cols-2 gap-3">
-      {signals.map((s, i) => (
-        <div key={i}
-          className="float-card bg-dark-800/70 border border-white/[0.08] rounded-xl p-4 backdrop-blur-sm"
-          style={{ animationDelay: `${i * 0.5}s`, animationDuration: `${3.5 + i * 0.3}s` }}>
-          <div className="text-xl mb-2">{s.icon}</div>
-          <p className="text-slate-200 text-xs font-semibold mb-2">{s.label}</p>
-          <div className="flex flex-wrap gap-1">
-            {s.tags.map(t => (
-              <span key={t} className="px-1.5 py-0.5 rounded-md bg-white/[0.05] text-slate-400 text-[10px]">{t}</span>
-            ))}
+    <div ref={containerRef} className="grid grid-cols-2 gap-3">
+      {signals.map((s, i) => {
+        const sc = SIGNAL_COLORS[s.color]
+        const pos = hoverPos[i]
+        const delay = i * 90
+
+        return (
+          <div
+            key={i}
+            className="relative overflow-hidden rounded-xl p-4 backdrop-blur-sm cursor-default"
+            style={{
+              background: sc.bg,
+              border: `1px solid ${pos ? sc.borderHover : sc.border}`,
+              boxShadow: pos
+                ? `0 4px 24px ${sc.glow}, 0 0 0 1px ${sc.borderHover}`
+                : `0 2px 8px rgba(0,0,0,0.18)`,
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'translateY(0px)' : 'translateY(18px)',
+              transition: `opacity 0.55s ease ${delay}ms, transform 0.55s ease ${delay}ms, box-shadow 0.25s ease, border-color 0.25s ease`,
+            }}
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect()
+              setHoverPos(prev => ({ ...prev, [i]: { x: e.clientX - rect.left, y: e.clientY - rect.top } }))
+            }}
+            onMouseLeave={() => setHoverPos(prev => ({ ...prev, [i]: null }))}
+          >
+            {/* Cursor spotlight */}
+            {pos && (
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: `radial-gradient(100px circle at ${pos.x}px ${pos.y}px, ${sc.spotlight}, transparent 70%)`,
+                  transition: 'background 0.05s linear',
+                }}
+              />
+            )}
+
+            {/* Icon + label */}
+            <div className="flex items-center gap-2.5 mb-3">
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: sc.iconBg }}
+              >
+                <s.Icon size={15} strokeWidth={1.6} className={sc.iconClass} />
+              </div>
+              <p className="text-slate-200 text-xs font-semibold leading-tight">{s.label}</p>
+            </div>
+
+            {/* Tags */}
+            <div className="flex flex-wrap gap-1">
+              {s.tags.map((t, ti) => (
+                <span
+                  key={t}
+                  className="px-2 py-0.5 rounded-md text-[10px] font-medium"
+                  style={{
+                    background: sc.tagBg,
+                    color: sc.tagText,
+                    opacity: visible ? 1 : 0,
+                    transition: `opacity 0.4s ease ${delay + 220 + ti * 70}ms`,
+                  }}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
