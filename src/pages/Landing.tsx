@@ -814,7 +814,7 @@ export default function Landing() {
             <div className="px-6 md:px-8 pb-6 md:pb-8 space-y-3">
 
               {/* 1. Description complète */}
-              <ExSection title={lang === 'fr' ? 'Description complète' : 'Full description'} icon={BriefcaseBusiness} defaultOpen>
+              <ExSection title={lang === 'fr' ? 'Description complète' : 'Full description'} icon={BriefcaseBusiness}>
                 <div className="space-y-3 text-sm text-slate-300 leading-relaxed">
                   <p>
                     {lang === 'fr'
