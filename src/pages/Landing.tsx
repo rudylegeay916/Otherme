@@ -1314,37 +1314,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Ce que ça évite ───────────────────────────────────────── */}
-      <section className="py-24 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
-              {lang === 'fr' ? 'Clarté' : 'Clarity'}
-            </p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
-              {lang === 'fr'
-                ? <>Ce qu'OtherMe <span className="gradient-text">aide à éviter</span></>
-                : <>What OtherMe <span className="gradient-text">helps you avoid</span></>}
-            </h2>
-            <p className="text-slate-500 text-base max-w-lg mx-auto">
-              {lang === 'fr'
-                ? 'Parce que les mauvaises décisions de carrière coûtent cher — en temps, en énergie et en confiance.'
-                : 'Because bad career decisions are costly — in time, energy and confidence.'}
-            </p>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-3">
-            {AVOIDS.map((a) => (
-              <div key={a.fr} className="card p-4 flex items-start gap-3 hover:border-white/[0.10] transition-colors duration-300">
-                <span className="w-5 h-5 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-red-400 text-[10px] font-bold">✕</span>
-                </span>
-                <p className="text-slate-400 text-sm leading-relaxed">{lang === 'fr' ? a.fr : a.en}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Exemples de transitions ───────────────────────────────── */}
       <section className="py-24 px-4 bg-dark-900/60">
         <div className="max-w-5xl mx-auto">
