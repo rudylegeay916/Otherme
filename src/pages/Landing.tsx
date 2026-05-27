@@ -103,23 +103,23 @@ const AVOIDS = [
 const WHY_DIFFERENT: Array<{ Icon: IconComponent; fr: { title: string; desc: string }; en: { title: string; desc: string } }> = [
   {
     Icon: BarChart3,
-    fr: { title: 'Analyse de ton parcours complet', desc: 'Pas un questionnaire générique. OtherMe prend en compte ton histoire, tes compétences, ton contexte et ton CV si tu le fournis.' },
-    en: { title: 'Analysis of your full background', desc: 'Not a generic quiz. OtherMe takes into account your history, skills, context and CV if you provide it.' },
+    fr: { title: 'Analyse de ton parcours complet', desc: 'Pas un questionnaire générique — ton parcours, tes compétences et ton CV analysés ensemble.' },
+    en: { title: 'Analysis of your full background', desc: 'Not a generic quiz — your background, skills and CV analysed together.' },
   },
   {
     Icon: Target,
-    fr: { title: 'Résultats vraiment personnalisés', desc: 'Deux profils similaires obtiennent des trajectoires différentes. Il n\'y a pas de réponse standard.' },
-    en: { title: 'Truly personalised results', desc: 'Two similar profiles get different paths. There\'s no standard answer.' },
+    fr: { title: 'Résultats vraiment personnalisés', desc: 'Deux profils similaires, deux trajectoires différentes. Zéro réponse standard.' },
+    en: { title: 'Truly personalised results', desc: 'Two similar profiles, two different paths. No standard answer.' },
   },
   {
     Icon: ClipboardList,
-    fr: { title: 'Un plan d\'action concret', desc: 'Chaque trajectoire inclut les premières étapes réalistes à enclencher, pas juste un titre de métier.' },
-    en: { title: 'A concrete action plan', desc: 'Each path includes realistic first steps to take, not just a job title.' },
+    fr: { title: 'Un plan d\'action concret', desc: 'Pas juste un titre de métier — les premières étapes concrètes pour y arriver.' },
+    en: { title: 'A concrete action plan', desc: 'Not just a job title — the concrete first steps to actually get there.' },
   },
   {
     Icon: ShieldCheck,
-    fr: { title: 'Sans promesses magiques', desc: 'OtherMe ne remplace pas un conseiller en évolution professionnelle. Il t\'aide à clarifier tes options et à avancer avec une feuille de route structurée.' },
-    en: { title: 'No magic promises', desc: 'OtherMe doesn\'t replace a career coach. It helps you clarify your options and move forward with a structured roadmap.' },
+    fr: { title: 'Sans promesses magiques', desc: 'OtherMe clarifie tes options et t\'avance avec une feuille de route concrète. Pas de remplacement d\'un coach.' },
+    en: { title: 'No magic promises', desc: 'OtherMe clarifies your options and moves you forward with a concrete roadmap. Not a coach replacement.' },
   },
 ]
 
@@ -1317,43 +1317,43 @@ export default function Landing() {
       </section>
 
       {/* ── Pourquoi pas un simple test ───────────────────────────── */}
-      <section className="py-24 px-4">
-        <div className="max-w-5xl mx-auto">
-          <Reveal className="text-center mb-16">
+      <section className="py-14 px-4">
+        <div className="max-w-4xl mx-auto">
+          <Reveal className="text-center mb-10">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
               {lang === 'fr' ? 'Différence' : 'What sets it apart'}
             </p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-slate-100">
               {lang === 'fr'
                 ? <>Pas <span className="gradient-text">un simple test</span> d'orientation</>
                 : <>Not <span className="gradient-text">just another quiz</span></>}
             </h2>
-            <p className="text-slate-500 text-base max-w-lg mx-auto">
+            <p className="text-slate-500 text-sm max-w-md mx-auto">
               {lang === 'fr'
                 ? 'Les tests classiques te disent ce que tu pourrais être. OtherMe te montre comment y arriver.'
                 : 'Classic tests tell you what you could be. OtherMe shows you how to get there.'}
             </p>
           </Reveal>
-          <div className="grid sm:grid-cols-2 gap-5">
+          <div className="grid sm:grid-cols-2 gap-3">
             {WHY_DIFFERENT.map((d) => (
-              <div key={d.fr.title} className="card p-6 flex items-start gap-4 hover:border-white/[0.12] transition-colors duration-300">
-                <div className="w-10 h-10 rounded-xl bg-brand-600/10 border border-brand-600/20 flex items-center justify-center flex-shrink-0">
-                  <d.Icon size={20} strokeWidth={1.5} className="text-brand-300" />
+              <div key={d.fr.title} className="card p-4 flex items-start gap-3 hover:border-white/[0.12] transition-colors duration-300">
+                <div className="w-8 h-8 rounded-lg bg-brand-600/10 border border-brand-600/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <d.Icon size={16} strokeWidth={1.5} className="text-brand-300" />
                 </div>
                 <div>
-                  <h4 className="text-slate-100 font-semibold text-sm mb-1.5">{lang === 'fr' ? d.fr.title : d.en.title}</h4>
-                  <p className="text-slate-500 text-sm leading-relaxed">{lang === 'fr' ? d.fr.desc : d.en.desc}</p>
+                  <h4 className="text-slate-100 font-semibold text-sm mb-1">{lang === 'fr' ? d.fr.title : d.en.title}</h4>
+                  <p className="text-slate-500 text-xs leading-relaxed">{lang === 'fr' ? d.fr.desc : d.en.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Encart crédibilité */}
-          <div className="mt-8 card p-5 border-white/[0.05]">
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-slate-500">
+          <div className="mt-5 card p-3 border-white/[0.05]">
+            <div className="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-xs text-slate-500">
               {(lang === 'fr'
-                ? ['Analyse personnalisée à partir de vos réponses', 'CV optionnel pour affiner les résultats', 'Résultat généré en quelques minutes', 'Trajectoires réalistes, pas de promesses magiques']
-                : ['Personalised analysis from your answers', 'Optional CV to refine results', 'Result generated in minutes', 'Realistic paths, no magic promises']
+                ? ['Analyse personnalisée', 'CV optionnel', 'Résultat en quelques minutes', 'Pas de promesses magiques']
+                : ['Personalised analysis', 'Optional CV', 'Result in minutes', 'No magic promises']
               ).map((item) => (
                 <span key={item} className="flex items-center gap-1.5">
                   <span className="text-green-500">✓</span> {item}
