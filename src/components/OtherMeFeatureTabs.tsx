@@ -582,6 +582,7 @@ export default function OtherMeFeatureTabs({ lang }: Props) {
       {([
         { id: 'analyse',  src: '/analyser-otherme.png'  },
         { id: 'revele',   src: '/reveler-otherme.png'   },
+        { id: 'compare',  src: '/comparer-otherme.png'  },
         { id: 'planifie', src: '/planifier-otherme.png' },
         { id: 'agir',     src: '/agir-otherme.png'      },
       ] as const).map(item => (
@@ -595,19 +596,19 @@ export default function OtherMeFeatureTabs({ lang }: Props) {
             className="absolute inset-0 w-full h-full object-cover"
             alt=""
             aria-hidden
-            style={{ filter: 'brightness(0.40) saturate(0.75)' }}
+            style={{ filter: 'brightness(0.55) saturate(0.85)' }}
           />
         </div>
       ))}
 
       {/* Global overlay */}
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'rgba(5,5,9,0.58)' }} />
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'rgba(5,5,9,0.42)' }} />
       {/* Top fade */}
       <div className="absolute inset-x-0 top-0 h-48 pointer-events-none"
-        style={{ background: 'linear-gradient(to bottom, #050509 0%, rgba(5,5,9,0.55) 55%, transparent 100%)' }} />
+        style={{ background: 'linear-gradient(to bottom, #050509 0%, rgba(5,5,9,0.50) 55%, transparent 100%)' }} />
       {/* Bottom fade */}
       <div className="absolute inset-x-0 bottom-0 h-48 pointer-events-none"
-        style={{ background: 'linear-gradient(to top, rgba(5,5,9,0.98) 0%, rgba(5,5,9,0.60) 55%, transparent 100%)' }} />
+        style={{ background: 'linear-gradient(to top, rgba(5,5,9,0.95) 0%, rgba(5,5,9,0.50) 55%, transparent 100%)' }} />
 
       {/* Ambient violet glow (always present) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
