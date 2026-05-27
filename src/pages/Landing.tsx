@@ -24,48 +24,18 @@ type IconComponent = React.ComponentType<LucideProps>
 const DELIVERABLES: Array<{ Icon: IconComponent; fr: { title: string; desc: string }; en: { title: string; desc: string } }> = [
   {
     Icon: Route,
-    fr: { title: '3 trajectoires personnalisées', desc: 'Trois voies professionnelles distinctes : une proche de ton parcours actuel, une progressive alignée sur tes envies, une plus ambitieuse. L\'objectif est de comparer plusieurs futurs possibles, pas de te donner une seule réponse simpliste.' },
-    en: { title: '3 personalised paths', desc: 'Three distinct professional directions: one close to your current background, one progressively aligned with your interests, one more ambitious. The goal is to compare multiple possible futures, not give a single simplistic answer.' },
+    fr: { title: '3 trajectoires personnalisées', desc: 'Trois voies professionnelles distinctes adaptées à ton profil : une proche de ton parcours actuel, une progressive alignée sur tes envies, une plus ambitieuse.' },
+    en: { title: '3 personalised paths', desc: 'Three distinct professional directions tailored to your profile: one close to your current background, one progressively aligned with your interests, one more ambitious.' },
   },
   {
-    Icon: BriefcaseBusiness,
-    fr: { title: 'Métier cible identifié', desc: 'Chaque métier cible est expliqué avec son environnement de travail, ses missions principales, son niveau d\'accessibilité et les raisons pour lesquelles il peut correspondre à ton profil spécifique.' },
-    en: { title: 'Target job identified', desc: 'Each target role is explained with its work environment, key missions, accessibility level and the reasons it may suit your specific profile.' },
-  },
-  {
-    Icon: BadgeEuro,
-    fr: { title: 'Revenu estimé réaliste', desc: 'Fourchette salariale basée sur le marché actuel, avec une trajectoire financière réaliste sur les 2 premières années de transition — pas sur des promesses.' },
-    en: { title: 'Realistic salary estimate', desc: 'Salary range based on current market data, with a realistic financial trajectory for the first 2 transition years — not wishful thinking.' },
-  },
-  {
-    Icon: ShieldCheck,
-    fr: { title: 'Niveau de risque évalué', desc: 'Pour choisir en connaissance de cause : chaque trajectoire inclut une évaluation des risques concrets, des erreurs fréquentes et des solutions pour les anticiper avant de se lancer.' },
-    en: { title: 'Risk level assessed', desc: 'To make informed decisions: each path includes an assessment of real risks, common mistakes and solutions to anticipate them before committing.' },
-  },
-  {
-    Icon: CalendarRange,
-    fr: { title: 'Timeline 6 à 24 mois', desc: 'La timeline détaille les grandes étapes de transition : clarification, montée en compétences, preuves à construire, premières candidatures, première expérience et consolidation du positionnement.' },
-    en: { title: 'Timeline 6 to 24 months', desc: 'The timeline details the key transition stages: clarification, skill-building, proofs to build, first applications, first experience and positioning consolidation.' },
+    Icon: BarChart3,
+    fr: { title: 'OtherMe Reality Score', desc: 'Évaluation multi-dimensionnelle de chaque trajectoire : compatibilité personnelle, faisabilité réelle, opportunité marché et effort de transition — pour choisir en connaissance de cause.' },
+    en: { title: 'OtherMe Reality Score', desc: 'Multi-dimensional assessment of each path: personal compatibility, real feasibility, market opportunity and transition effort — to make informed decisions.' },
   },
   {
     Icon: ListChecks,
     fr: { title: 'Plan d\'action 30 jours', desc: 'Des actions concrètes semaine par semaine pour ne pas rester bloqué dans la réflexion. Chaque semaine inclut un objectif précis, un livrable attendu et un conseil pratique.' },
     en: { title: '30-day action plan', desc: 'Concrete actions week by week to avoid getting stuck in reflection. Each week includes a precise objective, an expected deliverable and a practical tip.' },
-  },
-  {
-    Icon: ArrowRightLeft,
-    fr: { title: 'Compétences transférables', desc: 'Le rapport identifie ce que tu sais déjà faire et comment le valoriser dans une nouvelle voie professionnelle — pour éviter de repartir de zéro inutilement.' },
-    en: { title: 'Transferable skills', desc: 'The report identifies what you already know how to do and how to leverage it in a new career path — to avoid unnecessarily starting from scratch.' },
-  },
-  {
-    Icon: Brain,
-    fr: { title: 'Compétences à développer', desc: 'Le rapport distingue les compétences prioritaires à acquérir, leur utilité concrète dans le métier cible et les moyens précis de les travailler.' },
-    en: { title: 'Skills to develop', desc: 'The report distinguishes the priority skills to acquire, their concrete usefulness in the target role and the specific ways to work on them.' },
-  },
-  {
-    Icon: GraduationCap,
-    fr: { title: 'Ressources & formations', desc: 'Des pistes concrètes pour te former sans repartir de zéro : formations courtes, plateformes ciblées, certifications accessibles et méthodes d\'auto-apprentissage adaptées à chaque trajectoire.' },
-    en: { title: 'Resources & training', desc: 'Concrete leads to upskill without starting from scratch: short courses, targeted platforms, accessible certifications and self-learning methods tailored to each path.' },
   },
 ]
 
@@ -226,17 +196,6 @@ const EX_TIMELINE: ExTimelinePeriodData[] = [
   },
 ]
 
-const REPORT_CONTENTS: Array<{ Icon: IconComponent; title: string; desc: string }> = [
-  { Icon: ScanSearch, title: 'Diagnostic de départ', desc: 'Analyse de ton profil, de ton parcours et de tes réponses pour poser une base solide avant toute recommandation.' },
-  { Icon: Route, title: '3 trajectoires détaillées', desc: 'Trois voies distinctes avec des secteurs différents, chacune expliquée en profondeur et justifiée selon ton profil réel.' },
-  { Icon: BarChart3, title: 'Scores de faisabilité', desc: 'Évaluation multi-dimensionnelle : compatibilité personnelle, effort de transition, opportunité marché et faisabilité concrète.' },
-  { Icon: CalendarRange, title: 'Timeline approfondie', desc: 'Jalons de 30 jours à 24 mois : objectifs, actions, livrables et indicateurs de réussite pour chaque période clé.' },
-  { Icon: ListChecks, title: 'Plan d\'action 30 jours', desc: 'Actions semaine par semaine pour démarrer concrètement, avec objectif, livrable et conseil pratique par semaine.' },
-  { Icon: AlertTriangle, title: 'Risques et erreurs à éviter', desc: 'Les obstacles fréquents liés à ta trajectoire spécifique, avec des solutions concrètes pour les anticiper.' },
-  { Icon: CheckCircle2, title: 'Preuves à construire', desc: 'Les livrables à créer pour devenir crédible auprès des recruteurs ou clients de ta nouvelle voie professionnelle.' },
-  { Icon: FileText, title: 'Positionnement CV / LinkedIn', desc: 'Phrase de positionnement, accroche LinkedIn, pitch d\'entretien et mots-clés CV pour maximiser ta visibilité.' },
-  { Icon: Zap, title: 'Première action concrète', desc: 'Une action précise, réalisable aujourd\'hui ou demain, pour ne pas repartir les mains vides après la lecture.' },
-]
 
 // ── Composants internes ───────────────────────────────────────────────────────
 
@@ -539,7 +498,7 @@ export default function Landing() {
       </section>
 
       {/* ── Comment ça fonctionne ──────────────────────────────────── */}
-      <section className="py-28 px-4">
+      <section className="py-20 px-4">
         <div className="max-w-5xl mx-auto">
           <Reveal className="text-center mb-16">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">Processus</p>
@@ -569,7 +528,7 @@ export default function Landing() {
       </section>
 
       {/* ── Ce que tu découvres ───────────────────────────────────── */}
-      <section className="py-24 px-4 bg-dark-900/60">
+      <section className="py-16 px-4 bg-dark-900/60">
         <div className="max-w-5xl mx-auto">
           <Reveal className="text-center mb-14">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
@@ -628,19 +587,27 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Comparaison Test classique vs OtherMe ─────────────────── */}
-      <section className="py-24 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
+      {/* ── Pas un simple test d'orientation ──────────────────────── */}
+      <section className="py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <Reveal className="text-center mb-12">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
               {lang === 'fr' ? 'Différence' : 'What sets it apart'}
             </p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-100">
-              {t.compTitle}{' '}<span className="gradient-text">{t.compVsAccent}</span>{' '}{t.compOtherme}
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
+              {lang === 'fr'
+                ? <>Pas <span className="gradient-text">un simple test</span> d'orientation</>
+                : <>Not <span className="gradient-text">just another quiz</span></>}
             </h2>
-          </div>
-          <div className="rounded-2xl border border-white/[0.07] overflow-hidden">
-            {/* Header */}
+            <p className="text-slate-500 text-base max-w-lg mx-auto">
+              {lang === 'fr'
+                ? 'Les tests classiques te disent ce que tu pourrais être. OtherMe te montre comment y arriver.'
+                : 'Classic tests tell you what you could be. OtherMe shows you how to get there.'}
+            </p>
+          </Reveal>
+
+          {/* Comparison table */}
+          <div className="rounded-2xl border border-white/[0.07] overflow-hidden mb-8">
             <div className="grid grid-cols-3 border-b border-white/[0.07]">
               <div className="p-4 bg-dark-800/60" />
               <div className="p-4 bg-dark-800/60 border-l border-white/[0.06]">
@@ -668,34 +635,65 @@ export default function Landing() {
               </div>
             ))}
           </div>
+
+          {/* Ce qu'OtherMe aide à éviter — bande compacte */}
+          <div className="card p-5 border-white/[0.05] mb-8">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-center mb-4">
+              {lang === 'fr' ? 'Ce qu\'OtherMe aide à éviter' : 'What OtherMe helps you avoid'}
+            </p>
+            <div className="grid sm:grid-cols-2 gap-2">
+              {AVOIDS.slice(0, 4).map((a) => (
+                <div key={a.fr} className="flex items-start gap-2.5 text-xs text-slate-400">
+                  <span className="w-4 h-4 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-red-400 text-[9px] font-bold">✕</span>
+                  </span>
+                  {lang === 'fr' ? a.fr : a.en}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Credibility band */}
+          <div className="card p-4 border-white/[0.05]">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-slate-500">
+              {(lang === 'fr'
+                ? ['Analyse personnalisée à partir de vos réponses', 'CV optionnel pour affiner les résultats', 'Résultat généré en quelques minutes', 'Trajectoires réalistes, pas de promesses magiques']
+                : ['Personalised analysis from your answers', 'Optional CV to refine results', 'Result generated in minutes', 'Realistic paths, no magic promises']
+              ).map((item) => (
+                <span key={item} className="flex items-center gap-1.5">
+                  <span className="text-green-500">✓</span> {item}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── Ce que vous recevez ───────────────────────────────────── */}
-      <section className="py-24 px-4 bg-dark-900/60">
-        <div className="max-w-5xl mx-auto">
-          <Reveal className="text-center mb-16">
+      {/* ── Ce que tu obtiens ─────────────────────────────────────── */}
+      <section className="py-16 px-4 bg-dark-900/60">
+        <div className="max-w-4xl mx-auto">
+          <Reveal className="text-center mb-12">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
-              {lang === 'fr' ? 'Contenu du rapport' : 'Report content'}
+              {lang === 'fr' ? 'Livrable' : 'What you get'}
             </p>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
-              {lang === 'fr' ? <>Ce que tu <span className="gradient-text">reçois</span></> : <>What you <span className="gradient-text">receive</span></>}
+              {lang === 'fr' ? <>Ce que tu <span className="gradient-text">obtiens</span></> : <>What you <span className="gradient-text">get</span></>}
             </h2>
             <p className="text-slate-500 text-base max-w-lg mx-auto">
               {lang === 'fr'
-                ? 'Un rapport structuré, concret et actionnable — pas un test générique.'
-                : 'A structured, concrete and actionable report — not a generic test.'}
+                ? '3 trajectoires personnalisées, un Reality Score multi-dimensionnel et un plan d\'action concret — pas un test générique.'
+                : '3 personalised paths, a multi-dimensional Reality Score and a concrete action plan — not a generic test.'}
             </p>
           </Reveal>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-3 gap-5">
             {DELIVERABLES.map((d) => (
-              <div key={d.fr.title} className="card p-5 flex flex-col gap-3 hover:border-white/[0.12] transition-colors duration-300">
-                <div className="w-9 h-9 rounded-lg bg-violet-600/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
-                  <d.Icon size={18} strokeWidth={1.5} className="text-violet-300" />
+              <div key={d.fr.title} className="card p-6 flex flex-col gap-4 hover:border-white/[0.12] transition-colors duration-300">
+                <div className="w-10 h-10 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
+                  <d.Icon size={20} strokeWidth={1.5} className="text-violet-300" />
                 </div>
                 <div>
-                  <h4 className="text-slate-100 font-semibold text-sm mb-1">{lang === 'fr' ? d.fr.title : d.en.title}</h4>
-                  <p className="text-slate-500 text-xs leading-relaxed">{lang === 'fr' ? d.fr.desc : d.en.desc}</p>
+                  <h4 className="text-slate-100 font-semibold text-sm mb-1.5">{lang === 'fr' ? d.fr.title : d.en.title}</h4>
+                  <p className="text-slate-500 text-sm leading-relaxed">{lang === 'fr' ? d.fr.desc : d.en.desc}</p>
                 </div>
               </div>
             ))}
@@ -773,14 +771,15 @@ export default function Landing() {
               </div>
             </div>
 
-            {/* Score bars */}
+            {/* OtherMe Reality Score */}
             <div className="px-6 md:px-8 pt-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-brand-400 mb-2">OtherMe Reality Score</p>
               <div className="grid grid-cols-2 gap-x-6 gap-y-3 p-4 bg-dark-800/50 rounded-xl border border-dark-700 mb-4">
                 {([
-                  { label: lang === 'fr' ? 'Sécurité' : 'Security',                score: 62, color: 'bg-blue-500' },
-                  { label: lang === 'fr' ? 'Liberté' : 'Freedom',                  score: 78, color: 'bg-purple-500' },
-                  { label: lang === 'fr' ? 'Revenu potentiel' : 'Income potential', score: 82, color: 'bg-green-500' },
-                  { label: lang === 'fr' ? 'Alignement perso.' : 'Personal fit',   score: 71, color: 'bg-amber-500' },
+                  { label: lang === 'fr' ? 'Compatibilité personnelle' : 'Personal compatibility', score: 88, color: 'bg-violet-500' },
+                  { label: lang === 'fr' ? 'Faisabilité réelle' : 'Real feasibility',               score: 82, color: 'bg-blue-500' },
+                  { label: lang === 'fr' ? 'Opportunité marché' : 'Market opportunity',             score: 74, color: 'bg-emerald-500' },
+                  { label: lang === 'fr' ? 'Effort de transition' : 'Transition effort',            score: 65, color: 'bg-amber-500' },
                 ] as { label: string; score: number; color: string }[]).map(s => (
                   <div key={s.label} className="space-y-1">
                     <div className="flex justify-between text-xs">
@@ -1080,33 +1079,6 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* 4. Formations recommandées */}
-              <ExSection title={lang === 'fr' ? 'Formations recommandées' : 'Recommended training'} icon={GraduationCap}>
-                <div className="space-y-2.5">
-                  {(lang === 'fr' ? [
-                    { name: 'CSPO — Certified Scrum Product Owner', detail: 'Certification Scrum Alliance — 2 jours en présentiel ou distanciel — 1 000 à 1 800 €. Attendue par la majorité des entreprises qui recrutent des PMs en environnement Agile.', tag: 'Certifiante' },
-                    { name: 'Product School — Product Manager Certificate', detail: 'Formation intensive de 8 semaines en ligne — reconnu internationalement. Couvre la discovery, la roadmap et les métriques SaaS. Accès à une communauté de 1M+ de PMs.', tag: 'En ligne' },
-                    { name: 'Reforge — Product Management Fundamentals', detail: 'Plateforme de référence utilisée par les PMs de Airbnb, Stripe et Intercom. Parcours asynchrones sur la growth, la discovery et la stratégie produit — abonnement annuel ~2 000 $.', tag: 'Expert' },
-                    { name: 'OpenClassrooms — Devenez Product Owner', detail: 'Parcours accessible et complet pour les débutants — 6 mois, éligible CPF. Idéal pour acquérir les bases du product management et du backlog management avant une certification.', tag: 'CPF éligible' },
-                  ] : [
-                    { name: 'CSPO — Certified Scrum Product Owner', detail: 'Scrum Alliance certification — 2 days in-person or remote — €1,000 to €1,800. Expected by most companies hiring PMs in Agile environments.', tag: 'Certified' },
-                    { name: 'Product School — Product Manager Certificate', detail: '8-week intensive online training — internationally recognised. Covers discovery, roadmapping and SaaS metrics. Access to a 1M+ PM community.', tag: 'Online' },
-                    { name: 'Reforge — Product Management Fundamentals', detail: 'Reference platform used by PMs at Airbnb, Stripe and Intercom. Asynchronous courses on growth, discovery and product strategy — annual subscription ~$2,000.', tag: 'Expert' },
-                    { name: 'OpenClassrooms — Become a Product Owner', detail: 'Accessible and comprehensive course for beginners — 6 months, CPF-eligible. Ideal for acquiring PM and backlog management basics before a certification.', tag: 'CPF eligible' },
-                  ]).map(f => (
-                    <div key={f.name} className="flex items-start gap-3 bg-dark-800/50 border border-dark-700 rounded-xl p-3.5">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <p className="text-xs font-semibold text-slate-200">{f.name}</p>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-brand-900/40 border border-brand-800/30 text-brand-400">{f.tag}</span>
-                        </div>
-                        <p className="text-xs text-slate-500 leading-relaxed">{f.detail}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ExSection>
-
               {/* 5. Timeline sur 5 ans */}
               <ExSection title={lang === 'fr' ? 'Timeline sur 5 ans' : '5-year timeline'} icon={CalendarRange}>
                 <div className="space-y-2">
@@ -1171,91 +1143,6 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* 8. Personnes à contacter & preuves à construire */}
-              <ExSection title={lang === 'fr' ? 'Personnes à contacter & preuves à construire' : 'People to contact & proofs to build'} icon={ListChecks}>
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <div>
-                    <p className="text-xs font-semibold text-purple-400 mb-2">👥 {lang === 'fr' ? 'Personnes à contacter' : 'People to contact'}</p>
-                    <div className="space-y-2">
-                      {(lang === 'fr' ? [
-                        { who: 'PMs en startup B2B SaaS', where: 'LinkedIn (chercher "Product Manager SaaS B2B") ou Slack PM France', why: 'Comprendre la réalité du premier poste PM' },
-                        { who: 'Associate PMs en reconversion', where: 'Twitter/X (#productmanager) ou Product Hunt', why: 'Décrypter leur parcours d\'entrée sur le marché' },
-                        { who: 'Leads PM ou CPOs (Seed–Série A)', where: 'Product At Heart ou Lean Product Meetup', why: 'Valider ton approche de candidature' },
-                        { who: 'Recruteurs spécialisés tech/produit', where: 'LinkedIn (chercher "Tech Recruiter Product Manager")', why: 'Comprendre les critères réels de sélection' },
-                      ] : [
-                        { who: 'PMs at B2B SaaS startups', where: 'LinkedIn ("Product Manager SaaS B2B") or Slack PM France', why: 'Understand the reality of the first PM role' },
-                        { who: 'Associate PMs who changed careers', where: 'Twitter/X (#productmanager) or Product Hunt', why: 'Understand how they broke into the market' },
-                        { who: 'Lead PMs or CPOs (Seed–Series A)', where: 'Product At Heart or Lean Product Meetup', why: 'Validate your application approach' },
-                        { who: 'Specialist tech/product recruiters', where: 'LinkedIn ("Tech Recruiter Product Manager")', why: 'Understand real selection criteria' },
-                      ]).map((item, i) => (
-                        <div key={i} className="text-xs text-slate-400 bg-dark-800/40 border border-dark-700 rounded-lg px-3 py-2">
-                          <p className="font-semibold text-slate-300 mb-0.5">{item.who}</p>
-                          <p className="text-slate-500">{lang === 'fr' ? 'Où : ' : 'Where: '}{item.where}</p>
-                          <p className="text-brand-400 mt-0.5">→ {item.why}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-blue-400 mb-2">📁 {lang === 'fr' ? 'Preuves à construire' : 'Proofs to build'}</p>
-                    <div className="space-y-2">
-                      {(lang === 'fr' ? [
-                        { title: 'Case study produit (10–15 slides)', desc: 'Analyse d\'un problème utilisateur réel, proposition de solution, roadmap priorisée et métriques de succès définies.' },
-                        { title: '5 user interviews documentées', desc: 'Interviews structurées selon le framework Jobs-to-be-Done, avec synthèse et insights actionnables.' },
-                        { title: 'Roadmap fictive avec priorisation RICE', desc: 'Backlog de features priorisées avec justification claire de chaque arbitrage.' },
-                        { title: 'Certification CSPO ou Product School', desc: 'Certification reconnue qui légitime le changement de posture vers le product management.' },
-                        { title: 'Profil LinkedIn repositionné PM', desc: 'Titre, résumé et expériences reformulés avec les mots-clés produit pour apparaître dans les recherches recruteur.' },
-                        { title: '2–3 articles LinkedIn PM', desc: 'Publications courtes sur le product management — développe la visibilité et la crédibilité communautaire.' },
-                      ] : [
-                        { title: 'Product case study (10–15 slides)', desc: 'Analysis of a real user problem, solution proposal, prioritised roadmap and defined success metrics.' },
-                        { title: '5 documented user interviews', desc: 'Structured interviews using the Jobs-to-be-Done framework, with synthesis and actionable insights.' },
-                        { title: 'Fictitious roadmap with RICE prioritisation', desc: 'Feature backlog with clear justification for each trade-off.' },
-                        { title: 'CSPO or Product School certification', desc: 'Recognised certification that legitimises the shift to product management.' },
-                        { title: 'Repositioned PM LinkedIn profile', desc: 'Title, summary and experiences reformulated with product keywords to appear in recruiter searches.' },
-                        { title: '2–3 PM LinkedIn articles', desc: 'Short posts on product management — builds community visibility and credibility.' },
-                      ]).map(proof => (
-                        <div key={proof.title} className="flex items-start gap-2.5">
-                          <CheckCircle2 size={14} strokeWidth={1.5} className="text-brand-400 flex-shrink-0 mt-0.5" />
-                          <div>
-                            <p className="text-xs font-semibold text-slate-200 mb-0.5">{proof.title}</p>
-                            <p className="text-xs text-slate-500 leading-relaxed">{proof.desc}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </ExSection>
-
-              {/* 9. Risques et limites */}
-              <ExSection title={lang === 'fr' ? 'Risques et limites à connaître' : 'Risks and limits to know'} icon={AlertTriangle}>
-                <div className="space-y-3">
-                  {(lang === 'fr' ? [
-                    { title: 'Marché compétitif sans portfolio', desc: 'Les offres PM sont très courtisées. Sans case study produit solide, il est difficile de sortir du lot face à des candidats avec de l\'expérience.', solution: 'Construire un case study original sur un secteur sous-représenté, et le faire valider par 2 PMs expérimentés avant de postuler.' },
-                    { title: 'Manque de légitimité initiale', desc: 'Les grandes entreprises restent souvent fermées aux profils sans expérience produit directe — même avec une certification.', solution: 'Cibler en priorité des startups early-stage (Seed à Série A) ou des scale-ups qui valorisent la diversité des parcours.' },
-                    { title: 'Rôle très dépendant du contexte', desc: 'Le PM en startup de 15 personnes n\'a rien à voir avec le PM dans un grand groupe. Le premier rôle détermine toute la suite de la trajectoire.', solution: 'Bien cibler dès le départ le type d\'entreprise (startup, scale-up, ETI, corporate) dans lequel on veut évoluer.' },
-                    { title: 'Glissement vers l\'exécution pure', desc: 'Sans vision claire et sans développer la posture stratégique, le PM risque de devenir un PO exécutant sans réelle influence sur la direction produit.', solution: 'Se former dès le début aux frameworks de discovery et de stratégie produit (Reforge, Shape Up, Continuous Discovery Habits).' },
-                  ] : [
-                    { title: 'Competitive market without a portfolio', desc: 'PM roles are highly contested. Without a solid product case study, it\'s hard to stand out against candidates with direct experience.', solution: 'Build an original case study on an under-represented sector, validated by 2 experienced PMs before applying.' },
-                    { title: 'Initial legitimacy gap', desc: 'Large companies often remain closed to profiles without direct product experience — even with certifications.', solution: 'Prioritise early-stage startups (Seed to Series A) or scale-ups that value diverse backgrounds.' },
-                    { title: 'Role highly context-dependent', desc: 'A PM at a 15-person startup has nothing in common with a PM at a large corporation. The first role determines your entire trajectory.', solution: 'Define from the start which type of company (startup, scale-up, SME, corporate) you want to grow in.' },
-                    { title: 'Sliding into pure execution', desc: 'Without a clear vision and strategic posture, the PM risks becoming a PO executing without real influence on product direction.', solution: 'Learn discovery and product strategy frameworks from the start (Reforge, Shape Up, Continuous Discovery Habits).' },
-                  ]).map((risk, i) => (
-                    <div key={i} className="bg-dark-800/40 border border-dark-700 rounded-xl p-4">
-                      <div className="flex items-start gap-2.5 mb-2">
-                        <AlertTriangle size={14} strokeWidth={1.5} className="text-amber-400 flex-shrink-0 mt-0.5" />
-                        <p className="text-sm font-semibold text-slate-200">{risk.title}</p>
-                      </div>
-                      <p className="text-xs text-slate-500 leading-relaxed mb-2 ml-[22px]">{risk.desc}</p>
-                      <div className="ml-[22px] text-xs bg-blue-900/15 border border-blue-800/20 rounded px-2 py-1.5">
-                        <span className="font-semibold text-blue-400">{lang === 'fr' ? 'Solution : ' : 'Solution: '}</span>
-                        <span className="text-slate-300">{risk.solution}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ExSection>
-
               {/* 10. Métiers proches à explorer */}
               <ExSection title={lang === 'fr' ? 'Métiers proches à explorer' : 'Related careers to explore'} icon={Route}>
                 <div className="flex flex-wrap gap-2">
@@ -1277,44 +1164,6 @@ export default function Landing() {
                 </div>
               </ExSection>
 
-              {/* 11. Positionnement professionnel — CV & LinkedIn */}
-              <ExSection title={lang === 'fr' ? 'Positionnement professionnel — CV & LinkedIn' : 'Professional positioning — CV & LinkedIn'} icon={FileText}>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-xs font-semibold text-violet-400 mb-1.5">{lang === 'fr' ? 'Phrase de positionnement' : 'Positioning statement'}</p>
-                    <p className="text-sm text-slate-300 italic bg-dark-800/60 border border-dark-600 rounded-lg px-3 py-2 leading-relaxed">
-                      {lang === 'fr'
-                        ? 'Je me positionne comme un profil en reconversion vers le product management, capable d\'apporter une compréhension terrain des contraintes métier et une rigueur analytique pour des équipes produit en startup SaaS B2B.'
-                        : 'I position myself as a career changer moving into product management, able to bring ground-level business constraint understanding and analytical rigour to B2B SaaS startup product teams.'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-blue-400 mb-1.5">{lang === 'fr' ? 'Accroche LinkedIn (120 caractères max)' : 'LinkedIn headline (120 chars max)'}</p>
-                    <p className="text-sm text-slate-200 font-medium bg-dark-800/60 border border-dark-600 rounded-lg px-3 py-2">
-                      {lang === 'fr'
-                        ? 'En reconversion Product Manager | Background [secteur] → SaaS B2B | Certification CSPO en cours'
-                        : 'Transitioning to Product Manager | [Sector] Background → B2B SaaS | CSPO Certification in Progress'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-green-400 mb-1.5">{lang === 'fr' ? 'Pitch entretien' : 'Interview pitch'}</p>
-                    <p className="text-sm text-slate-300 leading-relaxed bg-dark-800/60 border border-dark-600 rounded-lg px-3 py-2">
-                      {lang === 'fr'
-                        ? 'Mon parcours en [secteur actuel] m\'a appris à comprendre les contraintes opérationnelles des utilisateurs finaux — une perspective que peu de PMs issus de cursus purement tech ont. Je me reconvertis vers le product management parce que c\'est là que je peux avoir le plus d\'impact. Je construis activement mon portfolio avec un case study B2B et 5 interviews utilisateurs structurées.'
-                        : 'My background in [current sector] taught me to understand the operational constraints of end users — a perspective few PMs from purely technical backgrounds have. I\'m transitioning to product management because that\'s where I can have the most impact. I\'m actively building my portfolio with a B2B case study and 5 structured user interviews.'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-amber-400 mb-1.5">{lang === 'fr' ? 'Mots-clés CV' : 'CV keywords'}</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {['Product Management', 'Discovery produit', 'Backlog management', 'Roadmap priorisation', 'User interviews', 'Agile / Scrum', 'SaaS B2B'].map((kw, i) => (
-                        <span key={i} className="text-xs px-2.5 py-1 rounded-full bg-amber-900/20 border border-amber-800/30 text-amber-300">{kw}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </ExSection>
-
               {/* 12. Pourquoi cette voie plutôt qu'une autre ? */}
               <ExSection title={lang === 'fr' ? 'Pourquoi cette voie plutôt qu\'une autre ?' : 'Why this path over others?'} icon={ArrowRightLeft}>
                 <p className="text-sm text-slate-300 leading-relaxed">
@@ -1322,34 +1171,6 @@ export default function Landing() {
                     ? 'Le Product Manager — Solutions SaaS B2B est le meilleur choix pour un profil cherchant un rôle à fort potentiel d\'impact et une rémunération attractive dans un marché en tension structurelle. Cette trajectoire est recommandée si tu as un sens analytique développé et si tu te projettes dans des environnements tech dynamiques avec une vision à 12–18 mois minimum. Elle est déconseillée si tu as besoin de revenus stables dans les 3 prochains mois — la transition vers le premier rôle PM nécessite 6 à 12 mois de préparation active. Par rapport à une trajectoire plus proche du parcours actuel, elle offre un potentiel de progression salariale beaucoup plus fort à 3–5 ans. Par rapport à une trajectoire indépendante ou entrepreneuriale, elle offre une structure d\'apprentissage et un encadrement plus lisible sur le marché du travail.'
                     : 'Product Manager — B2B SaaS Solutions is the best choice for a profile seeking a high-impact role with attractive compensation in a structurally tense market. This path is recommended if you have a developed analytical sense and can project yourself into dynamic tech environments with a minimum 12–18 month horizon. It\'s not recommended if you need stable income in the next 3 months — transitioning to the first PM role requires 6 to 12 months of active preparation. Compared to a path closer to your current background, it offers much stronger salary growth potential at 3–5 years. Compared to an independent or entrepreneurial path, it offers a clearer learning structure and more legible market progression.'}
                 </p>
-              </ExSection>
-
-              {/* 13. Types d'entreprises à cibler */}
-              <ExSection title={lang === 'fr' ? 'Types d\'entreprises à cibler' : 'Company types to target'} icon={BriefcaseBusiness}>
-                <div className="space-y-2.5">
-                  {(lang === 'fr' ? [
-                    { type: 'Startups early-stage (Seed à Série A)', desc: 'Le meilleur terrain d\'entrée pour un premier rôle PM. La culture est ouverte aux reconversions, les responsabilités sont larges et la courbe d\'apprentissage est maximale. Vérifier : présence d\'un lead PM pour être mentoré.', tag: 'Recommandé pour débuter' },
-                    { type: 'Scale-ups tech (Série B à C)', desc: 'Structure intermédiaire avec des équipes produit organisées et des processus de discovery en place. Permet d\'apprendre dans un environnement structuré tout en ayant un impact réel. Vérifier : taille de la squad et accès direct aux utilisateurs.', tag: 'Idéal à 6-12 mois d\'exp.' },
-                    { type: 'ETI en transformation digitale', desc: 'Entreprises de taille intermédiaire qui créent leurs premières équipes produit. Moins compétitif que les pure players, avec un fort besoin de profils capables de structurer une approche produit from scratch.', tag: 'Moins compétitif' },
-                    { type: 'Agences produit / cabinets conseil produit', desc: 'Permettent de toucher plusieurs produits, secteurs et problématiques en peu de temps. Utile pour accélérer l\'acquisition de compétences, même si le salaire est légèrement inférieur aux startups tech.', tag: 'Montée en compétences rapide' },
-                  ] : [
-                    { type: 'Early-stage startups (Seed to Series A)', desc: 'Best entry point for a first PM role. Culture is open to career changers, responsibilities are broad and the learning curve is steep. Check: presence of a lead PM for mentoring.', tag: 'Recommended for starters' },
-                    { type: 'Tech scale-ups (Series B to C)', desc: 'Mid-size structure with organised product teams and established discovery processes. Allows learning in a structured environment while having real impact. Check: squad size and direct user access.', tag: 'Ideal at 6-12 months exp.' },
-                    { type: 'SMEs in digital transformation', desc: 'Mid-sized companies creating their first product teams. Less competitive than pure players, with strong demand for profiles able to build a product approach from scratch.', tag: 'Less competitive' },
-                    { type: 'Product agencies / product consulting firms', desc: 'Allows exposure to multiple products, sectors and challenges quickly. Useful for accelerating skill acquisition, even if salaries are slightly lower than tech startups.', tag: 'Fast skill acquisition' },
-                  ]).map(item => (
-                    <div key={item.type} className="flex items-start gap-2.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-brand-500 mt-2 flex-shrink-0" />
-                      <div>
-                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                          <p className="text-xs font-semibold text-slate-200">{item.type}</p>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-dark-700 border border-dark-600 text-slate-500">{item.tag}</span>
-                        </div>
-                        <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </ExSection>
 
               {/* 14. Questions à poser à un PM */}
@@ -1381,58 +1202,6 @@ export default function Landing() {
                       <p className="text-xs text-slate-500 leading-relaxed ml-[18px] italic">→ {item.why}</p>
                     </div>
                   ))}
-                </div>
-              </ExSection>
-
-              {/* 15. Choisissez cette voie si / Évitez si */}
-              <ExSection title={lang === 'fr' ? 'Choisissez cette voie si… / Évitez si…' : 'Choose this path if… / Avoid if…'} icon={Compass}>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs font-semibold text-green-400 mb-2.5 flex items-center gap-1.5">
-                      <CheckCircle2 size={13} strokeWidth={1.5} />
-                      {lang === 'fr' ? 'Choisissez cette voie si…' : 'Choose this path if…'}
-                    </p>
-                    <div className="space-y-1.5">
-                      {(lang === 'fr' ? [
-                        'Tu aimes comprendre les problèmes en profondeur avant d\'agir — et pas seulement exécuter des tâches',
-                        'Tu te sens à l\'aise avec les chiffres et les données pour justifier tes décisions',
-                        'Tu veux un impact visible sur un produit concret utilisé par des vrais utilisateurs',
-                        'Tu tolères l\'ambiguïté et tu es capable de décider avec des informations incomplètes',
-                      ] : [
-                        'You enjoy understanding problems in depth before acting — not just executing tasks',
-                        'You\'re comfortable with data and numbers to justify your decisions',
-                        'You want visible impact on a concrete product used by real users',
-                        'You tolerate ambiguity and can decide with incomplete information',
-                      ]).map((c, i) => (
-                        <div key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-green-900/10 border border-green-800/20 rounded-lg px-3 py-2">
-                          <span className="text-green-500 flex-shrink-0 mt-0.5">→</span> {c}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-red-400 mb-2.5 flex items-center gap-1.5">
-                      <AlertTriangle size={13} strokeWidth={1.5} />
-                      {lang === 'fr' ? 'Évitez cette voie si…' : 'Avoid this path if…'}
-                    </p>
-                    <div className="space-y-1.5">
-                      {(lang === 'fr' ? [
-                        'Tu préfères un rôle avec des tâches répétitives et des résultats mesurables à court terme',
-                        'Tu as du mal à naviguer entre des interlocuteurs techniques et non-techniques sans frustration',
-                        'Tu veux coder ou designer toi-même — le PM ne fait ni l\'un ni l\'autre',
-                        'Tu as besoin de directives claires et d\'un cadre très défini pour être efficace',
-                      ] : [
-                        'You prefer a role with repetitive tasks and short-term measurable results',
-                        'You struggle to navigate between technical and non-technical stakeholders without frustration',
-                        'You want to code or design yourself — the PM does neither',
-                        'You need clear directives and a very defined framework to be effective',
-                      ]).map((a, i) => (
-                        <div key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-red-900/10 border border-red-800/20 rounded-lg px-3 py-2">
-                          <span className="text-red-400 flex-shrink-0 mt-0.5">✕</span> {a}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               </ExSection>
 
