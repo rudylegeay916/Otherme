@@ -528,17 +528,17 @@ export default function Landing() {
       </section>
 
       {/* ── Ce que tu découvres ───────────────────────────────────── */}
-      <section className="py-16 px-4 bg-dark-900/60">
-        <div className="max-w-5xl mx-auto">
-          <Reveal className="text-center mb-14">
+      <section className="py-10 px-4 bg-dark-900/60">
+        <div className="max-w-4xl mx-auto">
+          <Reveal className="text-center mb-8">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
               {lang === 'fr' ? 'Les 3 trajectoires' : 'The 3 paths'}
             </p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-100">
               {t.pathTypesTitle}{' '}<span className="gradient-text">{t.pathTypesAccent}</span>
             </h2>
           </Reveal>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-4">
             {t.pathTypes.map((pt, i) => {
               const colorMap: Record<string, { bg: string; border: string; badge: string; dot: string; glow: string; num: string }> = {
                 emerald: {
@@ -547,7 +547,7 @@ export default function Landing() {
                   badge: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20',
                   dot: 'bg-emerald-400',
                   glow: 'hover:shadow-[0_0_40px_rgba(16,185,129,0.08)]',
-                  num: 'text-emerald-800/60',
+                  num: 'text-emerald-800/50',
                 },
                 violet: {
                   bg: 'bg-gradient-to-br from-violet-950/60 to-dark-800',
@@ -555,7 +555,7 @@ export default function Landing() {
                   badge: 'bg-violet-500/10 text-violet-300 border-violet-500/20',
                   dot: 'bg-violet-400',
                   glow: 'hover:shadow-[0_0_40px_rgba(124,58,237,0.10)]',
-                  num: 'text-violet-800/60',
+                  num: 'text-violet-800/50',
                 },
                 amber: {
                   bg: 'bg-gradient-to-br from-amber-950/60 to-dark-800',
@@ -563,22 +563,22 @@ export default function Landing() {
                   badge: 'bg-amber-500/10 text-amber-300 border-amber-500/20',
                   dot: 'bg-amber-400',
                   glow: 'hover:shadow-[0_0_40px_rgba(245,158,11,0.08)]',
-                  num: 'text-amber-800/60',
+                  num: 'text-amber-800/50',
                 },
               }
               const c = colorMap[pt.color] ?? colorMap.violet
               return (
                 <Reveal key={i} delay={i * 90}>
-                  <div className={`relative rounded-2xl border p-7 transition-all duration-300 overflow-hidden h-full ${c.border} ${c.bg} ${c.glow}`}>
+                  <div className={`relative rounded-2xl border p-5 transition-all duration-300 overflow-hidden ${c.border} ${c.bg} ${c.glow}`}>
                     {/* Background number */}
-                    <div className={`absolute top-4 right-5 text-6xl font-black select-none ${c.num}`}>{String(i + 1).padStart(2, '0')}</div>
+                    <div className={`absolute top-3 right-4 text-5xl font-black select-none ${c.num}`}>{String(i + 1).padStart(2, '0')}</div>
                     {/* Badge */}
-                    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold mb-5 ${c.badge}`}>
+                    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold mb-3 ${c.badge}`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`} />
                       {pt.label}
                     </div>
-                    <h3 className="text-slate-100 font-bold text-lg mb-3 leading-snug">{pt.title}</h3>
-                    <p className="text-slate-400 text-sm leading-relaxed">{pt.desc}</p>
+                    <h3 className="text-slate-100 font-bold text-base mb-1.5 leading-snug">{pt.title}</h3>
+                    <p className="text-slate-400 text-xs leading-relaxed">{pt.desc}</p>
                   </div>
                 </Reveal>
               )

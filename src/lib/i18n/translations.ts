@@ -139,9 +139,9 @@ const fr: Tr = {
     ],
     pathTypesTitle: 'Ce que tu', pathTypesAccent: 'découvres',
     pathTypes: [
-      { label: 'Accessible', title: 'La trajectoire rapide', desc: 'Un premier pas réaliste, faisable en quelques mois, sans tout quitter.', color: 'emerald' },
-      { label: 'Alignée', title: 'La trajectoire qui te ressemble', desc: 'Un chemin en phase avec tes valeurs, tes envies et ta façon d\'être.', color: 'violet' },
-      { label: 'Ambitieuse', title: 'La trajectoire qui te dépasse', desc: 'Un cap plus grand, plus stimulant — pour ceux qui veulent viser haut.', color: 'amber' },
+      { label: 'Accessible', title: 'La trajectoire rapide', desc: 'Faisable en quelques mois, sans tout quitter.', color: 'emerald' },
+      { label: 'Alignée', title: 'La trajectoire qui te ressemble', desc: 'En phase avec tes valeurs, tes envies et ta façon d\'être.', color: 'violet' },
+      { label: 'Ambitieuse', title: 'La trajectoire qui te dépasse', desc: 'Pour ceux qui veulent viser plus haut et aller plus loin.', color: 'amber' },
     ],
     compTitle: 'Test classique', compVsAccent: 'vs', compOtherme: 'OtherMe',
     compRows: [
@@ -315,9 +315,9 @@ const en: Tr = {
     ],
     pathTypesTitle: 'What you', pathTypesAccent: 'discover',
     pathTypes: [
-      { label: 'Accessible', title: 'The fast-track path', desc: 'A realistic first step, achievable in a few months, without giving everything up.', color: 'emerald' },
-      { label: 'Aligned', title: 'The path that fits you', desc: 'A direction in line with your values, desires and the way you are.', color: 'violet' },
-      { label: 'Ambitious', title: 'The path that pushes you', desc: 'A bigger, more stimulating goal — for those who want to aim higher.', color: 'amber' },
+      { label: 'Accessible', title: 'The fast-track path', desc: 'Achievable in a few months, without giving everything up.', color: 'emerald' },
+      { label: 'Aligned', title: 'The path that fits you', desc: 'In line with your values, desires and the way you are.', color: 'violet' },
+      { label: 'Ambitious', title: 'The path that pushes you', desc: 'For those who want to aim higher and go further.', color: 'amber' },
     ],
     compTitle: 'Classic test', compVsAccent: 'vs', compOtherme: 'OtherMe',
     compRows: [
