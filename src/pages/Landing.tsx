@@ -588,64 +588,59 @@ export default function Landing() {
       </section>
 
       {/* ── Pas un simple test d'orientation ──────────────────────── */}
-      <section className="py-20 px-4">
+      <section className="py-12 px-4">
         <div className="max-w-4xl mx-auto">
-          <Reveal className="text-center mb-12">
+          <Reveal className="text-center mb-8">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
-              {lang === 'fr' ? 'Différence' : 'What sets it apart'}
+              {lang === 'fr' ? 'Comparaison' : 'Comparison'}
             </p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-100">
               {lang === 'fr'
-                ? <>Pas <span className="gradient-text">un simple test</span> d'orientation</>
-                : <>Not <span className="gradient-text">just another quiz</span></>}
+                ? <>OtherMe vs <span className="gradient-text">test classique</span></>
+                : <>OtherMe vs <span className="gradient-text">classic quiz</span></>}
             </h2>
-            <p className="text-slate-500 text-base max-w-lg mx-auto">
-              {lang === 'fr'
-                ? 'Les tests classiques te disent ce que tu pourrais être. OtherMe te montre comment y arriver.'
-                : 'Classic tests tell you what you could be. OtherMe shows you how to get there.'}
-            </p>
           </Reveal>
 
           {/* Comparison table */}
-          <div className="rounded-2xl border border-white/[0.07] overflow-hidden mb-8">
+          <div className="rounded-2xl border border-white/[0.07] overflow-hidden mb-4">
             <div className="grid grid-cols-3 border-b border-white/[0.07]">
-              <div className="p-4 bg-dark-800/60" />
-              <div className="p-4 bg-dark-800/60 border-l border-white/[0.06]">
+              <div className="p-3 bg-dark-800/60" />
+              <div className="p-3 bg-dark-800/60 border-l border-white/[0.06]">
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{t.compTitle}</span>
               </div>
-              <div className="p-4 bg-violet-900/20 border-l border-violet-500/20">
+              <div className="p-3 bg-violet-900/20 border-l border-violet-500/20">
                 <span className="text-xs font-semibold text-brand-300 uppercase tracking-wider">{t.compOtherme}</span>
               </div>
             </div>
             {t.compRows.map((row, i) => (
-              <div key={i} className={`grid grid-cols-3 text-sm ${i < t.compRows.length - 1 ? 'border-b border-white/[0.05]' : ''}`}>
-                <div className="p-4 text-slate-400 font-medium text-xs bg-dark-800/30">{row.label}</div>
-                <div className="p-4 text-slate-600 border-l border-white/[0.05] bg-dark-800/20 flex items-center gap-2">
-                  <span className="w-4 h-4 rounded-full bg-dark-700 flex items-center justify-center flex-shrink-0">
-                    <span className="text-slate-600 text-[9px] font-bold">✕</span>
+              <div key={i} className={`grid grid-cols-3 ${i < t.compRows.length - 1 ? 'border-b border-white/[0.05]' : ''}`}>
+                <div className="p-2.5 text-slate-400 font-medium text-[11px] bg-dark-800/30">{row.label}</div>
+                <div className="p-2.5 text-slate-600 border-l border-white/[0.05] bg-dark-800/20 flex items-center gap-1.5">
+                  <span className="w-3.5 h-3.5 rounded-full bg-dark-700 flex items-center justify-center flex-shrink-0">
+                    <span className="text-slate-600 text-[8px] font-bold">✕</span>
                   </span>
-                  <span className="text-xs">{row.classic}</span>
+                  <span className="text-[11px]">{row.classic}</span>
                 </div>
-                <div className="p-4 border-l border-violet-500/15 bg-violet-900/10 flex items-center gap-2">
-                  <span className="w-4 h-4 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
-                    <span className="text-emerald-400 text-[9px] font-bold">✓</span>
+                <div className="p-2.5 border-l border-violet-500/15 bg-violet-900/10 flex items-center gap-1.5">
+                  <span className="w-3.5 h-3.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
+                    <span className="text-emerald-400 text-[8px] font-bold">✓</span>
                   </span>
-                  <span className="text-xs text-slate-200">{row.otherme}</span>
+                  <span className="text-[11px] text-slate-200">{row.otherme}</span>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Ce qu'OtherMe aide à éviter — bande compacte */}
-          <div className="card p-5 border-white/[0.05] mb-8">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-center mb-4">
+          <div className="card p-4 border-white/[0.05] mb-3">
+            <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider text-center mb-3">
               {lang === 'fr' ? 'Ce qu\'OtherMe aide à éviter' : 'What OtherMe helps you avoid'}
             </p>
-            <div className="grid sm:grid-cols-2 gap-2">
+            <div className="grid sm:grid-cols-2 gap-1.5">
               {AVOIDS.slice(0, 4).map((a) => (
-                <div key={a.fr} className="flex items-start gap-2.5 text-xs text-slate-400">
-                  <span className="w-4 h-4 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-red-400 text-[9px] font-bold">✕</span>
+                <div key={a.fr} className="flex items-start gap-2 text-[11px] text-slate-400">
+                  <span className="w-3.5 h-3.5 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-red-400 text-[8px] font-bold">✕</span>
                   </span>
                   {lang === 'fr' ? a.fr : a.en}
                 </div>
@@ -654,11 +649,11 @@ export default function Landing() {
           </div>
 
           {/* Credibility band */}
-          <div className="card p-4 border-white/[0.05]">
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-slate-500">
+          <div className="card p-3 border-white/[0.05]">
+            <div className="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-[11px] text-slate-500">
               {(lang === 'fr'
-                ? ['Analyse personnalisée à partir de vos réponses', 'CV optionnel pour affiner les résultats', 'Résultat généré en quelques minutes', 'Trajectoires réalistes, pas de promesses magiques']
-                : ['Personalised analysis from your answers', 'Optional CV to refine results', 'Result generated in minutes', 'Realistic paths, no magic promises']
+                ? ['Analyse personnalisée', 'CV optionnel', 'Résultat en quelques minutes', 'Pas de promesses magiques']
+                : ['Personalised analysis', 'Optional CV', 'Result in minutes', 'No magic promises']
               ).map((item) => (
                 <span key={item} className="flex items-center gap-1.5">
                   <span className="text-green-500">✓</span> {item}
