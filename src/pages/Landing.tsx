@@ -23,19 +23,24 @@ type IconComponent = React.ComponentType<LucideProps>
 
 const DELIVERABLES: Array<{ Icon: IconComponent; fr: { title: string; desc: string }; en: { title: string; desc: string } }> = [
   {
+    Icon: ScanSearch,
+    fr: { title: 'Diagnostic de départ', desc: 'Analyse de ton profil, tes compétences transférables et tes contraintes réelles.' },
+    en: { title: 'Starting diagnostic', desc: 'Analysis of your profile, transferable skills and real constraints.' },
+  },
+  {
     Icon: Route,
-    fr: { title: '3 trajectoires personnalisées', desc: 'Trois voies professionnelles distinctes adaptées à ton profil : une proche de ton parcours actuel, une progressive alignée sur tes envies, une plus ambitieuse.' },
-    en: { title: '3 personalised paths', desc: 'Three distinct professional directions tailored to your profile: one close to your current background, one progressively aligned with your interests, one more ambitious.' },
+    fr: { title: '3 trajectoires personnalisées', desc: 'Trois voies distinctes — proche, progressive, ambitieuse — chacune justifiée et adaptée à ton profil.' },
+    en: { title: '3 personalised paths', desc: 'Three distinct directions — close, progressive, ambitious — each justified and tailored to your profile.' },
   },
   {
     Icon: BarChart3,
-    fr: { title: 'OtherMe Reality Score', desc: 'Évaluation multi-dimensionnelle de chaque trajectoire : compatibilité personnelle, faisabilité réelle, opportunité marché et effort de transition — pour choisir en connaissance de cause.' },
-    en: { title: 'OtherMe Reality Score', desc: 'Multi-dimensional assessment of each path: personal compatibility, real feasibility, market opportunity and transition effort — to make informed decisions.' },
+    fr: { title: 'Reality Score par trajectoire', desc: 'Faisabilité, alignement personnel, opportunité marché et effort de transition — pour choisir en connaissance de cause.' },
+    en: { title: 'Reality Score per path', desc: 'Feasibility, personal alignment, market opportunity and transition effort — to make informed decisions.' },
   },
   {
     Icon: ListChecks,
-    fr: { title: 'Plan d\'action 30 jours', desc: 'Des actions concrètes semaine par semaine pour ne pas rester bloqué dans la réflexion. Chaque semaine inclut un objectif précis, un livrable attendu et un conseil pratique.' },
-    en: { title: '30-day action plan', desc: 'Concrete actions week by week to avoid getting stuck in reflection. Each week includes a precise objective, an expected deliverable and a practical tip.' },
+    fr: { title: 'Plan d\'action 30 jours', desc: 'Des actions concrètes semaine par semaine pour passer de la réflexion à l\'exécution.' },
+    en: { title: '30-day action plan', desc: 'Concrete actions week by week to move from reflection to execution.' },
   },
 ]
 
@@ -665,30 +670,30 @@ export default function Landing() {
       </section>
 
       {/* ── Ce que tu obtiens ─────────────────────────────────────── */}
-      <section className="py-16 px-4 bg-dark-900/60">
+      <section className="py-12 px-4 bg-dark-900/60">
         <div className="max-w-4xl mx-auto">
-          <Reveal className="text-center mb-12">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
+          <Reveal className="text-center mb-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-2">
               {lang === 'fr' ? 'Livrable' : 'What you get'}
             </p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
+            <h2 className="text-2xl md:text-3xl font-bold mb-2 text-slate-100">
               {lang === 'fr' ? <>Ce que tu <span className="gradient-text">obtiens</span></> : <>What you <span className="gradient-text">get</span></>}
             </h2>
-            <p className="text-slate-500 text-base max-w-lg mx-auto">
+            <p className="text-slate-500 text-sm max-w-lg mx-auto">
               {lang === 'fr'
-                ? '3 trajectoires personnalisées, un Reality Score multi-dimensionnel et un plan d\'action concret — pas un test générique.'
-                : '3 personalised paths, a multi-dimensional Reality Score and a concrete action plan — not a generic test.'}
+                ? 'Pas un test générique — un rapport structuré avec trajectoires, scores et plan d\'action.'
+                : 'Not a generic test — a structured report with paths, scores and an action plan.'}
             </p>
           </Reveal>
-          <div className="grid sm:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3">
             {DELIVERABLES.map((d) => (
-              <div key={d.fr.title} className="card p-6 flex flex-col gap-4 hover:border-white/[0.12] transition-colors duration-300">
-                <div className="w-10 h-10 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
-                  <d.Icon size={20} strokeWidth={1.5} className="text-violet-300" />
+              <div key={d.fr.title} className="card p-4 flex flex-col gap-3 hover:border-white/[0.12] transition-colors duration-300">
+                <div className="w-8 h-8 rounded-lg bg-violet-600/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
+                  <d.Icon size={16} strokeWidth={1.5} className="text-violet-300" />
                 </div>
                 <div>
-                  <h4 className="text-slate-100 font-semibold text-sm mb-1.5">{lang === 'fr' ? d.fr.title : d.en.title}</h4>
-                  <p className="text-slate-500 text-sm leading-relaxed">{lang === 'fr' ? d.fr.desc : d.en.desc}</p>
+                  <h4 className="text-slate-100 font-semibold text-xs mb-1">{lang === 'fr' ? d.fr.title : d.en.title}</h4>
+                  <p className="text-slate-500 text-[11px] leading-relaxed">{lang === 'fr' ? d.fr.desc : d.en.desc}</p>
                 </div>
               </div>
             ))}
@@ -1223,40 +1228,6 @@ export default function Landing() {
               </div>
 
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Ce que contient le rapport complet ───────────────────── */}
-      <section className="py-24 px-4 bg-dark-900/60">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
-              {lang === 'fr' ? 'Structure du rapport' : 'Report structure'}
-            </p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
-              {lang === 'fr'
-                ? <>Un rapport complet pour passer <span className="gradient-text">de l'idée à l'action</span></>
-                : <>A complete report to go <span className="gradient-text">from idea to action</span></>}
-            </h2>
-            <p className="text-slate-500 text-base max-w-xl mx-auto leading-relaxed">
-              {lang === 'fr'
-                ? 'OtherMe ne se contente pas de proposer des métiers. Chaque trajectoire est expliquée, justifiée et transformée en plan d\'action concret.'
-                : 'OtherMe doesn\'t just suggest careers. Each path is explained, justified and turned into a concrete action plan.'}
-            </p>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-4">
-            {REPORT_CONTENTS.map((item) => (
-              <div key={item.title} className="card p-5 flex items-start gap-3.5 hover:border-white/[0.12] transition-colors duration-300">
-                <div className="w-9 h-9 rounded-lg bg-brand-600/10 border border-brand-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <item.Icon size={17} strokeWidth={1.5} className="text-brand-400" />
-                </div>
-                <div>
-                  <h4 className="text-slate-100 font-semibold text-sm mb-1">{item.title}</h4>
-                  <p className="text-slate-500 text-xs leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
