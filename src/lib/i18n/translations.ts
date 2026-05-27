@@ -133,7 +133,7 @@ const fr: Tr = {
     testiTitle: 'Ils ont découvert', testiAccent: 'leur autre vie', testiTitle2: '',
     testiDisclaimer: 'Profils illustratifs inspirés de trajectoires types générées par OtherMe.',
     testimonials: [
-      { name: 'Marie', age: 31, from: 'Responsable comptable', to: 'Consultante en transformation digitale', duration: '8 mois', tags: ['Analyser', 'Organiser', 'Piloter'], text: 'Je savais que je voulais autre chose, mais pas quoi. OtherMe a mis des mots sur ce que je ressentais et m\'a montré un chemin concret.' },
+      { name: 'Marie', age: 31, from: 'Responsable comptable', to: 'Consultante en transformation digitale', duration: '8 mois', tags: ['Analyser', 'Organiser', 'Piloter'], text: 'Je savais que je voulais autre chose, mais pas quoi. OtherMe a mis des mots dessus et m\'a montré un chemin concret.' },
       { name: 'Thomas', age: 28, from: 'Développeur backend', to: 'Product Manager indépendant', duration: '5 mois', tags: ['Tech', 'Vision produit', 'Autonomie'], text: 'Ce qui m\'a surpris, c\'est la précision. Ce n\'était pas des généralités — c\'était vraiment adapté à mon profil.' },
       { name: 'Camille', age: 35, from: 'Chargée RH', to: 'Coach carrière freelance', duration: '10 mois', tags: ['Écouter', 'Accompagner', 'Former'], text: 'J\'avais peur de tout perdre. OtherMe m\'a montré que je pouvais construire quelque chose de nouveau sans repartir de zéro.' },
     ],

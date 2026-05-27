@@ -1315,53 +1315,53 @@ export default function Landing() {
       </section>
 
       {/* ── Exemples de transitions ───────────────────────────────── */}
-      <section className="py-24 px-4 bg-dark-900/60">
+      <section className="py-12 px-4 bg-dark-900/60">
         <div className="max-w-5xl mx-auto">
-          <Reveal className="text-center mb-16">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
+          <Reveal className="text-center mb-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-2">
               {lang === 'fr' ? 'Trajectoires' : 'Paths'}
             </p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-100">
               {t.testiTitle}{' '}<span className="gradient-text">{t.testiAccent}</span>{t.testiTitle2 ? <>{' '}{t.testiTitle2}</> : null}
             </h2>
           </Reveal>
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-3 gap-3">
             {t.testimonials.map((ex, i) => (
-              <div key={i} className="bg-dark-800 border border-white/[0.07] rounded-2xl p-6 flex flex-col hover:border-white/[0.14] hover:shadow-[0_0_30px_rgba(124,58,237,0.06)] transition-all duration-300">
+              <div key={i} className="bg-dark-800 border border-white/[0.07] rounded-2xl p-4 flex flex-col hover:border-white/[0.14] hover:shadow-[0_0_30px_rgba(124,58,237,0.06)] transition-all duration-300">
                 {/* Profile header */}
-                <div className="flex items-center gap-3 mb-5">
+                <div className="flex items-center gap-2.5 mb-3">
                   <div className="relative flex-shrink-0">
-                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-violet-600 to-indigo-700 flex items-center justify-center ring-2 ring-violet-500/20">
-                      <span className="text-white font-bold text-base">{ex.name[0]}</span>
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-600 to-indigo-700 flex items-center justify-center ring-2 ring-violet-500/20">
+                      <span className="text-white font-bold text-sm">{ex.name[0]}</span>
                     </div>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-dark-800" />
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-dark-800" />
                   </div>
                   <div>
                     <div className="text-slate-100 font-semibold text-sm">{ex.name}, {ex.age} {lang === 'fr' ? 'ans' : 'yo'}</div>
-                    <div className="text-slate-500 text-xs mt-0.5">{lang === 'fr' ? 'Profil illustratif' : 'Illustrative profile'}</div>
+                    <div className="text-slate-500 text-[11px]">{lang === 'fr' ? 'Profil illustratif' : 'Illustrative profile'}</div>
                   </div>
                 </div>
                 {/* Transition arrow */}
-                <div className="flex items-start gap-2 mb-4 p-3 rounded-xl bg-dark-900/60 border border-white/[0.05]">
+                <div className="flex items-start gap-2 mb-3 p-2.5 rounded-xl bg-dark-900/60 border border-white/[0.05]">
                   <div className="flex-1 min-w-0">
-                    <div className="text-slate-500 text-[11px] mb-0.5">{lang === 'fr' ? 'Avant' : 'Before'}</div>
+                    <div className="text-slate-500 text-[10px] mb-0.5">{lang === 'fr' ? 'Avant' : 'Before'}</div>
                     <div className="text-slate-300 text-xs font-medium truncate">{ex.from}</div>
                   </div>
-                  <div className="text-brand-400 px-1 flex-shrink-0 mt-3">→</div>
+                  <div className="text-brand-400 px-1 flex-shrink-0 mt-2.5">→</div>
                   <div className="flex-1 min-w-0 text-right">
-                    <div className="text-brand-400/80 text-[11px] mb-0.5">{lang === 'fr' ? 'Après' : 'After'}</div>
+                    <div className="text-brand-400/80 text-[10px] mb-0.5">{lang === 'fr' ? 'Après' : 'After'}</div>
                     <div className="text-brand-300 text-xs font-semibold truncate">{ex.to}</div>
                   </div>
                 </div>
                 {/* Quote */}
-                <p className="text-slate-400 text-sm leading-relaxed flex-1 mb-4">
-                  <span className="text-violet-400/60 text-lg leading-none font-serif mr-1">"</span>{ex.text}<span className="text-violet-400/60 text-lg leading-none font-serif ml-1">"</span>
+                <p className="text-slate-400 text-xs leading-relaxed flex-1 mb-3">
+                  <span className="text-violet-400/60 text-base leading-none font-serif mr-1">"</span>{ex.text}<span className="text-violet-400/60 text-base leading-none font-serif ml-1">"</span>
                 </p>
                 {/* Footer */}
-                <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between gap-2">
+                <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between gap-2">
                   <div className="flex flex-wrap gap-1">
                     {ex.tags.map((tag) => (
-                      <span key={tag} className="px-2 py-0.5 rounded-full bg-violet-600/10 border border-violet-500/15 text-violet-300/80 text-[10px] font-medium">{tag}</span>
+                      <span key={tag} className="px-1.5 py-0.5 rounded-full bg-violet-600/10 border border-violet-500/15 text-violet-300/80 text-[10px] font-medium">{tag}</span>
                     ))}
                   </div>
                   <div className="text-slate-600 text-[10px] whitespace-nowrap flex-shrink-0">{ex.duration}</div>
@@ -1369,7 +1369,7 @@ export default function Landing() {
               </div>
             ))}
           </div>
-          <p className="text-center text-slate-600 text-xs mt-8">{t.testiDisclaimer}</p>
+          <p className="text-center text-slate-600 text-xs mt-5">{t.testiDisclaimer}</p>
         </div>
       </section>
 
