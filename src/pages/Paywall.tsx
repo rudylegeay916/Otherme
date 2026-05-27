@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { fetchReport, createCheckoutSession } from '../lib/api'
+import { fetchReport, createCheckoutSession, requestAdminBypass } from '../lib/api'
 import type { PathData, Report } from '../types'
 import Logo from '../components/Logo'
 import LanguageToggle from '../components/LanguageToggle'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTr } from '../lib/i18n/translations'
+import { useAuth } from '../contexts/AuthContext'
 
 const PATH_TYPE_LABELS: Record<string, { label: string; color: string; bg: string }> = {
   current_aligned: { label: 'Proche de ton parcours', color: 'text-blue-300', bg: 'bg-blue-900/30 border-blue-700/40' },
@@ -84,12 +85,15 @@ export default function Paywall() {
   const { lang }     = useLanguage()
   const tr           = useTr(lang)
   const t            = tr.paywall
+  const { session }  = useAuth()
 
-  const [report,    setReport]    = useState<Report | null>(null)
-  const [loading,   setLoading]   = useState(true)
-  const [paying,    setPaying]    = useState(false)
-  const [fetchErr,  setFetchErr]  = useState('')   // erreur chargement rapport
-  const [payErr,    setPayErr]    = useState('')   // erreur paiement (inline)
+  const [report,      setReport]      = useState<Report | null>(null)
+  const [loading,     setLoading]     = useState(true)
+  const [paying,      setPaying]      = useState(false)
+  const [fetchErr,    setFetchErr]    = useState('')
+  const [payErr,      setPayErr]      = useState('')
+  const [isAdmin,     setIsAdmin]     = useState(false)
+  const [adminBypassing, setAdminBypassing] = useState(false)
 
   useEffect(() => {
     if (!reportId) return
@@ -103,6 +107,29 @@ export default function Paywall() {
       .catch((e) => setFetchErr(e.message))
       .finally(() => setLoading(false))
   }, [reportId, navigate])
+
+  // Vérification admin silencieuse — uniquement si l'utilisateur est connecté
+  useEffect(() => {
+    if (!reportId || !session?.access_token) return
+    requestAdminBypass(reportId, session.access_token)
+      .then(({ authorized }) => setIsAdmin(authorized))
+      .catch(() => {/* pas admin, on ignore */})
+  }, [reportId, session?.access_token])
+
+  const handleAdminBypass = async () => {
+    if (!reportId || !session?.access_token) return
+    setAdminBypassing(true)
+    try {
+      const { authorized } = await requestAdminBypass(reportId, session.access_token)
+      if (authorized) {
+        navigate(`/results/${reportId}`, { state: { adminMode: true } })
+      }
+    } catch {
+      // silencieux
+    } finally {
+      setAdminBypassing(false)
+    }
+  }
 
   const handlePay = async () => {
     if (!report || !reportId) return
@@ -262,6 +289,25 @@ export default function Paywall() {
                 </span>
               ) : t.ctaBtn}
             </button>
+
+            {/* Bouton admin — visible uniquement pour les admins authentifiés */}
+            {isAdmin && (
+              <div className="mt-4 flex flex-col items-center gap-2">
+                <button
+                  onClick={handleAdminBypass}
+                  disabled={adminBypassing}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-amber-500/30 bg-amber-500/5 text-amber-300/90 text-sm font-medium hover:bg-amber-500/10 hover:border-amber-500/50 transition-all duration-200 disabled:opacity-50"
+                >
+                  {adminBypassing ? (
+                    <span className="w-3.5 h-3.5 border-2 border-amber-300/30 border-t-amber-300 rounded-full animate-spin" />
+                  ) : (
+                    <span>🔑</span>
+                  )}
+                  Voir le rapport en mode admin
+                </button>
+                <span className="text-[10px] text-slate-600 uppercase tracking-wider">Mode admin — aperçu non payé</span>
+              </div>
+            )}
 
             {/* Trust row */}
             <div className="flex items-center justify-center gap-3 mt-5 flex-wrap">

@@ -106,6 +106,9 @@ export const env = {
   // Access tokens
   accessTokenSecret: get('ACCESS_TOKEN_SECRET'),
 
+  // Admin (liste d'emails séparés par virgule, côté serveur uniquement)
+  adminEmails: get('ADMIN_EMAILS', ''),
+
   // App
   appUrl:  get('VITE_APP_URL', 'http://localhost:5173'),
   port:    parseInt(get('PORT', '3001'), 10),

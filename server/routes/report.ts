@@ -26,10 +26,10 @@ router.get('/:id', async (req, res) => {
     // Vérifier le token d'accès signé dans le cookie HttpOnly
     const rawCookie = req.headers.cookie
     const token     = parseCookieHeader(rawCookie, 'otherme_report_access')
-    const { valid } = token ? verifyAccessToken(token, id) : { valid: false }
+    const { valid, isAdmin } = token ? verifyAccessToken(token, id) : { valid: false, isAdmin: false }
 
-    // Rapport complet uniquement si paid EN BASE et token valide
-    const hasFullAccess = isPaid && valid
+    // Rapport complet si : (payé EN BASE + token valide) OU (token admin valide)
+    const hasFullAccess = (isPaid && valid) || (valid && isAdmin === true)
 
     // Adapter le statut interne au format attendu par le frontend
     const frontendStatus: Report['status'] = (() => {
@@ -44,7 +44,8 @@ router.get('/:id', async (req, res) => {
     // Pour l'instant on expose ce qui est nécessaire au frontend
     const firstName = row.title?.split('pour ').pop() ?? ''
 
-    // Si le rapport est payé mais que le token est absent/invalide, signaler sans exposer le contenu
+    // Si le rapport est payé mais que le token est absent/invalide, bloquer
+    // (les admins ont un token valide avec isAdmin: true, donc ils passent)
     if (isPaid && !valid) {
       return res.status(403).json({
         message: 'Accès au rapport non autorisé.',

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { fetchReport } from '../lib/api'
 import type { PathData, Report, RichTimelineStep, ActionPlanWeek } from '../types'
 import Logo from '../components/Logo'
@@ -666,6 +666,8 @@ function ComparisonTable({ paths }: { paths: PathData[] }) {
 export default function Results() {
   const { reportId } = useParams<{ reportId: string }>()
   const navigate     = useNavigate()
+  const location     = useLocation()
+  const adminMode    = (location.state as { adminMode?: boolean } | null)?.adminMode === true
 
   const [report,       setReport]       = useState<Report | null>(null)
   const [loading,      setLoading]      = useState(true)
@@ -793,8 +795,17 @@ export default function Results() {
 
         {/* ── Header ──────────────────────────────────────────────── */}
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-600/15 border border-green-600/30 text-green-300 text-sm font-medium mb-6">
-            <span className="w-2 h-2 rounded-full bg-green-400" />
+          {adminMode && (
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300/90 text-xs font-semibold uppercase tracking-wider mb-3">
+              <span>🔑</span> Mode admin — aperçu non payé
+            </div>
+          )}
+          <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-6 ${
+            adminMode
+              ? 'bg-amber-600/10 border border-amber-600/25 text-amber-300/80'
+              : 'bg-green-600/15 border border-green-600/30 text-green-300'
+          }`}>
+            <span className={`w-2 h-2 rounded-full ${adminMode ? 'bg-amber-400' : 'bg-green-400'}`} />
             Rapport OtherMe complet
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-100 mb-4">

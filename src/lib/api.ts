@@ -109,6 +109,25 @@ export async function createCheckoutSession(
   return res.json() as Promise<{ url: string }>
 }
 
+// ── requestAdminBypass ────────────────────────────────────────
+
+export async function requestAdminBypass(
+  reportId: string,
+  authToken: string
+): Promise<{ authorized: boolean }> {
+  const res = await fetch(`${BASE}/admin/bypass`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken}`,
+    },
+    credentials: 'include',
+    body: JSON.stringify({ reportId }),
+  })
+  if (!res.ok) return { authorized: false }
+  return res.json() as Promise<{ authorized: boolean }>
+}
+
 // ── verifyPayment ─────────────────────────────────────────────────
 
 export async function verifyPayment(

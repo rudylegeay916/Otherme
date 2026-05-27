@@ -22,13 +22,30 @@ export function signAccessToken(reportId: string, sessionId: string): string {
 }
 
 /**
+ * Génère un token admin signé HMAC-SHA256.
+ * Identique à signAccessToken mais avec isAdmin: true dans le payload.
+ * Ce flag permet au serveur de bypasser la vérification de paiement.
+ */
+export function signAdminAccessToken(reportId: string, adminEmail: string): string {
+  const payload = JSON.stringify({
+    reportId,
+    sessionId: `admin_${adminEmail}`,
+    isAdmin: true,
+    exp: Date.now() + TOKEN_TTL_MS,
+  })
+  const encoded = Buffer.from(payload).toString('base64url')
+  const secret  = process.env.ACCESS_TOKEN_SECRET ?? ''
+  return `${encoded}.${hmac(encoded, secret)}`
+}
+
+/**
  * Vérifie un token et retourne sa validité.
  * Rejette : signature incorrecte, token expiré, reportId ne correspondant pas.
  */
 export function verifyAccessToken(
   token: string,
   expectedReportId: string
-): { valid: boolean; sessionId?: string } {
+): { valid: boolean; sessionId?: string; isAdmin?: boolean } {
   try {
     const dot = token.lastIndexOf('.')
     if (dot === -1) return { valid: false }
@@ -49,13 +66,14 @@ export function verifyAccessToken(
     const payload = JSON.parse(Buffer.from(encoded, 'base64url').toString()) as {
       reportId:  string
       sessionId: string
+      isAdmin?:  boolean
       exp:       number
     }
 
     if (Date.now() > payload.exp)                    return { valid: false }
     if (payload.reportId !== expectedReportId)       return { valid: false }
 
-    return { valid: true, sessionId: payload.sessionId }
+    return { valid: true, sessionId: payload.sessionId, isAdmin: payload.isAdmin ?? false }
   } catch {
     return { valid: false }
   }
