@@ -498,27 +498,27 @@ export default function Landing() {
       </section>
 
       {/* ── Comment ça fonctionne ──────────────────────────────────── */}
-      <section className="py-20 px-4">
+      <section className="py-14 px-4">
         <div className="max-w-5xl mx-auto">
-          <Reveal className="text-center mb-16">
+          <Reveal className="text-center mb-10">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">Processus</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3 text-slate-100">
               {t.howTitle}{' '}<span className="gradient-text">{t.howAccent}</span> ?
             </h2>
-            <p className="text-slate-500 text-base max-w-md mx-auto">{t.howSub}</p>
+            <p className="text-slate-500 text-sm max-w-md mx-auto">{t.howSub}</p>
           </Reveal>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {t.steps.map((step, i) => {
               const StepIcon = STEP_ICONS[i]
               return (
                 <Reveal key={i} delay={i * 80}>
-                  <div className="card p-7 relative group hover:border-white/[0.12] hover:shadow-[0_0_30px_rgba(109,40,217,0.07)] transition-all duration-300 h-full">
-                    <div className="absolute top-5 right-5 text-5xl font-black text-dark-700 select-none group-hover:text-dark-600 transition-colors tabular-nums">{i + 1}</div>
-                    <div className="w-10 h-10 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-5 flex-shrink-0 group-hover:border-violet-500/35 transition-colors duration-300">
-                      <StepIcon size={20} strokeWidth={1.5} className="text-violet-300" />
+                  <div className="card p-5 relative group hover:border-white/[0.12] hover:shadow-[0_0_30px_rgba(109,40,217,0.07)] transition-all duration-300 h-full">
+                    <div className="absolute top-4 right-4 text-4xl font-black text-dark-700 select-none group-hover:text-dark-600 transition-colors tabular-nums">{i + 1}</div>
+                    <div className="w-9 h-9 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-3 flex-shrink-0 group-hover:border-violet-500/35 transition-colors duration-300">
+                      <StepIcon size={18} strokeWidth={1.5} className="text-violet-300" />
                     </div>
-                    <h3 className="text-base font-semibold mb-2.5 text-slate-100">{step.title}</h3>
-                    <p className="text-slate-500 text-sm leading-relaxed">{step.desc}</p>
+                    <h3 className="text-sm font-semibold mb-1.5 text-slate-100">{step.title}</h3>
+                    <p className="text-slate-500 text-xs leading-relaxed">{step.desc}</p>
                   </div>
                 </Reveal>
               )
