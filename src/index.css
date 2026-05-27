@@ -24,14 +24,17 @@
            bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm
            transition-all duration-200
            shadow-[0_0_0_1px_rgba(124,58,237,0.3),0_4px_24px_rgba(109,40,217,0.22)]
-           hover:shadow-[0_0_0_1px_rgba(124,58,237,0.45),0_4px_32px_rgba(109,40,217,0.35)]
-           active:scale-[0.97] cursor-pointer;
+           hover:shadow-[0_0_0_1px_rgba(124,58,237,0.50),0_8px_36px_rgba(109,40,217,0.38)]
+           hover:-translate-y-[2px]
+           active:scale-[0.97] active:translate-y-0 cursor-pointer;
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl
            border border-white/[0.10] bg-white/[0.04] hover:bg-white/[0.07] text-slate-200
-           font-semibold text-sm transition-all duration-200 active:scale-[0.97] cursor-pointer;
+           font-semibold text-sm transition-all duration-200
+           hover:-translate-y-[1px] hover:border-white/[0.16]
+           active:scale-[0.97] active:translate-y-0 cursor-pointer;
   }
 
   /* ── Cartes ──────────────────────────────────────────────────── */

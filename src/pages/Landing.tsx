@@ -12,6 +12,7 @@ import LanguageToggle from '../components/LanguageToggle'
 import AnimatedLifePathsBackground from '../components/AnimatedLifePathsBackground'
 import OtherMeStoryShowcase from '../components/OtherMeStoryShowcase'
 import OtherMeFeatureTabs from '../components/OtherMeFeatureTabs'
+import Reveal from '../components/Reveal'
 import { hasStartedTest, clearProgress } from '../lib/onboardingStorage'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTr } from '../lib/i18n/translations'
@@ -540,25 +541,27 @@ export default function Landing() {
       {/* ── Comment ça fonctionne ──────────────────────────────────── */}
       <section className="py-28 px-4">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+          <Reveal className="text-center mb-16">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">Processus</p>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
               {t.howTitle}{' '}<span className="gradient-text">{t.howAccent}</span> ?
             </h2>
             <p className="text-slate-500 text-base max-w-md mx-auto">{t.howSub}</p>
-          </div>
+          </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {t.steps.map((step, i) => {
               const StepIcon = STEP_ICONS[i]
               return (
-                <div key={i} className="card p-7 relative group hover:border-white/[0.12] transition-colors duration-300">
-                  <div className="absolute top-5 right-5 text-5xl font-black text-dark-700 select-none group-hover:text-dark-600 transition-colors tabular-nums">{i + 1}</div>
-                  <div className="w-10 h-10 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-5 flex-shrink-0">
-                    <StepIcon size={20} strokeWidth={1.5} className="text-violet-300" />
+                <Reveal key={i} delay={i * 80}>
+                  <div className="card p-7 relative group hover:border-white/[0.12] hover:shadow-[0_0_30px_rgba(109,40,217,0.07)] transition-all duration-300 h-full">
+                    <div className="absolute top-5 right-5 text-5xl font-black text-dark-700 select-none group-hover:text-dark-600 transition-colors tabular-nums">{i + 1}</div>
+                    <div className="w-10 h-10 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-5 flex-shrink-0 group-hover:border-violet-500/35 transition-colors duration-300">
+                      <StepIcon size={20} strokeWidth={1.5} className="text-violet-300" />
+                    </div>
+                    <h3 className="text-base font-semibold mb-2.5 text-slate-100">{step.title}</h3>
+                    <p className="text-slate-500 text-sm leading-relaxed">{step.desc}</p>
                   </div>
-                  <h3 className="text-base font-semibold mb-2.5 text-slate-100">{step.title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">{step.desc}</p>
-                </div>
+                </Reveal>
               )
             })}
           </div>
@@ -568,14 +571,14 @@ export default function Landing() {
       {/* ── Ce que tu découvres ───────────────────────────────────── */}
       <section className="py-24 px-4 bg-dark-900/60">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
+          <Reveal className="text-center mb-14">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
               {lang === 'fr' ? 'Les 3 trajectoires' : 'The 3 paths'}
             </p>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
               {t.pathTypesTitle}{' '}<span className="gradient-text">{t.pathTypesAccent}</span>
             </h2>
-          </div>
+          </Reveal>
           <div className="grid md:grid-cols-3 gap-6">
             {t.pathTypes.map((pt, i) => {
               const colorMap: Record<string, { bg: string; border: string; badge: string; dot: string; glow: string; num: string }> = {
@@ -606,17 +609,19 @@ export default function Landing() {
               }
               const c = colorMap[pt.color] ?? colorMap.violet
               return (
-                <div key={i} className={`relative rounded-2xl border p-7 transition-all duration-300 overflow-hidden ${c.border} ${c.bg} ${c.glow}`}>
-                  {/* Background number */}
-                  <div className={`absolute top-4 right-5 text-6xl font-black select-none ${c.num}`}>{String(i + 1).padStart(2, '0')}</div>
-                  {/* Badge */}
-                  <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold mb-5 ${c.badge}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`} />
-                    {pt.label}
+                <Reveal key={i} delay={i * 90}>
+                  <div className={`relative rounded-2xl border p-7 transition-all duration-300 overflow-hidden h-full ${c.border} ${c.bg} ${c.glow}`}>
+                    {/* Background number */}
+                    <div className={`absolute top-4 right-5 text-6xl font-black select-none ${c.num}`}>{String(i + 1).padStart(2, '0')}</div>
+                    {/* Badge */}
+                    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold mb-5 ${c.badge}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`} />
+                      {pt.label}
+                    </div>
+                    <h3 className="text-slate-100 font-bold text-lg mb-3 leading-snug">{pt.title}</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">{pt.desc}</p>
                   </div>
-                  <h3 className="text-slate-100 font-bold text-lg mb-3 leading-snug">{pt.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">{pt.desc}</p>
-                </div>
+                </Reveal>
               )
             })}
           </div>
@@ -669,7 +674,7 @@ export default function Landing() {
       {/* ── Ce que vous recevez ───────────────────────────────────── */}
       <section className="py-24 px-4 bg-dark-900/60">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+          <Reveal className="text-center mb-16">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
               {lang === 'fr' ? 'Contenu du rapport' : 'Report content'}
             </p>
@@ -681,7 +686,7 @@ export default function Landing() {
                 ? 'Un rapport structuré, concret et actionnable — pas un test générique.'
                 : 'A structured, concrete and actionable report — not a generic test.'}
             </p>
-          </div>
+          </Reveal>
           <div className="grid sm:grid-cols-3 gap-4">
             {DELIVERABLES.map((d) => (
               <div key={d.fr.title} className="card p-5 flex flex-col gap-3 hover:border-white/[0.12] transition-colors duration-300">
@@ -1545,7 +1550,7 @@ export default function Landing() {
       {/* ── Pourquoi pas un simple test ───────────────────────────── */}
       <section className="py-24 px-4">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+          <Reveal className="text-center mb-16">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
               {lang === 'fr' ? 'Différence' : 'What sets it apart'}
             </p>
@@ -1559,7 +1564,7 @@ export default function Landing() {
                 ? 'Les tests classiques te disent ce que tu pourrais être. OtherMe te montre comment y arriver.'
                 : 'Classic tests tell you what you could be. OtherMe shows you how to get there.'}
             </p>
-          </div>
+          </Reveal>
           <div className="grid sm:grid-cols-2 gap-5">
             {WHY_DIFFERENT.map((d) => (
               <div key={d.fr.title} className="card p-6 flex items-start gap-4 hover:border-white/[0.12] transition-colors duration-300">
@@ -1593,7 +1598,7 @@ export default function Landing() {
       {/* ── Pour qui ──────────────────────────────────────────────── */}
       <section className="py-24 px-4 bg-dark-900/60">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+          <Reveal className="text-center mb-16">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
               {lang === 'fr' ? 'Audience' : 'Who it\'s for'}
             </p>
@@ -1607,7 +1612,7 @@ export default function Landing() {
                 ? 'Pour celles et ceux qui veulent changer de direction professionnelle, mais ne savent pas encore quelle voie est réaliste.'
                 : 'For those who want to change career direction, but don\'t yet know which path is realistic.'}
             </p>
-          </div>
+          </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {FOR_WHO.map((p) => (
               <div key={p.fr.title} className={`card p-5 flex items-start gap-4 hover:border-white/[0.12] transition-colors duration-300 ${p.featured ? 'border-brand-600/25 bg-brand-600/[0.04]' : ''}`}>
@@ -1658,14 +1663,14 @@ export default function Landing() {
       {/* ── Exemples de transitions ───────────────────────────────── */}
       <section className="py-24 px-4 bg-dark-900/60">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+          <Reveal className="text-center mb-16">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
               {lang === 'fr' ? 'Trajectoires' : 'Paths'}
             </p>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
               {t.testiTitle}{' '}<span className="gradient-text">{t.testiAccent}</span>{t.testiTitle2 ? <>{' '}{t.testiTitle2}</> : null}
             </h2>
-          </div>
+          </Reveal>
           <div className="grid md:grid-cols-3 gap-5">
             {t.testimonials.map((ex, i) => (
               <div key={i} className="bg-dark-800 border border-white/[0.07] rounded-2xl p-6 flex flex-col hover:border-white/[0.14] hover:shadow-[0_0_30px_rgba(124,58,237,0.06)] transition-all duration-300">
@@ -1715,15 +1720,33 @@ export default function Landing() {
       </section>
 
       {/* ── CTA final ─────────────────────────────────────────────── */}
-      <section className="py-24 px-4">
-        <div className="max-w-2xl mx-auto text-center">
+      <section className="relative py-36 px-4 overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0 pointer-events-none">
+          <img
+            src="/cta-otherme.png"
+            alt=""
+            aria-hidden
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ filter: 'brightness(0.38) saturate(0.70)' }}
+          />
+          {/* Global dark overlay */}
+          <div className="absolute inset-0" style={{ background: 'rgba(5,5,9,0.62)' }} />
+          {/* Violet radial accent */}
+          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 60%, rgba(109,40,217,0.18) 0%, transparent 70%)' }} />
+          {/* Top + bottom fades */}
+          <div className="absolute inset-x-0 top-0 h-32" style={{ background: 'linear-gradient(to bottom, #050509 0%, transparent 100%)' }} />
+          <div className="absolute inset-x-0 bottom-0 h-32" style={{ background: 'linear-gradient(to top, #050509 0%, transparent 100%)' }} />
+        </div>
+
+        <Reveal className="relative z-10 max-w-2xl mx-auto text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-4">
             {lang === 'fr' ? 'Prochaine étape' : 'Next step'}
           </p>
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
             {t.ctaTitle}{' '}<span className="gradient-text">{t.ctaAccent}</span>{t.ctaTitle2}
           </h2>
-          <p className="text-slate-500 mb-10 text-base leading-relaxed">{t.ctaSub}</p>
+          <p className="text-slate-400 mb-10 text-base leading-relaxed">{t.ctaSub}</p>
           {started ? (
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <button onClick={handleResume} className="btn-primary text-base py-3.5 px-10">{t.ctaResume}</button>
@@ -1733,7 +1756,7 @@ export default function Landing() {
             <button onClick={handleStart} className="btn-primary text-base py-3.5 px-10">{t.ctaStart}</button>
           )}
           <p className="text-xs text-dark-500 mt-5">{t.ctaNote}</p>
-        </div>
+        </Reveal>
       </section>
 
       {/* ── FAQ ───────────────────────────────────────────────────── */}

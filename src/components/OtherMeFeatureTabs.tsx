@@ -83,8 +83,8 @@ const COLOR = {
 
 const SIGNAL_COLORS = {
   violet: {
-    bg:          'rgba(109,40,217,0.09)',
-    bgHover:     'rgba(109,40,217,0.15)',
+    bg:          'rgba(10,5,25,0.72)',
+    bgHover:     'rgba(10,5,25,0.82)',
     border:      'rgba(139,92,246,0.20)',
     borderHover: 'rgba(139,92,246,0.52)',
     glow:        'rgba(139,92,246,0.22)',
@@ -98,8 +98,8 @@ const SIGNAL_COLORS = {
     iconClass:   'text-violet-400',
   },
   emerald: {
-    bg:          'rgba(5,150,105,0.07)',
-    bgHover:     'rgba(5,150,105,0.12)',
+    bg:          'rgba(5,15,12,0.70)',
+    bgHover:     'rgba(5,15,12,0.80)',
     border:      'rgba(52,211,153,0.17)',
     borderHover: 'rgba(52,211,153,0.44)',
     glow:        'rgba(52,211,153,0.18)',
@@ -113,8 +113,8 @@ const SIGNAL_COLORS = {
     iconClass:   'text-emerald-400',
   },
   blue: {
-    bg:          'rgba(37,99,235,0.07)',
-    bgHover:     'rgba(37,99,235,0.12)',
+    bg:          'rgba(5,10,25,0.70)',
+    bgHover:     'rgba(5,10,25,0.80)',
     border:      'rgba(96,165,250,0.17)',
     borderHover: 'rgba(96,165,250,0.44)',
     glow:        'rgba(96,165,250,0.18)',
@@ -128,8 +128,8 @@ const SIGNAL_COLORS = {
     iconClass:   'text-blue-400',
   },
   amber: {
-    bg:          'rgba(146,64,14,0.07)',
-    bgHover:     'rgba(146,64,14,0.12)',
+    bg:          'rgba(20,12,5,0.70)',
+    bgHover:     'rgba(20,12,5,0.80)',
     border:      'rgba(251,191,36,0.15)',
     borderHover: 'rgba(251,191,36,0.40)',
     glow:        'rgba(251,191,36,0.16)',
@@ -295,26 +295,57 @@ function AnalyseVisual() {
 }
 
 function ReveleVisual() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+  const prefersReduced = useRef(
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ).current
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    if (prefersReduced) { setVisible(true); return }
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { threshold: 0.10 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [prefersReduced])
+
   const paths = [
-    { color: 'emerald', label: 'Chargé de projet digital', score: 87, tag: 'Accessible' },
-    { color: 'violet',  label: 'Consultant indépendant',   score: 74, tag: 'Alignée'    },
-    { color: 'amber',   label: 'Product Manager',          score: 68, tag: 'Ambitieuse' },
+    { color: 'emerald', label: 'Chargé de projet digital', score: 87, tag: 'Accessible',  delay: 0   },
+    { color: 'violet',  label: 'Consultant indépendant',   score: 74, tag: 'Alignée',     delay: 110 },
+    { color: 'amber',   label: 'Product Manager',          score: 68, tag: 'Ambitieuse',  delay: 220 },
   ]
+
   return (
-    <div className="flex flex-col gap-3">
+    <div ref={containerRef} className="flex flex-col gap-3">
       {paths.map((p, i) => {
         const c = COLOR[p.color as keyof typeof COLOR]
         return (
-          <div key={i}
-            className={`float-card border rounded-xl p-4 backdrop-blur-sm ${c.card}`}
-            style={{ animationDelay: `${i * 0.6}s`, animationDuration: `${3.8 + i * 0.4}s` }}>
+          <div
+            key={i}
+            className={`relative overflow-hidden border rounded-xl p-4 backdrop-blur-sm ${c.card}`}
+            style={{
+              opacity:    visible ? 1 : 0,
+              transform:  visible ? 'translateY(0px)' : 'translateY(20px)',
+              transition: prefersReduced ? 'none' : `opacity 0.55s ease ${p.delay}ms, transform 0.55s ease ${p.delay}ms`,
+            }}
+          >
             <div className="flex items-center justify-between mb-2">
               <span className={`text-xs font-bold ${c.badge}`}>{p.tag}</span>
               <span className="text-slate-400 text-xs">{p.score}% faisabilité</span>
             </div>
-            <p className="text-slate-200 text-sm font-semibold mb-2">{p.label}</p>
-            <div className="h-1 bg-dark-700 rounded-full overflow-hidden">
-              <div className={`h-full ${c.bar} rounded-full`} style={{ width: `${p.score}%`, transition: 'width 1s ease' }} />
+            <p className="text-slate-100 text-sm font-semibold mb-3">{p.label}</p>
+            <div className="h-1.5 bg-black/40 rounded-full overflow-hidden">
+              <div
+                className={`h-full ${c.bar} rounded-full`}
+                style={{
+                  width:      visible ? `${p.score}%` : '0%',
+                  transition: prefersReduced ? 'none' : `width 1.2s ease ${p.delay + 350}ms`,
+                }}
+              />
             </div>
           </div>
         )
@@ -324,6 +355,24 @@ function ReveleVisual() {
 }
 
 function CompareVisual() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+  const prefersReduced = useRef(
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ).current
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    if (prefersReduced) { setVisible(true); return }
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { threshold: 0.10 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [prefersReduced])
+
   const dims = [
     { label: 'Faisabilité', a: 87, b: 74, c: 68 },
     { label: 'Revenu',      a: 65, b: 72, c: 88 },
@@ -332,7 +381,7 @@ function CompareVisual() {
   ]
   const cols = ['Proche', 'Passion', 'Ambitieuse']
   return (
-    <div className="bg-dark-800/70 border border-white/[0.08] rounded-xl overflow-hidden backdrop-blur-sm">
+    <div ref={containerRef} className="bg-dark-800/70 border border-white/[0.08] rounded-xl overflow-hidden backdrop-blur-sm">
       <div className="grid grid-cols-4 text-[10px] font-semibold uppercase tracking-wider border-b border-white/[0.06] bg-dark-800/60">
         <div className="p-3 text-slate-600" />
         {cols.map(c => <div key={c} className="p-3 text-slate-500 border-l border-white/[0.05]">{c}</div>)}
@@ -345,7 +394,10 @@ function CompareVisual() {
               <div className="h-1.5 bg-dark-700 rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full ${j === 0 ? 'bg-emerald-500' : j === 1 ? 'bg-violet-500' : 'bg-amber-500'}`}
-                  style={{ width: `${val}%` }}
+                  style={{
+                    width:      visible ? `${val}%` : '0%',
+                    transition: prefersReduced ? 'none' : `width 1.0s ease ${i * 100 + j * 50 + 100}ms`,
+                  }}
                 />
               </div>
               <span className="text-slate-600 text-[10px]">{val}%</span>
@@ -358,6 +410,24 @@ function CompareVisual() {
 }
 
 function PlanifierVisual() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+  const prefersReduced = useRef(
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ).current
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    if (prefersReduced) { setVisible(true); return }
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { threshold: 0.10 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [prefersReduced])
+
   const weeks = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4']
   const actions = [
     'Analyser 15 offres PM sur LinkedIn',
@@ -365,25 +435,45 @@ function PlanifierVisual() {
     'Lire 5 fiches métier Product School',
   ]
   return (
-    <div className="flex flex-col gap-3">
-      {/* Mini timeline */}
-      <div className="bg-dark-800/70 border border-white/[0.08] rounded-xl p-4 backdrop-blur-sm">
-        <p className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-3">Plan 30 jours</p>
+    <div ref={containerRef} className="flex flex-col gap-3">
+      <div
+        className="bg-dark-800/70 border border-white/[0.09] rounded-xl p-4 backdrop-blur-sm"
+        style={{
+          opacity:    visible ? 1 : 0,
+          transform:  visible ? 'translateY(0px)' : 'translateY(18px)',
+          transition: prefersReduced ? 'none' : 'opacity 0.55s ease, transform 0.55s ease',
+        }}
+      >
+        <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-3">Plan 30 jours</p>
         <div className="flex items-center gap-1">
           {weeks.map((w, i) => (
             <div key={w} className="flex-1 flex flex-col items-center gap-1">
-              <div className={`w-full h-1 rounded-full ${i < 2 ? 'bg-violet-500' : 'bg-dark-600'}`} />
+              <div className="w-full h-1 rounded-full bg-dark-600 overflow-hidden">
+                <div
+                  className={`h-full rounded-full origin-left ${i < 2 ? 'bg-violet-500' : 'bg-dark-500'}`}
+                  style={{
+                    transform:  visible ? 'scaleX(1)' : 'scaleX(0)',
+                    transformOrigin: 'left center',
+                    transition: prefersReduced ? 'none' : `transform 0.55s ease ${i * 130}ms`,
+                  }}
+                />
+              </div>
               <span className="text-[10px] text-slate-600">{w}</span>
             </div>
           ))}
         </div>
       </div>
-      {/* Actions */}
       <div className="flex flex-col gap-2">
         {actions.map((a, i) => (
-          <div key={i}
-            className="float-card flex items-center gap-3 bg-dark-800/60 border border-white/[0.07] rounded-lg px-3 py-2.5 backdrop-blur-sm"
-            style={{ animationDelay: `${i * 0.5}s`, animationDuration: `${3.5 + i * 0.4}s` }}>
+          <div
+            key={i}
+            className="flex items-center gap-3 bg-dark-800/60 border border-white/[0.07] rounded-lg px-3 py-2.5 backdrop-blur-sm"
+            style={{
+              opacity:    visible ? 1 : 0,
+              transform:  visible ? 'translateX(0px)' : 'translateX(-14px)',
+              transition: prefersReduced ? 'none' : `opacity 0.40s ease ${i * 110 + 280}ms, transform 0.40s ease ${i * 110 + 280}ms`,
+            }}
+          >
             <span className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 text-[9px] font-bold ${i < 2 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-dark-700 text-slate-600'}`}>
               {i < 2 ? '✓' : '→'}
             </span>
@@ -396,6 +486,24 @@ function PlanifierVisual() {
 }
 
 function AgirVisual() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+  const prefersReduced = useRef(
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ).current
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    if (prefersReduced) { setVisible(true); return }
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { threshold: 0.10 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [prefersReduced])
+
   const steps = [
     { done: true,  label: 'Explorer 15 offres PM ciblées' },
     { done: true,  label: 'Contacter 1 PM en reconversion' },
@@ -404,15 +512,30 @@ function AgirVisual() {
     { done: false, label: 'Postuler à 3 offres Associate PM' },
   ]
   return (
-    <div className="bg-dark-800/70 border border-white/[0.08] rounded-xl p-5 backdrop-blur-sm float-card"
-      style={{ animationDuration: '4s' }}>
+    <div
+      ref={containerRef}
+      className="bg-dark-800/70 border border-white/[0.10] rounded-2xl p-5 backdrop-blur-sm"
+      style={{
+        opacity:    visible ? 1 : 0,
+        transform:  visible ? 'translateY(0px)' : 'translateY(20px)',
+        transition: prefersReduced ? 'none' : 'opacity 0.60s ease, transform 0.60s ease',
+      }}
+    >
       <div className="flex items-center justify-between mb-4">
-        <p className="text-slate-200 text-sm font-semibold">Mes premiers pas</p>
+        <p className="text-slate-100 text-sm font-semibold">Mes premiers pas</p>
         <span className="text-[10px] text-emerald-400 font-semibold">2 / 5 faits</span>
       </div>
       <div className="flex flex-col gap-2.5">
         {steps.map((s, i) => (
-          <div key={i} className="flex items-center gap-3">
+          <div
+            key={i}
+            className="flex items-center gap-3"
+            style={{
+              opacity:    visible ? 1 : 0,
+              transform:  visible ? 'translateX(0px)' : 'translateX(-12px)',
+              transition: prefersReduced ? 'none' : `opacity 0.40s ease ${i * 90 + 200}ms, transform 0.40s ease ${i * 90 + 200}ms`,
+            }}
+          >
             <span className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 text-[9px] font-bold border ${
               s.done
                 ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
@@ -423,26 +546,14 @@ function AgirVisual() {
         ))}
       </div>
       <div className="mt-4 h-1.5 bg-dark-700 rounded-full overflow-hidden">
-        <div className="h-full bg-emerald-500 rounded-full" style={{ width: '40%' }} />
+        <div
+          className="h-full bg-emerald-500 rounded-full"
+          style={{
+            width:      visible ? '40%' : '0%',
+            transition: prefersReduced ? 'none' : 'width 1.2s ease 700ms',
+          }}
+        />
       </div>
-    </div>
-  )
-}
-
-function AnalyseImageCard() {
-  return (
-    <div
-      className="relative rounded-2xl border border-violet-500/25 shadow-[0_0_40px_rgba(139,92,246,0.12)] overflow-hidden
-        transition-all duration-300
-        hover:scale-[1.015] hover:border-violet-400/45 hover:shadow-[0_0_50px_rgba(139,92,246,0.20)]
-        motion-reduce:transition-none motion-reduce:hover:scale-100"
-    >
-      <div className="absolute inset-0 bg-black/15 pointer-events-none z-10" />
-      <img
-        src="/analyser-otherme.png"
-        alt="Personne analysant son parcours professionnel avec CV, compétences, expériences, envies et contraintes."
-        className="w-full h-auto block"
-      />
     </div>
   )
 }
@@ -466,13 +577,44 @@ export default function OtherMeFeatureTabs({ lang }: Props) {
   const Visual = VISUALS[tab.id]
 
   return (
-    <section className="relative py-20 md:py-28 px-4 overflow-hidden bg-dark-900/50">
-      {/* Ambient glows */}
+    <section className="relative py-20 md:py-28 px-4 overflow-hidden bg-dark-950">
+      {/* Per-tab background images — opacity-controlled fade between tabs */}
+      {([
+        { id: 'analyse',  src: '/analyser-otherme.png'  },
+        { id: 'revele',   src: '/reveler-otherme.png'   },
+        { id: 'planifie', src: '/planifier-otherme.png' },
+        { id: 'agir',     src: '/agir-otherme.png'      },
+      ] as const).map(item => (
+        <div
+          key={item.id}
+          className="absolute inset-0 pointer-events-none"
+          style={{ opacity: tab.id === item.id ? 1 : 0, transition: 'opacity 0.85s ease' }}
+        >
+          <img
+            src={item.src}
+            className="absolute inset-0 w-full h-full object-cover"
+            alt=""
+            aria-hidden
+            style={{ filter: 'brightness(0.40) saturate(0.75)' }}
+          />
+        </div>
+      ))}
+
+      {/* Global overlay */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'rgba(5,5,9,0.58)' }} />
+      {/* Top fade */}
+      <div className="absolute inset-x-0 top-0 h-48 pointer-events-none"
+        style={{ background: 'linear-gradient(to bottom, #050509 0%, rgba(5,5,9,0.55) 55%, transparent 100%)' }} />
+      {/* Bottom fade */}
+      <div className="absolute inset-x-0 bottom-0 h-48 pointer-events-none"
+        style={{ background: 'linear-gradient(to top, rgba(5,5,9,0.98) 0%, rgba(5,5,9,0.60) 55%, transparent 100%)' }} />
+
+      {/* Ambient violet glow (always present) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[600px] rounded-full blur-[140px]"
-          style={{ background: 'radial-gradient(ellipse, rgba(109,40,217,0.09) 0%, rgba(109,40,217,0.03) 60%, transparent 80%)' }} />
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] rounded-full blur-[100px]"
-          style={{ background: 'rgba(109,40,217,0.04)' }} />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[600px] rounded-full blur-[140px]"
+          style={{ background: 'radial-gradient(ellipse, rgba(109,40,217,0.09) 0%, rgba(109,40,217,0.03) 60%, transparent 80%)' }}
+        />
       </div>
 
       <div className="relative max-w-6xl mx-auto">
@@ -530,35 +672,20 @@ export default function OtherMeFeatureTabs({ lang }: Props) {
 
           {/* Content panel */}
           <div key={active} className="animate-fade-in">
-            <div className={tab.id === 'analyse' ? 'flex items-start gap-10' : undefined}>
-
-              {/* Main content */}
-              <div className={tab.id === 'analyse' ? 'flex-1 min-w-0' : undefined}>
-                <div className="flex items-center gap-3 mb-5">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${c.card}`}>
-                    <tab.Icon size={18} strokeWidth={1.5} className={c.badge} />
-                  </div>
-                  <span className={`text-[11px] font-bold uppercase tracking-[0.18em] ${c.num}`}>{tab.num}</span>
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-slate-100 mb-4 leading-snug">
-                  {lang === 'fr' ? tab.titleFr : tab.titleEn}
-                </h3>
-                <p className="text-slate-400 text-base leading-relaxed mb-10">
-                  {lang === 'fr' ? tab.descFr : tab.descEn}
-                </p>
-
-                {/* Animated visual mockup */}
-                <div className="max-w-lg">
-                  <Visual />
-                </div>
+            <div className="flex items-center gap-3 mb-5">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${c.card}`}>
+                <tab.Icon size={18} strokeWidth={1.5} className={c.badge} />
               </div>
-
-              {/* Analyser image — right column on desktop */}
-              {tab.id === 'analyse' && (
-                <Reveal className="w-[260px] xl:w-[300px] flex-shrink-0 pt-1" delay={150}>
-                  <AnalyseImageCard />
-                </Reveal>
-              )}
+              <span className={`text-[11px] font-bold uppercase tracking-[0.18em] ${c.num}`}>{tab.num}</span>
+            </div>
+            <h3 className="text-2xl md:text-3xl font-bold text-slate-100 mb-4 leading-snug">
+              {lang === 'fr' ? tab.titleFr : tab.titleEn}
+            </h3>
+            <p className="text-slate-400 text-base leading-relaxed mb-10">
+              {lang === 'fr' ? tab.descFr : tab.descEn}
+            </p>
+            <div className="max-w-lg">
+              <Visual />
             </div>
           </div>
         </div>
@@ -596,12 +723,6 @@ export default function OtherMeFeatureTabs({ lang }: Props) {
               {lang === 'fr' ? tab.descFr : tab.descEn}
             </p>
             <Visual />
-            {/* Analyser image — below cards on mobile */}
-            {tab.id === 'analyse' && (
-              <Reveal className="mt-6" delay={100}>
-                <AnalyseImageCard />
-              </Reveal>
-            )}
           </div>
         </div>
       </div>
