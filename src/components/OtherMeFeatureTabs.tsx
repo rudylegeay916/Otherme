@@ -578,9 +578,9 @@ export default function OtherMeFeatureTabs({ lang }: Props) {
 
   return (
     <section className="relative py-20 md:py-28 px-4 overflow-hidden bg-dark-950">
-      {/* Per-tab background images — opacity-controlled fade between tabs */}
+      {/* Per-tab background images — Révéler / Planifier / Agir only
+          Analyser uses its own immersive content panel (see below) */}
       {([
-        { id: 'analyse',  src: '/analyser-otherme.png'  },
         { id: 'revele',   src: '/reveler-otherme.png'   },
         { id: 'planifie', src: '/planifier-otherme.png' },
         { id: 'agir',     src: '/agir-otherme.png'      },
@@ -672,21 +672,72 @@ export default function OtherMeFeatureTabs({ lang }: Props) {
 
           {/* Content panel */}
           <div key={active} className="animate-fade-in">
-            <div className="flex items-center gap-3 mb-5">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${c.card}`}>
-                <tab.Icon size={18} strokeWidth={1.5} className={c.badge} />
+            {tab.id === 'analyse' ? (
+
+              /* ── Analyser: panneau immersif avec image en fond ── */
+              <div className="relative overflow-hidden rounded-2xl" style={{ minHeight: '560px' }}>
+
+                {/* Image de fond — visible, lumineuse, centrée */}
+                <img
+                  src="/analyser-otherme.png"
+                  className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none"
+                  alt=""
+                  aria-hidden
+                  style={{ filter: 'brightness(0.82) contrast(1.06) saturate(1.08)' }}
+                />
+
+                {/* Overlay global léger — laisse l'image respirer */}
+                <div className="absolute inset-0 pointer-events-none" style={{ background: 'rgba(5,5,9,0.28)' }} />
+
+                {/* Gradient bas — lisibilité des cartes */}
+                <div className="absolute inset-x-0 bottom-0 h-3/4 pointer-events-none"
+                  style={{ background: 'linear-gradient(to top, rgba(5,5,9,0.88) 0%, rgba(5,5,9,0.55) 40%, transparent 100%)' }} />
+
+                {/* Gradient haut — lisibilité du titre */}
+                <div className="absolute inset-x-0 top-0 h-44 pointer-events-none"
+                  style={{ background: 'linear-gradient(to bottom, rgba(5,5,9,0.75) 0%, rgba(5,5,9,0.20) 60%, transparent 100%)' }} />
+
+                {/* Contenu posé par-dessus */}
+                <div className="relative z-10 p-8 flex flex-col" style={{ minHeight: '560px' }}>
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${c.card}`}>
+                      <tab.Icon size={18} strokeWidth={1.5} className={c.badge} />
+                    </div>
+                    <span className={`text-[11px] font-bold uppercase tracking-[0.18em] ${c.num}`}>{tab.num}</span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 leading-snug">
+                    {lang === 'fr' ? tab.titleFr : tab.titleEn}
+                  </h3>
+                  <p className="text-slate-300/80 text-base leading-relaxed mb-10 max-w-lg">
+                    {lang === 'fr' ? tab.descFr : tab.descEn}
+                  </p>
+                  <div className="max-w-lg">
+                    <Visual />
+                  </div>
+                </div>
               </div>
-              <span className={`text-[11px] font-bold uppercase tracking-[0.18em] ${c.num}`}>{tab.num}</span>
-            </div>
-            <h3 className="text-2xl md:text-3xl font-bold text-slate-100 mb-4 leading-snug">
-              {lang === 'fr' ? tab.titleFr : tab.titleEn}
-            </h3>
-            <p className="text-slate-400 text-base leading-relaxed mb-10">
-              {lang === 'fr' ? tab.descFr : tab.descEn}
-            </p>
-            <div className="max-w-lg">
-              <Visual />
-            </div>
+
+            ) : (
+
+              /* ── Autres onglets: layout standard ── */
+              <>
+                <div className="flex items-center gap-3 mb-5">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${c.card}`}>
+                    <tab.Icon size={18} strokeWidth={1.5} className={c.badge} />
+                  </div>
+                  <span className={`text-[11px] font-bold uppercase tracking-[0.18em] ${c.num}`}>{tab.num}</span>
+                </div>
+                <h3 className="text-2xl md:text-3xl font-bold text-slate-100 mb-4 leading-snug">
+                  {lang === 'fr' ? tab.titleFr : tab.titleEn}
+                </h3>
+                <p className="text-slate-400 text-base leading-relaxed mb-10">
+                  {lang === 'fr' ? tab.descFr : tab.descEn}
+                </p>
+                <div className="max-w-lg">
+                  <Visual />
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -716,13 +767,46 @@ export default function OtherMeFeatureTabs({ lang }: Props) {
 
           {/* Mobile content */}
           <div key={`m-${active}`} className="animate-fade-in">
-            <h3 className="text-xl font-bold text-slate-100 mb-3 leading-snug">
-              {lang === 'fr' ? tab.titleFr : tab.titleEn}
-            </h3>
-            <p className="text-slate-400 text-sm leading-relaxed mb-8">
-              {lang === 'fr' ? tab.descFr : tab.descEn}
-            </p>
-            <Visual />
+            {tab.id === 'analyse' ? (
+
+              /* ── Analyser mobile: panneau immersif ── */
+              <div className="relative overflow-hidden rounded-2xl" style={{ minHeight: '480px' }}>
+                <img
+                  src="/analyser-otherme.png"
+                  className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none"
+                  alt=""
+                  aria-hidden
+                  style={{ filter: 'brightness(0.80) contrast(1.06) saturate(1.08)' }}
+                />
+                <div className="absolute inset-0 pointer-events-none" style={{ background: 'rgba(5,5,9,0.30)' }} />
+                <div className="absolute inset-x-0 bottom-0 h-3/4 pointer-events-none"
+                  style={{ background: 'linear-gradient(to top, rgba(5,5,9,0.90) 0%, rgba(5,5,9,0.55) 45%, transparent 100%)' }} />
+                <div className="absolute inset-x-0 top-0 h-32 pointer-events-none"
+                  style={{ background: 'linear-gradient(to bottom, rgba(5,5,9,0.72) 0%, transparent 100%)' }} />
+                <div className="relative z-10 p-6 flex flex-col" style={{ minHeight: '480px' }}>
+                  <h3 className="text-xl font-bold text-white mb-3 leading-snug">
+                    {lang === 'fr' ? tab.titleFr : tab.titleEn}
+                  </h3>
+                  <p className="text-slate-300/80 text-sm leading-relaxed mb-8">
+                    {lang === 'fr' ? tab.descFr : tab.descEn}
+                  </p>
+                  <Visual />
+                </div>
+              </div>
+
+            ) : (
+
+              /* ── Autres onglets mobile: layout standard ── */
+              <>
+                <h3 className="text-xl font-bold text-slate-100 mb-3 leading-snug">
+                  {lang === 'fr' ? tab.titleFr : tab.titleEn}
+                </h3>
+                <p className="text-slate-400 text-sm leading-relaxed mb-8">
+                  {lang === 'fr' ? tab.descFr : tab.descEn}
+                </p>
+                <Visual />
+              </>
+            )}
           </div>
         </div>
       </div>
