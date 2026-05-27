@@ -768,7 +768,14 @@ export default function Landing() {
 
             {/* OtherMe Reality Score */}
             <div className="px-6 md:px-8 pt-4">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-brand-400 mb-2">OtherMe Reality Score</p>
+              <div className="flex items-baseline justify-between mb-2">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-brand-400">OtherMe Reality Score</p>
+                <p className="text-[10px] text-slate-500">
+                  {lang === 'fr'
+                    ? 'Faisabilité, alignement, marché et effort — pour chaque trajectoire.'
+                    : 'Feasibility, alignment, market and effort — for every path.'}
+                </p>
+              </div>
               <div className="grid grid-cols-2 gap-x-6 gap-y-3 p-4 bg-dark-800/50 rounded-xl border border-dark-700 mb-4">
                 {([
                   { label: lang === 'fr' ? 'Compatibilité personnelle' : 'Personal compatibility', score: 88, color: 'bg-violet-500' },
@@ -1247,63 +1254,6 @@ export default function Landing() {
                 <div>
                   <h4 className="text-slate-100 font-semibold text-sm mb-1">{item.title}</h4>
                   <p className="text-slate-500 text-xs leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── OtherMe Reality Score ─────────────────────────────────── */}
-      <section className="py-24 px-4 bg-dark-900/60">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
-              {lang === 'fr' ? 'Évaluation' : 'Assessment'}
-            </p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-100">
-              OtherMe <span className="gradient-text">Reality Score</span>
-            </h2>
-            <p className="text-slate-500 text-base max-w-lg mx-auto">
-              {lang === 'fr'
-                ? 'OtherMe ne cherche pas seulement le métier qui te plaît. Il évalue aussi ce qui est réaliste selon ton niveau actuel, tes contraintes, ton temps disponible et le marché.'
-                : 'OtherMe doesn\'t just find a career you\'ll enjoy. It evaluates what\'s realistic given your current level, constraints, available time and the market.'}
-            </p>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-5">
-            {[
-              {
-                label: lang === 'fr' ? 'Compatibilité personnelle' : 'Personal compatibility',
-                desc: lang === 'fr' ? 'Alignement avec tes valeurs, tes motivations et ton mode de fonctionnement' : 'Alignment with your values, motivations and work style',
-                pct: 88, color: 'from-violet-500 to-purple-400',
-              },
-              {
-                label: lang === 'fr' ? 'Faisabilité réelle' : 'Real feasibility',
-                desc: lang === 'fr' ? 'Accessibilité selon ton niveau actuel, ton parcours et tes ressources disponibles' : 'Accessibility given your current level, background and available resources',
-                pct: 82, color: 'from-blue-500 to-indigo-400',
-              },
-              {
-                label: lang === 'fr' ? 'Opportunité marché' : 'Market opportunity',
-                desc: lang === 'fr' ? 'Dynamisme du secteur, demande actuelle et perspectives d\'évolution' : 'Sector dynamism, current demand and growth prospects',
-                pct: 74, color: 'from-emerald-500 to-teal-400',
-              },
-              {
-                label: lang === 'fr' ? 'Effort de transition' : 'Transition effort',
-                desc: lang === 'fr' ? 'Estimation du temps et des ressources nécessaires pour atteindre ce métier' : 'Estimate of time and resources needed to reach this career',
-                pct: 65, color: 'from-amber-500 to-orange-400',
-              },
-            ].map(dim => (
-              <div key={dim.label} className="card p-6 hover:border-white/[0.12] transition-colors duration-300">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-slate-100 font-semibold text-sm">{dim.label}</h4>
-                  <span className="text-2xl font-black text-slate-200">{dim.pct}%</span>
-                </div>
-                <p className="text-slate-500 text-xs leading-relaxed mb-4">{dim.desc}</p>
-                <div className="h-1.5 bg-dark-700 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full bg-gradient-to-r ${dim.color} rounded-full`}
-                    style={{ width: `${dim.pct}%` }}
-                  />
                 </div>
               </div>
             ))}
