@@ -414,11 +414,11 @@ function PathCard({ path, index }: { path: PathData; index: number }) {
         </div>
 
         {/* Training */}
-        {path.recommendedTrainingTypes.length > 0 && (
+        {(path.recommendedTrainingTypes?.length ?? 0) > 0 && (
           <div className="mt-3">
             <Accordion title="Formations recommandées" icon="🎓">
               <ul className="space-y-1.5">
-                {path.recommendedTrainingTypes.map((r, i) => (
+                {(path.recommendedTrainingTypes ?? []).map((r, i) => (
                   <li key={i} className="flex items-start gap-2 text-xs text-slate-300">
                     <span className="text-blue-400 flex-shrink-0 mt-0.5">•</span> {r}
                   </li>
@@ -468,28 +468,34 @@ function PathCard({ path, index }: { path: PathData; index: number }) {
         </div>
 
         {/* People & proofs */}
-        <div className="mt-3">
-          <Accordion title="Personnes à contacter & preuves à construire" icon="🤝">
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <p className="text-xs font-semibold text-purple-400 mb-2">👥 Personnes à contacter</p>
-                <ul className="space-y-1">
-                  {path.peopleToContact.map((p, i) => (
-                    <li key={i} className="text-xs text-slate-400">• {p}</li>
-                  ))}
-                </ul>
+        {((path.peopleToContact?.length ?? 0) > 0 || (path.proofsToBuild?.length ?? 0) > 0) && (
+          <div className="mt-3">
+            <Accordion title="Personnes à contacter & preuves à construire" icon="🤝">
+              <div className="grid sm:grid-cols-2 gap-4">
+                {(path.peopleToContact?.length ?? 0) > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-purple-400 mb-2">👥 Personnes à contacter</p>
+                    <ul className="space-y-1">
+                      {(path.peopleToContact ?? []).map((p, i) => (
+                        <li key={i} className="text-xs text-slate-400">• {p}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {(path.proofsToBuild?.length ?? 0) > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-blue-400 mb-2">📁 Preuves à construire</p>
+                    <ul className="space-y-1">
+                      {(path.proofsToBuild ?? []).map((p, i) => (
+                        <li key={i} className="text-xs text-slate-400">• {p}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
-              <div>
-                <p className="text-xs font-semibold text-blue-400 mb-2">📁 Preuves à construire</p>
-                <ul className="space-y-1">
-                  {path.proofsToBuild.map((p, i) => (
-                    <li key={i} className="text-xs text-slate-400">• {p}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </Accordion>
-        </div>
+            </Accordion>
+          </div>
+        )}
 
         {/* Risks */}
         {path.risksAndLimits.length > 0 && (
@@ -502,21 +508,21 @@ function PathCard({ path, index }: { path: PathData; index: number }) {
                   </div>
                 ))}
               </div>
-              {path.mistakesToAvoid.length > 0 && (
+              {(path.mistakesToAvoid?.length ?? 0) > 0 && (
                 <div className="mt-3 border-t border-dark-700 pt-3">
                   <p className="text-xs font-semibold text-orange-400 mb-2">🚫 Erreurs à éviter</p>
                   <ul className="space-y-1">
-                    {path.mistakesToAvoid.map((m, i) => (
+                    {(path.mistakesToAvoid ?? []).map((m, i) => (
                       <li key={i} className="text-xs text-slate-400">• {m}</li>
                     ))}
                   </ul>
                 </div>
               )}
-              {path.likelyObstacles.length > 0 && (
+              {(path.likelyObstacles?.length ?? 0) > 0 && (
                 <div className="mt-3 border-t border-dark-700 pt-3">
                   <p className="text-xs font-semibold text-yellow-400 mb-2">🧱 Obstacles probables</p>
                   <ul className="space-y-1">
-                    {path.likelyObstacles.map((o, i) => (
+                    {(path.likelyObstacles ?? []).map((o, i) => (
                       <li key={i} className="text-xs text-slate-400">• {o}</li>
                     ))}
                   </ul>
@@ -527,11 +533,11 @@ function PathCard({ path, index }: { path: PathData; index: number }) {
         )}
 
         {/* Similar jobs */}
-        {path.similarJobs.length > 0 && (
+        {(path.similarJobs?.length ?? 0) > 0 && (
           <div className="mt-3">
             <Accordion title="Métiers proches à explorer" icon="🔭">
               <div className="flex flex-wrap gap-2">
-                {path.similarJobs.map((j, i) => (
+                {(path.similarJobs ?? []).map((j, i) => (
                   <span key={i} className="text-xs px-3 py-1.5 rounded-full bg-dark-700 border border-dark-600 text-slate-300">{j}</span>
                 ))}
               </div>

@@ -75,6 +75,13 @@ Les champs suivants sont maintenant collectés et DOIVENT influencer concrèteme
 
 RÈGLE CRITIQUE : Si une combinaison de réponses crée une incohérence (ex : profil "Sécuritaire" + realisticPath "changement ambitieux"), ne pas ignorer — le mentionner dans comparison.reason en expliquant la tension et quelle trajectoire résout le mieux cette ambivalence.
 
+RÈGLE PROFIL VAGUE — s'applique si 7 champs questionnaire ou plus sont "non renseigné" :
+- Ne pas forcer les 5 citations nominatives du profil dans whyItFits. Utiliser "Basé sur ta situation déclarée : [élément connu]" à la place.
+- Construire les trajectoires uniquement à partir des données disponibles (âge, situation actuelle, ville, formation) — ne jamais inventer des motivations, expériences ou contraintes non déclarées.
+- Mentionner dans reportSummary : "Ces trajectoires sont basées sur les informations disponibles et pourront être affinées avec plus de détails ou un CV."
+- Produire des trajectoires exploratoires : plus d'options à tester, moins de certitudes, plus de mini-projets de validation.
+- firstConcreteStep doit être une action d'exploration (rencontrer un professionnel, tester via mission courte) plutôt qu'une action directe de transition.
+
 QUALITÉ DU CONTENU — FORMATS OBLIGATOIRES PAR CHAMP :
 - alreadyAcquiredStrengths : chaque entrée = "Force [X] — Source : [poste ou réalisation concrète du profil] — Comment la valoriser dans [métier cible] : [action concrète avec exemple]"
 - missingSkills : chaque entrée = "Compétence [X] — Pourquoi critique : [raison liée au métier cible] — Acquisition : [méthode précise + outil ou organisme nommé] — Niveau cible : [débutant/intermédiaire/avancé] — Priorité : [haute/moyenne/faible]"

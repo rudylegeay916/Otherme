@@ -59,6 +59,12 @@ const PathDataSchema = z.object({
   }),
   whyItFits:                z.array(z.string()).min(1),
   firstConcreteStep:        z.string().min(1),
+  likelyObstacles:          z.array(z.string()).min(1),
+  similarJobs:              z.array(z.string()).min(1),
+  peopleToContact:          z.array(z.string()).min(1),
+  proofsToBuild:            z.array(z.string()).min(1),
+  recommendedTrainingTypes: z.array(z.string()).min(1),
+  howToReachRole:           HowToReachRoleSchema,
   positioningStatement:     z.string().optional(),
   linkedinHeadline:         z.string().optional(),
   interviewPitch:           z.string().optional(),
@@ -68,7 +74,6 @@ const PathDataSchema = z.object({
   questionsToAskProfessionals:      z.array(z.string()).optional(),
   choosePath:                       z.array(z.string()).optional(),
   avoidPath:                        z.array(z.string()).optional(),
-  howToReachRole:                   HowToReachRoleSchema.optional(),
 }).passthrough() // conserve les champs extra (longDescription, dailyLife, etc.)
 
 // ── GeneratedReport ───────────────────────────────────────────────
