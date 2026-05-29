@@ -149,12 +149,6 @@ export interface Report {
 export interface OnboardingResponse {
   reportId: string
   status: string
-  isMock?: boolean
-  mockPaths?: PathData[]
-  mockReportSummary?: string
-  mockComparison?: ReportComparison
-  mockBestFirstStep?: string
-  mockTrajectories?: Trajectory[]
   firstName?: string
   email?: string
 }
