@@ -212,31 +212,24 @@ export default function Paywall() {
             ))}
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-3 mb-10">
-            {[
-              { label: 'Proche de ton parcours', color: 'text-blue-300', bg: 'bg-blue-900/30 border-blue-700/40', gradient: 'from-blue-600 to-purple-500' },
-              { label: 'Basée sur tes passions',  color: 'text-purple-300', bg: 'bg-purple-900/30 border-purple-700/40', gradient: 'from-purple-600 to-pink-500' },
-              { label: 'Fort potentiel',           color: 'text-amber-300', bg: 'bg-amber-900/30 border-amber-700/40', gradient: 'from-amber-500 to-orange-500' },
-            ].map((info, i) => (
-              <div key={i} className="card relative overflow-hidden">
-                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${info.gradient} rounded-t-2xl`} />
-                <div className="p-6">
-                  <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full border ${info.bg} ${info.color} mb-4`}>{info.label}</span>
-                  <div className="space-y-2 blur-sm opacity-40">
-                    <div className="h-4 bg-dark-700 rounded w-4/5" />
-                    <div className="h-3 bg-dark-700 rounded w-full mt-3" />
-                    <div className="h-3 bg-dark-700 rounded w-5/6" />
-                    <div className="h-3 bg-dark-700 rounded w-4/6" />
-                  </div>
-                  <div className="mt-4 flex items-center justify-center">
-                    <div className="bg-dark-900/90 border border-dark-600 rounded-xl px-4 py-2.5 flex items-center gap-2">
-                      <span>🔒</span>
-                      <span className="text-slate-300 text-sm font-medium">Contenu verrouillé</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="card p-8 text-center mb-10">
+            <div className="text-4xl mb-4">⚠️</div>
+            <p className="text-slate-300 font-semibold mb-2">
+              {lang === 'fr'
+                ? "Nous n'avons pas pu récupérer ton analyse personnalisée."
+                : "We couldn't retrieve your personalised analysis."}
+            </p>
+            <p className="text-slate-500 text-sm mb-6">
+              {lang === 'fr'
+                ? 'Le rapport est peut-être encore en cours de génération, ou une erreur est survenue.'
+                : 'The report may still be generating, or an error occurred.'}
+            </p>
+            <button
+              onClick={() => navigate('/onboarding')}
+              className="btn-secondary text-sm py-2 px-5"
+            >
+              {lang === 'fr' ? '← Relancer l\'analyse' : '← Restart the analysis'}
+            </button>
           </div>
         )}
 

@@ -124,6 +124,19 @@ router.post('/', upload.single('cv'), async (req, res) => {
       data.cvText = await extractCvText(req.file)
     }
 
+    // ── Logs diagnostiques (sans données sensibles) ───────────────────
+    const a = data.answers ?? {}
+    const phase1Keys = ['drains', 'vision5y', 'role', 'relation', 'timeActivity', 'realisticPath', 'successCriteria', 'profile']
+    const filledPhase1 = phase1Keys.filter(k => {
+      const ans = a[k]
+      return ans && (ans.selectedOptions.length > 0 || ans.freeText.trim().length > 0)
+    })
+    const totalAnswers  = Object.keys(a).length
+    const adaptiveCount = Object.keys(a).filter(k => k.startsWith('adap_')).length
+    console.log(`[onboarding] Profil: ${data.firstName} | réponses: ${totalAnswers} | Phase1: ${filledPhase1.length}/8 (${filledPhase1.join(',') || 'aucune'}) | adaptatives: ${adaptiveCount}`)
+    if (data.cvText) console.log(`[onboarding] CV: ${data.cvText.length} chars extraits`)
+    else console.log('[onboarding] Aucun CV fourni')
+
     const userId = await getUserIdFromBearer(req.headers.authorization)
 
     const onboardingRow = await createOnboardingResponse({
@@ -135,7 +148,7 @@ router.post('/', upload.single('cv'), async (req, res) => {
     })
 
     const report: GeneratedReport = await generateTrajectories(data)
-    console.log(`[onboarding] Rapport IA valide — source: ai — ${data.firstName}`)
+    console.log(`[onboarding] Rapport IA généré — ${report.paths.length} trajectoires : ${report.paths.map(p => `[${p.pathType}] "${p.title}" fit=${p.fitScore}`).join(' | ')}`)
 
     const reportRow = await createReport({
       user_id:                userId,

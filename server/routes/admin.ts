@@ -70,4 +70,18 @@ router.post('/bypass', async (req, res) => {
   }
 })
 
+/**
+ * GET /api/admin/status
+ *
+ * Retourne uniquement des booléens de configuration.
+ * Ne révèle jamais les valeurs des secrets.
+ */
+router.get('/status', (_req, res) => {
+  return res.json({
+    adminEmailsConfigured:        !!env.adminEmails,
+    accessTokenSecretConfigured:  !!env.accessTokenSecret,
+    supabaseConfigured:           !!(env.supabaseUrl && env.supabaseServiceRoleKey),
+  })
+})
+
 export default router

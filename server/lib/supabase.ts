@@ -146,6 +146,18 @@ export async function getReport(id: string): Promise<ReportRow | null> {
   return data as ReportRow
 }
 
+export async function getOnboardingResponseById(
+  id: string
+): Promise<Pick<OnboardingResponseRow, 'raw_answers'> | null> {
+  const { data, error } = await supabase
+    .from('onboarding_responses')
+    .select('raw_answers')
+    .eq('id', id)
+    .single()
+  if (error) return null
+  return data as Pick<OnboardingResponseRow, 'raw_answers'>
+}
+
 export async function updateReportStatus(
   id: string,
   status: ReportRow['status']
