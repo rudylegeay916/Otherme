@@ -286,7 +286,7 @@ function PathCard({ path, index }: { path: PathData; index: number }) {
         </div>
 
         {/* Description */}
-        <Accordion title="Description complète" icon="📄" defaultOpen={index === 0}>
+        <Accordion title="Description complète" icon="📄">
           <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">{path.longDescription}</p>
           {path.dailyLife && (
             <div className="mt-4 bg-dark-800/60 border border-dark-600 rounded-xl p-4">

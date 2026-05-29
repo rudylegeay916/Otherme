@@ -27,9 +27,16 @@ PRINCIPES NON NÉGOCIABLES :
 6. Tu réponds UNIQUEMENT avec du JSON valide. Aucun markdown, aucun texte autour.
 
 RÈGLES TECHNIQUES ABSOLUES :
-- longDescription : MINIMUM 1500 caractères par trajectoire, avec au moins 5 références explicites au profil
+- longDescription : MINIMUM 1800 caractères par trajectoire, structuré en 4 blocs séparés par saut de ligne : (1) pourquoi ce métier pour ce profil, (2) réalité concrète du quotidien, (3) état du marché, (4) trajectoire financière et faisabilité. Au moins 5 références NOMINATIVES au profil.
+- dailyLife : MINIMUM 250 caractères — description heure par heure d'une journée type réaliste (outils utilisés, interlocuteurs, lieu de travail). CHAMP OBLIGATOIRE même si non demandé.
 - fiveYearTimeline : EXACTEMENT 7 périodes dans cet ordre strict : "30 jours", "1 à 3 mois", "3 à 6 mois", "6 à 12 mois", "12 à 24 mois", "2 à 3 ans", "3 à 5 ans"
-- detailedActionPlan30Days : EXACTEMENT 4 entrées (week: 1, 2, 3, 4), chaque semaine avec 3 à 5 actions incluant durée estimée et livrable attendu
+- detailedActionPlan30Days : EXACTEMENT 4 entrées (week: 1, 2, 3, 4), chaque semaine avec 3 à 5 actions incluant durée estimée et livrable attendu. CHAQUE SEMAINE doit inclure objective, deliverable, practicalTip, mistakeToAvoid.
+- whyItFits : MINIMUM 4 entrées. Chaque entrée DOIT citer un élément spécifique du profil (réponse questionnaire ou élément CV) et son lien direct avec le métier cible.
+- howToReachRole : OBLIGATOIRE dans chaque trajectoire sans exception — priorityActions doit contenir EXACTEMENT 5 actions numérotées avec durée et impact.
+- questionsToAskProfessionals : MINIMUM 5 questions concrètes, formulées comme un professionnel les poserait lors d'un échange réseau. CHAMP OBLIGATOIRE.
+- recommendedTrainingTypes : MINIMUM 3 formations avec plateforme nommée, durée et objectif. CHAMP OBLIGATOIRE.
+- similarJobs : MINIMUM 4 métiers proches. CHAMP OBLIGATOIRE.
+- peopleToContact : MINIMUM 4 profils avec lieu de contact et raison. CHAMP OBLIGATOIRE.
 - Scores : entiers entre 0 et 100 uniquement
 - personalCompatibilityScore : adéquation profil ↔ métier (compétences, valeurs, style de vie souhaité)
 - feasibilityScore : faisabilité réelle de la transition (délai, ressources nécessaires, obstacles)
@@ -39,6 +46,20 @@ RÈGLES TECHNIQUES ABSOLUES :
 - Titres OBLIGATOIRES : [Métier concret + fonction précise] pour [secteur ou public cible]. Ex : "Chargé de développement commercial pour PME industrielles", "Responsable formation digitale en cabinet RH", "Technicien de maintenance pour parc éolien offshore"
 - firstConcreteStep : action faisable AUJOURD'HUI ou demain, avec un outil ou une plateforme nommée
 - Si un CV est fourni : ses postes, outils, réalisations et secteurs sont des FAITS vérifiés. Cite-les nommément (jamais de façon générique) dans alreadyAcquiredStrengths, whyItFits et longDescription de chaque trajectoire.
+- INTERDIT absolu : ne jamais écrire "non renseigné", "N/A", "à compléter" ou toute valeur vide dans le JSON retourné. Si une information n'est pas dans le profil, utilise les données disponibles pour faire une déduction raisonnée et l'indiquer clairement ("Basé sur ton profil actuel : [contenu]").
+
+RÈGLE D'AUTO-ENRICHISSEMENT OBLIGATOIRE :
+Avant de clore le JSON, vérifie mentalement chaque trajectoire :
+□ longDescription ≥ 1800 chars avec 5 citations nominatives du profil → sinon compléter
+□ dailyLife ≥ 250 chars avec outils et interlocuteurs nommés → sinon compléter
+□ whyItFits ≥ 4 entrées citant chacune un élément du profil → sinon compléter
+□ howToReachRole.priorityActions = exactement 5 entrées numérotées → sinon corriger
+□ questionsToAskProfessionals ≥ 5 questions concrètes → sinon compléter
+□ detailedActionPlan30Days = exactement 4 semaines avec objective+deliverable → sinon corriger
+□ fiveYearTimeline = exactement 7 périodes → sinon corriger
+□ recommendedTrainingTypes ≥ 3 entrées avec plateforme + durée → sinon compléter
+□ similarJobs ≥ 4 métiers → sinon compléter
+Si un champ ne respecte pas ces minima, enrichir le contenu AVANT de retourner le JSON.
 
 UTILISATION DES DONNÉES PERSONNALISÉES — OBLIGATOIRE :
 Les champs suivants sont maintenant collectés et DOIVENT influencer concrètement le rapport. Ne pas les ignorer.
@@ -749,7 +770,7 @@ export async function generateTrajectories(data: OnboardingData): Promise<Genera
       { role: 'user',   content: buildUserPrompt(data, cvSection) },
     ],
     temperature:     0.72,
-    max_tokens:      12000,
+    max_tokens:      16000,
     response_format: { type: 'json_object' },
   })
 
