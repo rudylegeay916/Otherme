@@ -1,15 +1,16 @@
 import OpenAI from 'openai'
 import { env } from '../config/env'
-import type { OnboardingData, PathData, ReportComparison, QuestionAnswer } from '../../src/types'
+import type { OnboardingData, PathData, ReportComparison, QuestionAnswer, CvInfluence } from '../../src/types'
 import { validateGeneratedReport } from './reportSchema'
 
 const client = new OpenAI({ apiKey: env.openaiApiKey })
 
 export interface GeneratedReport {
-  paths:           PathData[]
-  reportSummary:   string
-  comparison:      ReportComparison
+  paths:            PathData[]
+  reportSummary:    string
+  comparison:       ReportComparison
   bestFirstStep48h: string
+  cvInfluence?:     CvInfluence
 }
 
 // ── System prompt ─────────────────────────────────────────────────
@@ -687,7 +688,34 @@ JSON ATTENDU — RÉPONDS UNIQUEMENT AVEC CE JSON
     "reason": "Explication personnalisée de 4 à 6 lignes : POURQUOI cette trajectoire est prioritaire pour ${fn} — citant sa situation concrète, ses contraintes déclarées, ses forces réelles et ce que ça implique comme premier pas."
   },
 
-  "bestFirstStep48h": "Action ultra-concrète que ${fn} peut faire dans les 48 prochaines heures — nommer l'outil exact, la plateforme, l'action précise en 30 minutes ou moins, et le résultat attendu immédiat."
+  "bestFirstStep48h": "Action ultra-concrète que ${fn} peut faire dans les 48 prochaines heures — nommer l'outil exact, la plateforme, l'action précise en 30 minutes ou moins, et le résultat attendu immédiat."${cvSection ? `,
+
+  "cvInfluence": {
+    "detectedElements": [
+      "Élément 1 du CV utilisé : [intitulé de poste / réalisation / outil nommé] — utilisé dans [trajectoire spécifique / champ alreadyAcquiredStrengths ou whyItFits]",
+      "Élément 2 du CV utilisé : [...]",
+      "Élément 3 du CV utilisé : [...]"
+    ],
+    "transferableSkills": [
+      "Compétence transférable 1 identifiée dans le CV — applicable à [trajectoires concernées] car [raison concrète]",
+      "Compétence transférable 2 — [...]",
+      "Compétence transférable 3 — [...]"
+    ],
+    "relevantExperiences": [
+      "Expérience 1 du CV (intitulé exact) — justifie [trajectoire spécifique] car [lien concret avec le métier cible]",
+      "Expérience 2 du CV — [...]",
+      "Expérience 3 — [...]"
+    ],
+    "cvLimits": [
+      "Limite 1 : [gap ou manque visible dans le CV, ex: absence de gestion d'équipe] — impact sur [trajectoire concernée]",
+      "Limite 2 : [...]"
+    ],
+    "improvementSuggestions": [
+      "Suggestion 1 : [amélioration concrète du CV, ex: quantifier les résultats, ajouter certifications] pour soutenir [trajectoire cible]",
+      "Suggestion 2 : [...]",
+      "Suggestion 3 : [...]"
+    ]
+  }` : ''}
 }
 
 RAPPEL FINAL :
@@ -700,7 +728,8 @@ RAPPEL FINAL :
 - detailedActionPlan30Days : chaque semaine DOIT inclure objective, deliverable, practicalTip, mistakeToAvoid
 - companyTypesToTarget : adapter au pathType (entreprises de taille PME/startup/grande entreprise selon risk_level)
 - choosePath / avoidPath : honnêtes, concrets, personnalisés au profil — pas génériques
-- howToReachRole : OBLIGATOIRE dans chaque trajectoire — priorityActions doit contenir EXACTEMENT 5 actions numérotées, chacune avec durée et impact attendu`
+- howToReachRole : OBLIGATOIRE dans chaque trajectoire — priorityActions doit contenir EXACTEMENT 5 actions numérotées, chacune avec durée et impact attendu
+- cvInfluence : OBLIGATOIRE si un CV a été fourni — citer les éléments RÉELS du CV, jamais de généralités. detectedElements doit lister au minimum 3 éléments nominatifs du CV. improvementSuggestions doit être actionnable et personnalisé.`
 }
 
 // ── Main export ───────────────────────────────────────────────────

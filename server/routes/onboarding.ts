@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import multer from 'multer'
+import mammoth from 'mammoth'
 import { supabase, createOnboardingResponse, createReport } from '../lib/supabase'
 import { generateTrajectories } from '../lib/openai'
 import type { OnboardingData, QuestionAnswer } from '../../src/types'
@@ -19,16 +20,52 @@ const upload = multer({
   },
 })
 
+function cleanExtractedText(raw: string): string {
+  return raw
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[ \t]{3,}/g, '  ')   // normalise les espaces/tabs excessifs
+    .replace(/\n{4,}/g, '\n\n\n')  // limite les lignes vides consécutives
+    .trim()
+}
+
 async function extractCvText(file: Express.Multer.File): Promise<string> {
+  const { mimetype, size } = file
   try {
-    if (file.mimetype === 'text/plain') return file.buffer.toString('utf-8').slice(0, 8000)
-    if (file.mimetype === 'application/pdf') {
+    if (mimetype === 'text/plain') {
+      const text = cleanExtractedText(file.buffer.toString('utf-8')).slice(0, 8000)
+      console.log(`[cv] TXT extrait — ${text.length} chars (fichier: ${size}b)`)
+      return text
+    }
+
+    if (mimetype === 'application/pdf') {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const pdfParse = require('pdf-parse') as (buf: Buffer) => Promise<{ text: string }>
       const result = await pdfParse(file.buffer)
-      return result.text.slice(0, 8000)
+      const text = cleanExtractedText(result.text).slice(0, 8000)
+      console.log(`[cv] PDF extrait — ${text.length} chars (fichier: ${size}b)`)
+      return text
     }
-  } catch { /* extraction optionnelle */ }
+
+    if (
+      mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+      mimetype === 'application/msword'
+    ) {
+      const result = await mammoth.extractRawText({ buffer: file.buffer })
+      if (result.messages.some(m => m.type === 'error')) {
+        console.warn(`[cv] DOCX — ${result.messages.filter(m => m.type === 'error').length} erreur(s) de conversion`)
+      }
+      const text = cleanExtractedText(result.value).slice(0, 8000)
+      if (!text.trim()) {
+        console.warn('[cv] DOCX extrait vide — fichier peut-être protégé ou corrompu')
+        return ''
+      }
+      console.log(`[cv] DOCX extrait — ${text.length} chars (fichier: ${size}b)`)
+      return text
+    }
+  } catch (err) {
+    console.warn(`[cv] Extraction échouée (${mimetype}, ${size}b): ${err instanceof Error ? err.message : String(err)}`)
+  }
   return ''
 }
 

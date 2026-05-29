@@ -116,6 +116,14 @@ export interface HowToReachRole {
   mistakesToAvoid: string[]
 }
 
+export interface CvInfluence {
+  detectedElements:       string[]
+  transferableSkills:     string[]
+  relevantExperiences:    string[]
+  cvLimits:               string[]
+  improvementSuggestions: string[]
+}
+
 export interface ReportComparison {
   safestPath: string
   mostPassionAlignedPath: string
@@ -133,6 +141,7 @@ export interface Report {
   reportSummary?: string
   comparison?: ReportComparison
   bestFirstStep48h?: string
+  cvInfluence?: CvInfluence
   trajectories?: Trajectory[]
   createdAt: string
 }

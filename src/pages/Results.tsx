@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { fetchReport } from '../lib/api'
-import type { PathData, Report, RichTimelineStep, ActionPlanWeek } from '../types'
+import type { PathData, Report, RichTimelineStep, ActionPlanWeek, CvInfluence } from '../types'
 import Logo from '../components/Logo'
 
 // ── Score bar ─────────────────────────────────────────────────────
@@ -17,6 +17,93 @@ function ScoreBar({ label, score, color = 'bg-brand-500' }: { label: string; sco
         <div className={`h-full ${color} rounded-full transition-all duration-700`} style={{ width: `${score}%` }} />
       </div>
     </div>
+  )
+}
+
+// ── CV Influence section ─────────────────────────────────────────
+
+function CvInfluenceSection({ cv }: { cv: CvInfluence }) {
+  return (
+    <section className="card p-6 border-dark-700">
+      <div className="flex items-center gap-3 mb-5">
+        <span className="text-2xl">📄</span>
+        <div>
+          <h2 className="text-lg font-bold text-slate-100">Analyse de ton CV</h2>
+          <p className="text-xs text-slate-500">Éléments pris en compte pour personnaliser tes trajectoires</p>
+        </div>
+      </div>
+      <div className="grid sm:grid-cols-2 gap-4">
+        {cv.detectedElements?.length > 0 && (
+          <div>
+            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Éléments détectés</h3>
+            <ul className="space-y-1.5">
+              {cv.detectedElements.map((el, i) => (
+                <li key={i} className="text-sm text-slate-300 flex gap-2">
+                  <span className="text-brand-400 mt-0.5 flex-shrink-0">✓</span>
+                  <span>{el}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {cv.transferableSkills?.length > 0 && (
+          <div>
+            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Compétences transférables</h3>
+            <ul className="space-y-1.5">
+              {cv.transferableSkills.map((sk, i) => (
+                <li key={i} className="text-sm text-slate-300 flex gap-2">
+                  <span className="text-purple-400 mt-0.5 flex-shrink-0">→</span>
+                  <span>{sk}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {cv.relevantExperiences?.length > 0 && (
+          <div>
+            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Expériences valorisées</h3>
+            <ul className="space-y-1.5">
+              {cv.relevantExperiences.map((ex, i) => (
+                <li key={i} className="text-sm text-slate-300 flex gap-2">
+                  <span className="text-amber-400 mt-0.5 flex-shrink-0">★</span>
+                  <span>{ex}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {(cv.cvLimits?.length > 0 || cv.improvementSuggestions?.length > 0) && (
+          <div>
+            {cv.cvLimits?.length > 0 && (
+              <>
+                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Limites identifiées</h3>
+                <ul className="space-y-1.5 mb-3">
+                  {cv.cvLimits.map((lim, i) => (
+                    <li key={i} className="text-sm text-slate-400 flex gap-2">
+                      <span className="text-slate-500 mt-0.5 flex-shrink-0">·</span>
+                      <span>{lim}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {cv.improvementSuggestions?.length > 0 && (
+              <>
+                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Améliorer ton CV</h3>
+                <ul className="space-y-1.5">
+                  {cv.improvementSuggestions.map((sg, i) => (
+                    <li key={i} className="text-sm text-slate-300 flex gap-2">
+                      <span className="text-emerald-400 mt-0.5 flex-shrink-0">↑</span>
+                      <span>{sg}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
 
@@ -900,6 +987,8 @@ export default function Results() {
             <p className="text-xs text-slate-500 mt-4">À faire dans les 48 prochaines heures</p>
           </section>
         )}
+
+        {report.cvInfluence && <CvInfluenceSection cv={report.cvInfluence} />}
 
         {/* ── Footer ───────────────────────────────────────────────── */}
         <div className="text-center pt-4 border-t border-dark-800">
