@@ -18,14 +18,15 @@ import LanguageToggle from '../components/LanguageToggle'
 
 // ── Questions par étape (IDs dans QUESTIONS[]) ────────────────────
 const STEP_QUESTION_IDS: string[][] = [
-  [],                                          // Step 0 — Identité
-  [],                                          // Step 1 — CV
-  ['skills', 'askedFor'],                      // Step 2 — Compétences
-  ['energy', 'interests'],                     // Step 3 — Énergie & Domaines
-  ['motivation', 'lifestyle'],                 // Step 4 — Direction
-  ['workEnv', 'money', 'risk'],               // Step 5 — Environnement & Priorités
-  ['avoidNext', 'blocks', 'transitionTest'],  // Step 6 — Contraintes & Plan
-  [],                                          // Step 7 — Adaptatives
+  [],                                                        // Step 0 — Identité
+  [],                                                        // Step 1 — CV
+  ['skills', 'askedFor'],                                    // Step 2 — Compétences
+  ['energy', 'drains', 'interests'],                         // Step 3 — Énergie & Domaines
+  ['motivation', 'vision5y', 'lifestyle'],                   // Step 4 — Direction & Vision
+  ['workEnv', 'role', 'relation', 'money', 'risk'],          // Step 5 — Environnement & Priorités
+  ['timeActivity', 'avoidNext', 'blocks', 'realisticPath'],  // Step 6 — Contraintes & Chemin
+  ['successCriteria', 'profile', 'transitionTest'],          // Step 7 — Vision & Profil
+  [],                                                        // Step 8 — Adaptatives
 ]
 
 // Étapes après lesquelles on affiche un checkpoint (index 0..2)
@@ -297,7 +298,7 @@ export default function Onboarding() {
     [step, lang]
   )
 
-  const TOTAL_STEPS = adaptiveQuestions.length > 0 ? 8 : 7
+  const TOTAL_STEPS = adaptiveQuestions.length > 0 ? 9 : 8
 
   // ── Validation ────────────────────────────────────────────────────
   const step0Valid = !!data.firstName.trim() && !!data.email.trim() &&
@@ -360,7 +361,7 @@ export default function Onboarding() {
   }
 
   const currentQuestionIds: string[] =
-    step === 7 ? adaptiveQuestions.map((q) => q.id) : (STEP_QUESTION_IDS[step] ?? [])
+    step === 8 ? adaptiveQuestions.map((q) => q.id) : (STEP_QUESTION_IDS[step] ?? [])
 
   const currentQuestions = currentQuestionIds
     .map((id) => ld.QUESTIONS.find((q) => q.id === id) ?? adaptiveQuestions.find((q) => q.id === id) ?? null)
@@ -689,8 +690,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Étape 7 sans questions adaptatives */}
-            {step === 7 && currentQuestions.length === 0 && (
+            {/* Étape 8 sans questions adaptatives */}
+            {step === 8 && currentQuestions.length === 0 && (
               <div className="text-center py-8">
                 <div className="text-4xl mb-4">✅</div>
                 <h2 className="text-xl font-bold text-slate-100 mb-2">Profil complété !</h2>

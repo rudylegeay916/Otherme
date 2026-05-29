@@ -39,6 +39,20 @@ RÈGLES TECHNIQUES ABSOLUES :
 - firstConcreteStep : action faisable AUJOURD'HUI ou demain, avec un outil ou une plateforme nommée
 - Si un CV est fourni : ses postes, outils, réalisations et secteurs sont des FAITS vérifiés. Cite-les nommément (jamais de façon générique) dans alreadyAcquiredStrengths, whyItFits et longDescription de chaque trajectoire.
 
+UTILISATION DES DONNÉES PERSONNALISÉES — OBLIGATOIRE :
+Les champs suivants sont maintenant collectés et DOIVENT influencer concrètement le rapport. Ne pas les ignorer.
+
+- vision5y (vision à 5 ans) : La progression de la timeline (période "3 à 5 ans") doit converger vers cette vision si elle est cohérente. Le reportSummary doit la mentionner. Si la vision est "Je ne sais pas encore", favoriser une trajectoire d'exploration.
+- drains (ce qui épuise) : Si l'utilisateur est épuisé par quelque chose, NE PAS recommander une trajectoire qui reproduit ce même contexte sans mise en garde explicite dans risksAndLimits. Ex : si épuisé par "pression commerciale" → avertir pour les trajectoires à composante commerciale forte. Cette règle est non négociable.
+- successCriteria (définition du succès) : Utiliser pour orienter le reportSummary et le comparison.reason. La trajectoire recommandée en premier doit être celle qui correspond le mieux à ces critères. Les citer explicitement dans whyItFits.
+- timeActivity (temps disponible par semaine) : Adapter le detailedActionPlan30Days selon la réponse. "Moins de 2h" → 2-3 actions légères par semaine, durées max 30-45 min. "5 à 10h" → 4-5 actions avec durées estimées de 1-2h. "Plein temps" → rythme intensif possible. Mentionner la contrainte temps dans practicalTip si pertinent.
+- role (rôle préféré) : "Expert / spécialiste" → orienter vers des rôles d'expertise, éviter le management pur. "Créateur / entrepreneur" → inclure au moins une trajectoire indépendante ou entrepreneuriale. "Accompagnant / formateur" → trajectoires orientées personnes, enseignement, coaching. "Analyste / stratège" → rôles analytiques, conseil, data.
+- relation (rapport au travail) : "Sécurité et stabilité" → insister sur les filets de sécurité dans chaque trajectoire, ne pas pousser uniquement vers le high_potential. "Liberté et autonomie" → favoriser au moins une trajectoire indépendante ou remote. "Impact et utilité" → favoriser trajectoires à forte valeur sociale ou environnementale. "Progression financière" → mentionner les paliers de revenus réalistes.
+- realisticPath (trajectoire perçue comme réaliste) : "Évolution proche" → trajectoire current_aligned très accessible, transition ≤ 6 mois. "Reconversion progressive" → passion_based atteignable en 12-18 mois. "Changement ambitieux" → high_potential avec effort assumé et risque justifié. "Je ne sais pas" → équilibre les 3 trajectoires sans surpoids.
+- profile (profil dominant) : Nuancer les formulations et les recommandations. "Sécuritaire" → insister sur les étapes progressives, les filets de sécurité, éviter de proposer uniquement du risque. "Créatif" → valoriser les aspects créatifs dans chaque trajectoire. "Entrepreneur" → inclure une trajectoire de création ou indépendante. "Analytique" → valoriser les aspects analytiques et de résolution de problèmes. "Accompagnant" → orienter vers les métiers humains et de transmission.
+
+RÈGLE CRITIQUE : Si une combinaison de réponses crée une incohérence (ex : profil "Sécuritaire" + realisticPath "changement ambitieux"), ne pas ignorer — le mentionner dans comparison.reason en expliquant la tension et quelle trajectoire résout le mieux cette ambivalence.
+
 QUALITÉ DU CONTENU — FORMATS OBLIGATOIRES PAR CHAMP :
 - alreadyAcquiredStrengths : chaque entrée = "Force [X] — Source : [poste ou réalisation concrète du profil] — Comment la valoriser dans [métier cible] : [action concrète avec exemple]"
 - missingSkills : chaque entrée = "Compétence [X] — Pourquoi critique : [raison liée au métier cible] — Acquisition : [méthode précise + outil ou organisme nommé] — Niveau cible : [débutant/intermédiaire/avancé] — Priorité : [haute/moyenne/faible]"
