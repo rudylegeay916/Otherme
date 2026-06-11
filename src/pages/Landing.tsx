@@ -13,6 +13,7 @@ import AnimatedLifePathsBackground from '../components/AnimatedLifePathsBackgrou
 import OtherMeStoryShowcase from '../components/OtherMeStoryShowcase'
 import OtherMeFeatureTabs from '../components/OtherMeFeatureTabs'
 import Reveal from '../components/Reveal'
+import Floating3DCard from '../components/Floating3DCard'
 import { hasStartedTest, clearProgress } from '../lib/onboardingStorage'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTr } from '../lib/i18n/translations'
@@ -282,6 +283,7 @@ export default function Landing() {
   const [started, setStarted]         = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [heroParallax, setHeroParallax] = useState(0)
+  const [heroMouse, setHeroMouse]       = useState({ x: 0, y: 0 })
 
   useEffect(() => { setStarted(hasStartedTest()) }, [])
 
@@ -294,6 +296,20 @@ export default function Landing() {
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    const mq    = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const touch = window.matchMedia('(pointer: coarse)')
+    if (mq.matches || touch.matches) return
+    const onMove = (e: MouseEvent) => {
+      setHeroMouse({
+        x: (e.clientX / window.innerWidth) * 2 - 1,
+        y: (e.clientY / window.innerHeight) * 2 - 1,
+      })
+    }
+    window.addEventListener('mousemove', onMove, { passive: true })
+    return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
   const handleStart          = () => navigate('/onboarding')
@@ -383,14 +399,32 @@ export default function Landing() {
         <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity: 0.08 }}>
           <AnimatedLifePathsBackground />
         </div>
+        {/* Violet blob — parallax layer 1 (slow) */}
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 700px 550px at 22% 58%, rgba(109,40,217,0.12) 0%, transparent 70%)' }}
+          style={{
+            background: 'radial-gradient(ellipse 700px 550px at 22% 58%, rgba(109,40,217,0.13) 0%, transparent 70%)',
+            transform: `translate(${heroMouse.x * -22}px, ${heroMouse.y * -16}px)`,
+            transition: 'transform 0.7s cubic-bezier(0.23,1,0.32,1)',
+          }}
+        />
+        {/* Indigo blob — parallax layer 2 (faster, opposite area) */}
+        <div className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 380px 280px at 68% 28%, rgba(79,70,229,0.07) 0%, transparent 70%)',
+            transform: `translate(${heroMouse.x * -40}px, ${heroMouse.y * -28}px)`,
+            transition: 'transform 0.9s cubic-bezier(0.23,1,0.32,1)',
+          }}
         />
 
         {/* ── Contenu superposé à gauche ────────────────────────────── */}
         <div className="relative z-10 flex flex-col min-h-screen px-6 sm:px-10 lg:px-16 xl:px-24 pt-28 pb-16">
           <div className="flex-1 flex items-center">
-            <div className="w-full max-w-2xl">
+            <div className="w-full max-w-2xl"
+              style={{
+                transform: `translate(${heroMouse.x * 5}px, ${heroMouse.y * 4}px)`,
+                transition: 'transform 0.5s cubic-bezier(0.23,1,0.32,1)',
+              }}
+            >
 
               {/* Badge */}
               <div
@@ -569,14 +603,14 @@ export default function Landing() {
               const sc = stepColors[i]
               return (
                 <Reveal key={i} delay={i * 80}>
-                  <div className="card p-5 relative group hover:border-white/[0.12] hover:shadow-[0_0_30px_rgba(109,40,217,0.08)] hover:-translate-y-0.5 transition-all duration-300 h-full">
+                  <Floating3DCard intensity={5} className="card p-5 relative group hover:border-white/[0.12] hover:shadow-[0_0_30px_rgba(109,40,217,0.10)] transition-all duration-300 h-full flex flex-col">
                     <div className={`absolute top-3 right-4 text-5xl font-black select-none transition-colors tabular-nums ${sc.num}`}>{String(i + 1).padStart(2, '0')}</div>
                     <div className={`w-9 h-9 rounded-xl border flex items-center justify-center mb-3 flex-shrink-0 transition-colors duration-300 ${sc.icon}`}>
                       <StepIcon size={17} strokeWidth={1.5} className={sc.iconText} />
                     </div>
                     <h3 className="text-sm font-semibold mb-1.5 text-slate-100 pr-8">{step.title}</h3>
                     <p className="text-slate-500 text-xs leading-relaxed">{step.desc}</p>
-                  </div>
+                  </Floating3DCard>
                 </Reveal>
               )
             })}
@@ -626,7 +660,7 @@ export default function Landing() {
               const c = colorMap[pt.color] ?? colorMap.violet
               return (
                 <Reveal key={i} delay={i * 90}>
-                  <div className={`relative rounded-2xl border p-5 transition-all duration-300 overflow-hidden ${c.border} ${c.bg} ${c.glow}`}>
+                  <Floating3DCard intensity={6} className={`relative rounded-2xl border p-5 transition-all duration-300 overflow-hidden ${c.border} ${c.bg}`}>
                     {/* Background number */}
                     <div className={`absolute top-3 right-4 text-5xl font-black select-none ${c.num}`}>{String(i + 1).padStart(2, '0')}</div>
                     {/* Badge */}
@@ -636,7 +670,7 @@ export default function Landing() {
                     </div>
                     <h3 className="text-slate-100 font-bold text-base mb-1.5 leading-snug">{pt.title}</h3>
                     <p className="text-slate-400 text-xs leading-relaxed">{pt.desc}</p>
-                  </div>
+                  </Floating3DCard>
                 </Reveal>
               )
             })}
@@ -750,7 +784,7 @@ export default function Landing() {
               ]
               const ic = iconColors[i % iconColors.length]
               return (
-                <div key={d.fr.title} className="card p-5 flex flex-col gap-3 hover:border-white/[0.14] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300">
+                <Floating3DCard key={d.fr.title} intensity={5} className="card p-5 flex flex-col gap-3 hover:border-white/[0.14] hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300">
                   <div className={`w-9 h-9 rounded-xl border flex items-center justify-center flex-shrink-0 ${ic.wrap}`}>
                     <d.Icon size={17} strokeWidth={1.5} className={ic.text} />
                   </div>
@@ -758,7 +792,7 @@ export default function Landing() {
                     <h4 className="text-slate-100 font-semibold text-xs mb-1.5">{lang === 'fr' ? d.fr.title : d.en.title}</h4>
                     <p className="text-slate-500 text-[11px] leading-relaxed">{lang === 'fr' ? d.fr.desc : d.en.desc}</p>
                   </div>
-                </div>
+                </Floating3DCard>
               )
             })}
           </div>
@@ -784,7 +818,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="card glow relative overflow-hidden">
+          <Floating3DCard intensity={3} className="card glow relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-600/40 to-transparent" />
 
             {/* Header */}
@@ -1292,7 +1326,7 @@ export default function Landing() {
               </div>
 
             </div>
-          </div>
+          </Floating3DCard>
         </div>
       </section>
 
@@ -1384,7 +1418,7 @@ export default function Landing() {
           </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {FOR_WHO.map((p) => (
-              <div key={p.fr.title} className={`card p-5 flex items-start gap-4 hover:border-white/[0.12] transition-colors duration-300 ${p.featured ? 'border-brand-600/25 bg-brand-600/[0.04]' : ''}`}>
+              <Floating3DCard key={p.fr.title} intensity={5} className={`card p-5 flex items-start gap-4 hover:border-white/[0.12] transition-all duration-300 ${p.featured ? 'border-brand-600/25 bg-brand-600/[0.04]' : ''}`}>
                 <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${p.featured ? 'bg-brand-600/15 border border-brand-500/25' : 'bg-violet-600/10 border border-violet-500/20'}`}>
                   <p.Icon size={18} strokeWidth={1.5} className={p.featured ? 'text-brand-300' : 'text-violet-300'} />
                 </div>
@@ -1392,7 +1426,7 @@ export default function Landing() {
                   <h4 className={`font-semibold text-sm mb-1 ${p.featured ? 'text-brand-300' : 'text-slate-100'}`}>{lang === 'fr' ? p.fr.title : p.en.title}</h4>
                   <p className="text-slate-500 text-xs leading-relaxed">{lang === 'fr' ? p.fr.desc : p.en.desc}</p>
                 </div>
-              </div>
+              </Floating3DCard>
             ))}
           </div>
         </div>
@@ -1411,7 +1445,7 @@ export default function Landing() {
           </Reveal>
           <div className="grid md:grid-cols-3 gap-4">
             {t.testimonials.map((ex, i) => (
-              <div key={i} className="testi-card bg-dark-800 border border-white/[0.07] rounded-2xl p-5 flex flex-col">
+              <Floating3DCard key={i} intensity={7} className="testi-card bg-dark-800 border border-white/[0.07] rounded-2xl p-5 flex flex-col">
                 {/* Profile header */}
                 <div className="flex items-center gap-3 mb-4">
                   <div className="relative flex-shrink-0">
@@ -1455,7 +1489,7 @@ export default function Landing() {
                     {ex.duration}
                   </div>
                 </div>
-              </div>
+              </Floating3DCard>
             ))}
           </div>
           <p className="text-center text-slate-600 text-xs mt-5">{t.testiDisclaimer}</p>

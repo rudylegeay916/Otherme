@@ -346,14 +346,34 @@
 
 /* ── Testimonial card hover glow ───────────────────────────── */
 
-.testi-card:hover {
-  border-color: rgba(124, 58, 237, 0.20);
-  box-shadow: 0 0 40px rgba(124, 58, 237, 0.07), 0 8px 32px rgba(0,0,0,0.4);
-  transform: translateY(-2px);
+.testi-card {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.testi-card {
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+.testi-card:hover {
+  border-color: rgba(124, 58, 237, 0.22);
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.09), 0 8px 32px rgba(0,0,0,0.45);
+}
+
+/* CSS transform only on touch / reduced-motion (Floating3DCard handles desktop) */
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .testi-card {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .testi-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* ── 3D card wrapper ─────────────────────────────────────────── */
+
+.card-3d-wrap {
+  transform-style: preserve-3d;
+}
+
+/* depth layer pushed slightly toward viewer */
+.card-3d-face {
+  transform: translateZ(12px);
 }
 
 /* ── Floating tag chips ─────────────────────────────────────── */
