@@ -17,6 +17,7 @@ import Account from './pages/Account'
 import SocialProof from './pages/SocialProof'
 import Results from './pages/Results'
 import AdminLogin from './pages/AdminLogin'
+import LandingV2 from './pages/LandingV2'
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Routes>
           {/* Public */}
           <Route path="/" element={<Landing />} />
+          <Route path="/landing-v2" element={<LandingV2 />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/social-proof/:reportId" element={<SocialProof />} />
           <Route path="/paywall/:reportId" element={<Paywall />} />
