@@ -394,32 +394,32 @@ export default function Landing() {
 
               {/* Badge */}
               <div
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-300/90 text-xs font-medium mb-8 tracking-wide animate-slide-up-hero"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-300/90 text-xs font-medium mb-8 tracking-wide animate-slide-up-hero glow-ring-pulse"
                 style={{ animationDelay: '0ms' }}
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-400/80" />
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse" />
                 {t.badge}
               </div>
 
               {/* Titre hero */}
               <h1
-                className="font-bold tracking-tight mb-7 animate-slide-up-hero"
+                className="font-bold tracking-tight mb-6 animate-slide-up-hero"
                 style={{ animationDelay: '80ms' }}
               >
-                <span className="block text-white text-[2.5rem] sm:text-[3.2rem] md:text-[3.8rem] lg:text-[4.2rem] xl:text-[4.6rem] leading-[1.12]">
+                <span className="block text-white text-[2.6rem] sm:text-[3.4rem] md:text-[4rem] lg:text-[4.4rem] xl:text-[4.8rem] leading-[1.10]">
                   {t.heroTitle}
                 </span>
-                <span className="block gradient-text text-[2.1rem] sm:text-[2.6rem] md:text-[3rem] lg:text-[3.5rem] xl:text-[3.9rem] leading-[1.20]">
+                <span className="block gradient-text-animated text-[2.2rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[3.7rem] xl:text-[4.1rem] leading-[1.18]">
                   {t.heroAccent}
                 </span>
-                <span className="block gradient-text text-[2.1rem] sm:text-[2.6rem] md:text-[3rem] lg:text-[3.5rem] xl:text-[3.9rem] leading-[1.20]">
+                <span className="block gradient-text-animated text-[2.2rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[3.7rem] xl:text-[4.1rem] leading-[1.18]">
                   {t.heroTitle2}
                 </span>
               </h1>
 
               {/* Sous-titre */}
               <p
-                className="text-[1.05rem] text-slate-300/80 mb-10 max-w-md leading-relaxed animate-slide-up-hero"
+                className="text-[1.08rem] text-slate-300/80 mb-9 max-w-[480px] leading-relaxed animate-slide-up-hero"
                 style={{ animationDelay: '190ms' }}
                 dangerouslySetInnerHTML={{ __html: t.heroSub }}
               />
@@ -430,27 +430,50 @@ export default function Landing() {
                 style={{ animationDelay: '280ms' }}
               >
                 {started ? (
-                  <div className="flex flex-col sm:flex-row items-start gap-3 mb-10">
-                    <button onClick={handleResume} className="btn-primary text-base py-3.5 px-9 w-full sm:w-auto">{t.ctaResume}</button>
+                  <div className="flex flex-col sm:flex-row items-start gap-3 mb-8">
+                    <button onClick={handleResume} className="btn-primary text-base py-3.5 px-9 w-full sm:w-auto">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                      {t.ctaResume}
+                    </button>
                     <button onClick={() => setShowConfirm(true)} className="btn-secondary text-base py-3.5 px-8 w-full sm:w-auto">{t.ctaRestart}</button>
                   </div>
                 ) : (
-                  <div className="mb-10">
-                    <button onClick={handleStart} className="btn-primary text-base py-3.5 px-9">{t.heroCta}</button>
+                  <div className="flex flex-col sm:flex-row items-start gap-3 mb-8">
+                    <button onClick={handleStart} className="btn-primary text-base py-3.5 px-9">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                      {t.heroCta}
+                    </button>
+                    <button
+                      onClick={() => document.getElementById('section-exemple')?.scrollIntoView({ behavior: 'smooth' })}
+                      className="btn-secondary text-base py-3.5 px-7 w-full sm:w-auto"
+                    >
+                      {lang === 'fr' ? 'Voir un exemple' : 'See an example'}
+                    </button>
                   </div>
                 )}
               </div>
 
-              {/* Microcopy */}
+              {/* Proof pills */}
               <div
-                className="flex items-center gap-3 sm:gap-5 text-xs text-slate-500 flex-wrap animate-slide-up-hero"
+                className="flex flex-wrap gap-2 animate-slide-up-hero"
                 style={{ animationDelay: '370ms' }}
               >
-                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-emerald-500/60" />{t.statRating}</span>
-                <span className="hidden sm:block w-px h-3 bg-dark-700" />
-                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-violet-500/60" />{t.statReports}</span>
-                <span className="hidden sm:block w-px h-3 bg-dark-700" />
-                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-blue-500/60" />{t.statSpeed}</span>
+                <span className="proof-chip">
+                  <svg className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                  {t.statRating}
+                </span>
+                <span className="proof-chip">
+                  <svg className="w-3.5 h-3.5 text-violet-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                  {t.statReports}
+                </span>
+                <span className="proof-chip">
+                  <svg className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                  {t.statSpeed}
+                </span>
+                <span className="proof-chip">
+                  <svg className="w-3.5 h-3.5 text-brand-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                  {lang === 'fr' ? 'Analyse IA personnalisée' : 'Personalised AI analysis'}
+                </span>
               </div>
             </div>
           </div>
@@ -487,15 +510,37 @@ export default function Landing() {
       {/* ── Feature tabs: Analyser/Révéler/Comparer/Planifier/Agir ── */}
       <OtherMeFeatureTabs lang={lang} />
 
+      {/* ── Mid-page CTA banner ───────────────────────────────────── */}
+      <section className="mid-cta-banner py-10 px-4">
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-sm text-slate-400 mb-4 leading-relaxed">
+            {lang === 'fr'
+              ? 'Prêt à explorer tes trajectoires personnalisées ?'
+              : 'Ready to explore your personalised paths?'}
+          </p>
+          <button onClick={handleStart} className="btn-primary text-sm py-3 px-8">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+            {lang === 'fr' ? 'Lancer mon analyse' : 'Start my analysis'}
+          </button>
+          <div className="cta-microcopy mt-3">
+            <span>{lang === 'fr' ? 'Sans compte requis' : 'No account required'}</span>
+            <span className="cta-microcopy-dot" />
+            <span>{lang === 'fr' ? 'Résultat personnalisé' : 'Personalised result'}</span>
+            <span className="cta-microcopy-dot" />
+            <span>{lang === 'fr' ? 'Quelques minutes' : 'Just a few minutes'}</span>
+          </div>
+        </div>
+      </section>
+
       {/* ── Proof bandeau ─────────────────────────────────────────── */}
-      <section className="py-10 px-4 border-y border-white/[0.05] bg-dark-800/20 backdrop-blur-sm">
+      <section className="py-12 px-4 border-y border-white/[0.05] bg-dark-800/20 backdrop-blur-sm proof-scan">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-wrap items-center justify-center gap-0">
             {t.proofItems.map((item, i) => (
-              <div key={i} className="text-center px-8 md:px-12 py-2 relative">
-                {i > 0 && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-px h-8 bg-white/[0.06]" />}
-                <div className="text-2xl sm:text-3xl font-black gradient-text tracking-tight">{item.value}</div>
-                <div className="text-xs text-slate-500 mt-0.5 whitespace-nowrap">{item.label}</div>
+              <div key={i} className="text-center px-10 md:px-14 py-3 relative">
+                {i > 0 && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-px h-10 bg-white/[0.06]" />}
+                <div className="text-3xl sm:text-4xl font-black gradient-text tracking-tight tabular-nums">{item.value}</div>
+                <div className="text-xs text-slate-500 mt-1 whitespace-nowrap font-medium">{item.label}</div>
               </div>
             ))}
           </div>
@@ -515,14 +560,21 @@ export default function Landing() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {t.steps.map((step, i) => {
               const StepIcon = STEP_ICONS[i]
+              const stepColors = [
+                { num: 'text-violet-600/40', icon: 'bg-violet-600/10 border-violet-500/20 group-hover:border-violet-500/40', iconText: 'text-violet-300' },
+                { num: 'text-blue-600/40', icon: 'bg-blue-600/10 border-blue-500/20 group-hover:border-blue-500/40', iconText: 'text-blue-300' },
+                { num: 'text-emerald-600/40', icon: 'bg-emerald-600/10 border-emerald-500/20 group-hover:border-emerald-500/40', iconText: 'text-emerald-300' },
+                { num: 'text-amber-600/40', icon: 'bg-amber-600/10 border-amber-500/20 group-hover:border-amber-500/40', iconText: 'text-amber-300' },
+              ]
+              const sc = stepColors[i]
               return (
                 <Reveal key={i} delay={i * 80}>
-                  <div className="card p-5 relative group hover:border-white/[0.12] hover:shadow-[0_0_30px_rgba(109,40,217,0.07)] transition-all duration-300 h-full">
-                    <div className="absolute top-4 right-4 text-4xl font-black text-dark-700 select-none group-hover:text-dark-600 transition-colors tabular-nums">{i + 1}</div>
-                    <div className="w-9 h-9 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-3 flex-shrink-0 group-hover:border-violet-500/35 transition-colors duration-300">
-                      <StepIcon size={18} strokeWidth={1.5} className="text-violet-300" />
+                  <div className="card p-5 relative group hover:border-white/[0.12] hover:shadow-[0_0_30px_rgba(109,40,217,0.08)] hover:-translate-y-0.5 transition-all duration-300 h-full">
+                    <div className={`absolute top-3 right-4 text-5xl font-black select-none transition-colors tabular-nums ${sc.num}`}>{String(i + 1).padStart(2, '0')}</div>
+                    <div className={`w-9 h-9 rounded-xl border flex items-center justify-center mb-3 flex-shrink-0 transition-colors duration-300 ${sc.icon}`}>
+                      <StepIcon size={17} strokeWidth={1.5} className={sc.iconText} />
                     </div>
-                    <h3 className="text-sm font-semibold mb-1.5 text-slate-100">{step.title}</h3>
+                    <h3 className="text-sm font-semibold mb-1.5 text-slate-100 pr-8">{step.title}</h3>
                     <p className="text-slate-500 text-xs leading-relaxed">{step.desc}</p>
                   </div>
                 </Reveal>
@@ -613,24 +665,27 @@ export default function Landing() {
               <div className="p-3 bg-dark-800/60 border-l border-white/[0.06]">
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{t.compTitle}</span>
               </div>
-              <div className="p-3 bg-violet-900/20 border-l border-violet-500/20">
-                <span className="text-xs font-semibold text-brand-300 uppercase tracking-wider">{t.compOtherme}</span>
+              <div className="p-3 comp-col-highlight">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-brand-300 uppercase tracking-wider">{t.compOtherme}</span>
+                  <span className="px-1.5 py-0.5 rounded-full bg-brand-600/20 border border-brand-500/30 text-brand-300 text-[9px] font-bold uppercase tracking-wide">✦ IA</span>
+                </div>
               </div>
             </div>
             {t.compRows.map((row, i) => (
               <div key={i} className={`grid grid-cols-3 ${i < t.compRows.length - 1 ? 'border-b border-white/[0.05]' : ''}`}>
-                <div className="p-2.5 text-slate-400 font-medium text-[11px] bg-dark-800/30">{row.label}</div>
-                <div className="p-2.5 text-slate-600 border-l border-white/[0.05] bg-dark-800/20 flex items-center gap-1.5">
-                  <span className="w-3.5 h-3.5 rounded-full bg-dark-700 flex items-center justify-center flex-shrink-0">
-                    <span className="text-slate-600 text-[8px] font-bold">✕</span>
+                <div className="p-3 text-slate-400 font-medium text-[11px] bg-dark-800/30">{row.label}</div>
+                <div className="p-3 text-slate-600 border-l border-white/[0.05] bg-dark-800/20 flex items-center gap-1.5">
+                  <span className="w-3.5 h-3.5 rounded-full bg-dark-700 flex items-center justify-center flex-shrink-0 flex-shrink-0">
+                    <svg className="w-2 h-2 text-dark-500" fill="currentColor" viewBox="0 0 16 16"><path d="M11.354 4.646a.5.5 0 0 1 0 .708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708L8 7.293l2.646-2.647a.5.5 0 0 1 .708 0z"/></svg>
                   </span>
                   <span className="text-[11px]">{row.classic}</span>
                 </div>
-                <div className="p-2.5 border-l border-violet-500/15 bg-violet-900/10 flex items-center gap-1.5">
+                <div className="p-3 comp-col-highlight flex items-center gap-1.5">
                   <span className="w-3.5 h-3.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
-                    <span className="text-emerald-400 text-[8px] font-bold">✓</span>
+                    <svg className="w-2 h-2 text-emerald-400" fill="currentColor" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>
                   </span>
-                  <span className="text-[11px] text-slate-200">{row.otherme}</span>
+                  <span className="text-[11px] text-slate-200 font-medium">{row.otherme}</span>
                 </div>
               </div>
             ))}
@@ -686,23 +741,32 @@ export default function Landing() {
             </p>
           </Reveal>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3">
-            {DELIVERABLES.map((d) => (
-              <div key={d.fr.title} className="card p-4 flex flex-col gap-3 hover:border-white/[0.12] transition-colors duration-300">
-                <div className="w-8 h-8 rounded-lg bg-violet-600/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
-                  <d.Icon size={16} strokeWidth={1.5} className="text-violet-300" />
+            {DELIVERABLES.map((d, i) => {
+              const iconColors = [
+                { wrap: 'bg-violet-600/10 border-violet-500/20', text: 'text-violet-300' },
+                { wrap: 'bg-blue-600/10 border-blue-500/20', text: 'text-blue-300' },
+                { wrap: 'bg-emerald-600/10 border-emerald-500/20', text: 'text-emerald-300' },
+                { wrap: 'bg-amber-600/10 border-amber-500/20', text: 'text-amber-300' },
+              ]
+              const ic = iconColors[i % iconColors.length]
+              return (
+                <div key={d.fr.title} className="card p-5 flex flex-col gap-3 hover:border-white/[0.14] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300">
+                  <div className={`w-9 h-9 rounded-xl border flex items-center justify-center flex-shrink-0 ${ic.wrap}`}>
+                    <d.Icon size={17} strokeWidth={1.5} className={ic.text} />
+                  </div>
+                  <div>
+                    <h4 className="text-slate-100 font-semibold text-xs mb-1.5">{lang === 'fr' ? d.fr.title : d.en.title}</h4>
+                    <p className="text-slate-500 text-[11px] leading-relaxed">{lang === 'fr' ? d.fr.desc : d.en.desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-slate-100 font-semibold text-xs mb-1">{lang === 'fr' ? d.fr.title : d.en.title}</h4>
-                  <p className="text-slate-500 text-[11px] leading-relaxed">{lang === 'fr' ? d.fr.desc : d.en.desc}</p>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
 
       {/* ── Trajectoire exemple ───────────────────────────────────── */}
-      <section className="py-24 px-4">
+      <section id="section-exemple" className="py-24 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-400 mb-3">
@@ -1232,6 +1296,26 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── CTA after example ─────────────────────────────────────── */}
+      <section className="py-10 px-4 bg-dark-900/40">
+        <div className="max-w-xl mx-auto text-center">
+          <p className="text-slate-500 text-sm mb-5 leading-relaxed">
+            {lang === 'fr'
+              ? 'Ton rapport complet ressemblera à ça — mais adapté à ton parcours réel, tes compétences et ton CV.'
+              : 'Your full report will look like this — but adapted to your real background, skills and CV.'}
+          </p>
+          <button onClick={handleStart} className="btn-primary py-3.5 px-10">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+            {lang === 'fr' ? 'Découvrir mes autres vies' : 'Discover my other lives'}
+          </button>
+          <div className="cta-microcopy">
+            <span>{lang === 'fr' ? 'Rapport généré en quelques minutes' : 'Report generated in minutes'}</span>
+            <span className="cta-microcopy-dot" />
+            <span>{lang === 'fr' ? 'Vous pouvez reprendre plus tard' : 'Resume later if needed'}</span>
+          </div>
+        </div>
+      </section>
+
       {/* ── Pourquoi pas un simple test ───────────────────────────── */}
       <section className="py-14 px-4">
         <div className="max-w-4xl mx-auto">
@@ -1325,46 +1409,51 @@ export default function Landing() {
               {t.testiTitle}{' '}<span className="gradient-text">{t.testiAccent}</span>{t.testiTitle2 ? <>{' '}{t.testiTitle2}</> : null}
             </h2>
           </Reveal>
-          <div className="grid md:grid-cols-3 gap-3">
+          <div className="grid md:grid-cols-3 gap-4">
             {t.testimonials.map((ex, i) => (
-              <div key={i} className="bg-dark-800 border border-white/[0.07] rounded-2xl p-4 flex flex-col hover:border-white/[0.14] hover:shadow-[0_0_30px_rgba(124,58,237,0.06)] transition-all duration-300">
+              <div key={i} className="testi-card bg-dark-800 border border-white/[0.07] rounded-2xl p-5 flex flex-col">
                 {/* Profile header */}
-                <div className="flex items-center gap-2.5 mb-3">
+                <div className="flex items-center gap-3 mb-4">
                   <div className="relative flex-shrink-0">
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-600 to-indigo-700 flex items-center justify-center ring-2 ring-violet-500/20">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-600 to-indigo-700 flex items-center justify-center ring-2 ring-violet-500/20 shadow-lg">
                       <span className="text-white font-bold text-sm">{ex.name[0]}</span>
                     </div>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-dark-800" />
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-dark-800" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="text-slate-100 font-semibold text-sm">{ex.name}, {ex.age} {lang === 'fr' ? 'ans' : 'yo'}</div>
                     <div className="text-slate-500 text-[11px]">{lang === 'fr' ? 'Profil illustratif' : 'Illustrative profile'}</div>
                   </div>
                 </div>
                 {/* Transition arrow */}
-                <div className="flex items-start gap-2 mb-3 p-2.5 rounded-xl bg-dark-900/60 border border-white/[0.05]">
+                <div className="flex items-start gap-2 mb-4 p-3 rounded-xl bg-dark-900/70 border border-white/[0.05]">
                   <div className="flex-1 min-w-0">
-                    <div className="text-slate-500 text-[10px] mb-0.5">{lang === 'fr' ? 'Avant' : 'Before'}</div>
-                    <div className="text-slate-300 text-xs font-medium truncate">{ex.from}</div>
+                    <div className="text-slate-600 text-[10px] mb-0.5 font-medium uppercase tracking-wider">{lang === 'fr' ? 'Avant' : 'Before'}</div>
+                    <div className="text-slate-400 text-xs font-medium truncate">{ex.from}</div>
                   </div>
-                  <div className="text-brand-400 px-1 flex-shrink-0 mt-2.5">→</div>
+                  <div className="flex flex-col items-center justify-center px-1 flex-shrink-0 mt-2">
+                    <svg className="w-3.5 h-3.5 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                  </div>
                   <div className="flex-1 min-w-0 text-right">
-                    <div className="text-brand-400/80 text-[10px] mb-0.5">{lang === 'fr' ? 'Après' : 'After'}</div>
+                    <div className="text-brand-400/80 text-[10px] mb-0.5 font-medium uppercase tracking-wider">{lang === 'fr' ? 'Vers' : 'Towards'}</div>
                     <div className="text-brand-300 text-xs font-semibold truncate">{ex.to}</div>
                   </div>
                 </div>
                 {/* Quote */}
-                <p className="text-slate-400 text-xs leading-relaxed flex-1 mb-3">
-                  <span className="text-violet-400/60 text-base leading-none font-serif mr-1">"</span>{ex.text}<span className="text-violet-400/60 text-base leading-none font-serif ml-1">"</span>
+                <p className="text-slate-400 text-xs leading-relaxed flex-1 mb-4 italic">
+                  <span className="text-violet-400/50 text-lg leading-none font-serif mr-0.5 not-italic">"</span>{ex.text}<span className="text-violet-400/50 text-lg leading-none font-serif ml-0.5 not-italic">"</span>
                 </p>
                 {/* Footer */}
                 <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between gap-2">
                   <div className="flex flex-wrap gap-1">
                     {ex.tags.map((tag) => (
-                      <span key={tag} className="px-1.5 py-0.5 rounded-full bg-violet-600/10 border border-violet-500/15 text-violet-300/80 text-[10px] font-medium">{tag}</span>
+                      <span key={tag} className="px-2 py-0.5 rounded-full bg-violet-600/10 border border-violet-500/15 text-violet-300/80 text-[10px] font-medium">{tag}</span>
                     ))}
                   </div>
-                  <div className="text-slate-600 text-[10px] whitespace-nowrap flex-shrink-0">{ex.duration}</div>
+                  <div className="result-chip flex-shrink-0">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                    {ex.duration}
+                  </div>
                 </div>
               </div>
             ))}
@@ -1403,13 +1492,25 @@ export default function Landing() {
           <p className="text-slate-400 mb-10 text-base leading-relaxed">{t.ctaSub}</p>
           {started ? (
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <button onClick={handleResume} className="btn-primary text-base py-3.5 px-10">{t.ctaResume}</button>
+              <button onClick={handleResume} className="btn-primary text-base py-3.5 px-10">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                {t.ctaResume}
+              </button>
               <button onClick={() => setShowConfirm(true)} className="btn-secondary text-base py-3.5 px-8">{t.ctaRestart}</button>
             </div>
           ) : (
-            <button onClick={handleStart} className="btn-primary text-base py-3.5 px-10">{t.ctaStart}</button>
+            <button onClick={handleStart} className="btn-primary text-base py-3.5 px-10">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+              {t.ctaStart}
+            </button>
           )}
-          <p className="text-xs text-dark-500 mt-5">{t.ctaNote}</p>
+          <div className="cta-microcopy mt-5">
+            <span>{lang === 'fr' ? 'Sans compte requis pour commencer' : 'No account required to start'}</span>
+            <span className="cta-microcopy-dot" />
+            <span>{lang === 'fr' ? 'Résultat personnalisé' : 'Personalised result'}</span>
+            <span className="cta-microcopy-dot" />
+            <span>{lang === 'fr' ? 'Vous pouvez reprendre plus tard' : 'Resume any time'}</span>
+          </div>
         </Reveal>
       </section>
 
